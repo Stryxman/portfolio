@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conseil LLM · Portfolio</title>
+<style>
+  :root{--bg:#fafafb;--fg:#1d1f24;--muted:#5f6470;--line:#e3e5ea;--card:#fff;--accent:#2f45c8;
+    --c1:#c0392b;--c2:#7a4fb5;--c3:#1f8a5b;--c4:#b7791f;--c5:#2f6fb5}
+  @media (prefers-color-scheme:dark){:root{--bg:#121318;--fg:#eceef2;--muted:#a3a8b4;--line:#2b2e36;--card:#191b21;--accent:#9aa9ff}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:860px;margin:0 auto;padding:32px 16px 64px}
+  h1{font-size:1.6rem;line-height:1.2;margin:0 0 8px}
+  h2{font-size:1.15rem;margin:28px 0 8px}
+  .q{color:var(--muted);margin:0 0 24px}
+  .verdict{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:20px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+  .pill{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:.85rem}
+  .flag{border-color:var(--c4);color:var(--c4)}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:8px}
+  th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+  th{font-weight:600}
+  .y{color:var(--c3);font-weight:600}.n{color:var(--c1);font-weight:600}.m{color:var(--c4);font-weight:600}
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:10px 0}
+  summary{cursor:pointer;font-weight:600}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
+  ul{padding-left:20px}
+  footer{margin-top:40px;color:var(--muted);font-size:.85rem}
+  @media (max-width:600px){table{font-size:.82rem}th,td{padding:6px 4px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Conseil LLM : plan du portfolio</h1>
+  <p class="q">Le plan (Next.js 16 + Convex + admin maison, Better Auth, Vercel Hobby, direction « Ordre et transformation » avec moteur WebGL2, V1 complète) est-il le bon pour un site durable, rapide, gratuit, qui démarque Richard ?</p>
+
+  <section class="verdict">
+    <strong>Recommandation :</strong> garder la direction visuelle et le moteur « Champ », mais remplacer la base Convex + admin + auth de la V1 par un site <em>statique</em> alimenté par des fichiers dans Git (édités via Claude Code, avec Keystatic en option pour une admin sans base), hébergé gratuitement chez un hébergeur qui autorise l'usage commercial. Convex reste une V2, déclenchée seulement par un besoin mesuré.
+    <div class="pills">
+      <span class="pill">Confiance : moyenne</span>
+      <span class="pill flag">Convergence 5/5 : drapeau de biais commun</span>
+      <span class="pill">Contredit ton choix initial</span>
+    </div>
+  </section>
+
+  <h2>Accord et désaccord</h2>
+  <table>
+    <thead><tr><th>Point</th><th>Contrarian</th><th>First Pr.</th><th>Expansion.</th><th>Outsider</th><th>Executor</th></tr></thead>
+    <tbody>
+      <tr><td>Admin + Convex en V1</td><td class="n">contre</td><td class="n">contre</td><td class="n">contre</td><td class="n">contre</td><td class="n">contre</td></tr>
+      <tr><td>Contenu en fichiers Git</td><td class="y">pour</td><td class="y">pour</td><td class="y">pour</td><td class="y">pour</td><td class="y">pour</td></tr>
+      <tr><td>Quitter Vercel Hobby</td><td class="y">pour</td><td class="y">pour</td><td class="y">pour</td><td class="y">pour</td><td class="y">pour</td></tr>
+      <tr><td>Garder le moteur « Champ »</td><td class="y">pour</td><td class="y">pour</td><td class="y">priorité</td><td class="m">plus tard</td><td class="m">après mise en ligne</td></tr>
+      <tr><td>Framework</td><td>Astro</td><td>Astro</td><td>Astro</td><td>Next.js + Keystatic</td><td>Astro</td></tr>
+      <tr><td>Admin Keystatic</td><td class="m">si mobile</td><td class="m">si mobile</td><td class="y">option</td><td class="y">pour</td><td class="m">si mobile</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Où le conseil converge</h2>
+  <ul>
+    <li><strong>L'admin résout un problème que tu n'as pas</strong> : tu publies déjà en demandant à Claude Code d'ajouter un fichier puis en poussant. La cible du PRD (« publier en moins de 5 min ») est atteinte sans admin.</li>
+    <li><strong>Trop de services pour un seul éditeur</strong> : 7 services gratuits, plusieurs briques en 0.x. C'est l'inverse de « durable ».</li>
+    <li><strong>Vercel Hobby n'est pas compatible</strong> avec un site qui sollicite des clients. Cloudflare ou Netlify autorisent l'usage commercial gratuitement.</li>
+    <li><strong>Ce qui te démarque, c'est le Champ et les sceaux</strong>, pas le CRUD. L'effort doit y aller, et au contenu.</li>
+  </ul>
+
+  <h2>Check de divergence</h2>
+  <p><strong>Convergence élevée : possible biais commun, confiance à tempérer.</strong> Les tensions attendues ne se sont pas matérialisées (l'Expansionist rejoint le Contrarian). La question cadrée mentionnait « Node non installé » et « Claude Code comme outil principal », ce qui a pu orienter tout le monde vers la même lecture. Et les cinq ont écarté une exigence que <em>tu</em> as formulée : une interface admin et un site « entièrement dynamique ».</p>
+
+  <h2>Où le conseil se déchire</h2>
+  <ul>
+    <li><strong>Astro ou Next.js</strong> : 4 conseillers sur 5 préfèrent Astro (site de contenu, statique par défaut, îlots interactifs). L'Outsider garde Next.js + Keystatic. Le moteur WebGL étant indépendant du framework, ce choix n'affecte pas l'identité visuelle.</li>
+    <li><strong>Admin ou pas</strong> : Contrarian, First Principles et Executor la suppriment ; Outsider et Expansionist acceptent Keystatic (admin qui écrit dans Git, sans base). Le critère : modifieras-tu le site depuis un téléphone, sans Claude Code ?</li>
+  </ul>
+
+  <h2>Angles morts attrapés</h2>
+  <ul>
+    <li>Le « dynamique » demandé se fait sans base : sync GitHub par reconstruction quotidienne (GitHub Actions planifiée, gratuite), captures d'écran générées dans la même action, contact par une fonction serverless.</li>
+    <li>Idée de l'Expansionist : générer les fiches projet depuis les dépôts de <code>Local/</code> (README + CLAUDE.md). Le portfolio suit ton travail réel.</li>
+    <li>Chaque sceau génératif peut devenir l'image de partage (LinkedIn, GitHub) de son projet, et le moteur une signature réutilisable sur tes sites clients.</li>
+    <li><code>IMPLEMENTATION_PLAN.md</code> est cité mais pas encore écrit (normal à ce stade, prévu après ta relecture).</li>
+  </ul>
+
+  <h2>Ce verdict changerait si…</h2>
+  <ul>
+    <li>tu prévois de publier plusieurs fois par mois depuis un téléphone ou une machine sans Claude Code (alors Keystatic, voire Convex) ;</li>
+    <li>tu veux à court terme des fonctions qui exigent une base : comptes, espace client, statistiques maison.</li>
+  </ul>
+
+  <h2>La première chose à faire</h2>
+  <p>Répondre aux deux questions décisives (édition depuis mobile ? rythme de publication ?), puis un essai chronométré d'une journée : Node + Astro + 3 vrais projets en fichiers + déploiement Cloudflare. <strong>Succès</strong> si ajouter un 4e projet via Claude Code prend moins de 5 min jusqu'à la mise en ligne et si Lighthouse mobile ≥ 95. Sinon, le plan Convex est justifié.</p>
+
+  <h2>Avis complets</h2>
+  <details><summary><span class="dot" style="background:var(--c1)"></span>Contrarian · Opus · pre-mortem</summary>
+    <p>Échec à 12 mois : trois mois à monter Convex, Better Auth et 8 modules d'admin ; sortie tardive, fiches EN vides ; mise à jour d'auth qui casse l'admin au mois 9, jamais réparée. Hypothèse fragile : « modifier le code freine les mises à jour », fausse avec Claude Code. Briques en 0.x, six services à clés et quotas, sauvegarde manuelle vite oubliée, Vercel Hobby incompatible avec le persona client. Info manquante : rythme d'ajout (moins de 2 par mois → l'admin ne s'amortit jamais). Test : Astro + Markdown + 5 projets sur Netlify en une journée ; 6e projet en moins de 5 min et Lighthouse ≥ 95.</p></details>
+  <details><summary><span class="dot" style="background:var(--c2)"></span>First Principles · Opus · base rates</summary>
+    <p>Le vrai problème est d'être compris vite puis contacté (7,4 s pour le premier tri d'un CV, Ladders 2018 ; pas de chiffre fiable pour un portfolio). L'admin, près de la moitié de la V1, n'est vue par aucun visiteur. Les offres gratuites disparaissent (Heroku 2022, PlanetScale Hobby 2024) ; un site statique survit à n'importe quel fournisseur. Réfuté si l'ajout prend plus de 5 min ou si 4 publications par mois depuis un téléphone sont prévues.</p></details>
+  <details><summary><span class="dot" style="background:var(--c3)"></span>Expansionist · Sonnet</summary>
+    <p>Ton meilleur CMS existe déjà : dépôts Git, README, CLAUDE.md, gh. Un script peut produire les fiches depuis <code>Local/</code>. Le Champ et les sceaux sont l'actif rare : images OG partageables, micro-bibliothèque, signature vendue avec chaque site client. Le portfolio devient la démo et le gabarit commercial. Test : Astro + MDX depuis 3 README + Champ ; ajout en un prompt en moins de 2 min, Lighthouse ≥ 95 moteur actif.</p></details>
+  <details><summary><span class="dot" style="background:var(--c4)"></span>Outsider · Haiku</summary>
+    <p>Le plan sacrifie la durabilité à l'ambition technique. Une suspension Vercel ruinerait la crédibilité ; Netlify règle le problème. « Durable + seul + stack sur mesure » est contradictoire : qui maintient l'admin dans 6 mois ? Test : lire la clause Vercel (5 min) ; V0 Next.js + Markdown + Keystatic + contact ; si un changement prend plus de 4 h, la stack est trop complexe.</p></details>
+  <details><summary><span class="dot" style="background:var(--c5)"></span>Executor · Sonnet</summary>
+    <p>Projet d'ingénierie plutôt que portfolio : couper en deux. Le goulot est la mise en ligne : 0 ligne de code, Node absent, 7 services externes. Prédiction : le plan actuel ne sera pas en ligne dans 6 semaines. Le moteur visuel, ce qui démarque, devient un lot séparé après la mise en ligne. Test : fnm + Astro + 3 projets + Cloudflare Pages, en ligne en 4 h ou moins, Lighthouse ≥ 95, 4e projet en moins de 5 min.</p></details>
+
+  <footer>Conseil LLM v3 · mode léger · 2026-10-12 · Contrarian et First Principles : Opus · Expansionist et Executor : Sonnet · Outsider : Haiku · synthèse : Chairman (Opus)</footer>
+</main>
+</body>
+</html>
