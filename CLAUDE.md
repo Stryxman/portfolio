@@ -25,5 +25,5 @@ Site profil + projets de Richard. Astro statique + contenu en fichiers Git + Ver
 - UI : skills `taste-skill`, `emil-design-eng`, `impeccable` ; revues `review-animations` et `break-ui` sur chaque composant animé ou à données variables.
 - Ne jamais lancer le CLI `impeccable` (télécharge un binaire) sans accord explicite.
 - Zéro tiret cadratin dans les textes d'interface ; un libellé par intention (DESIGN_BRIEF §7).
-- Secrets uniquement en variables d'environnement Vercel/Convex, jamais dans le dépôt.
+- Secrets uniquement en variables d'environnement Vercel / GitHub Actions, jamais dans le dépôt.
 - Réponses brèves et directes.
