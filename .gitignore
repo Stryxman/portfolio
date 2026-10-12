@@ -1,0 +1,22 @@
+# deps / build
+node_modules/
+.next/
+out/
+build/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# env
+.env
+.env*.local
+
+# convex
+.convex/
+
+# outils
+.vercel/
+.impeccable/config.local.json
+*.log
+.DS_Store
