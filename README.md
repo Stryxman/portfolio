@@ -1,8 +1,8 @@
 # Portfolio
 
-Site dynamique qui centralise le profil de Richard et ses projets (sites Claude Code, codés main, CMS), avec administration en ligne et synchronisation GitHub.
+Site qui centralise le profil de Richard et ses projets (sites Claude Code, codés main, CMS), avec contenu en fichiers Git et synchronisation GitHub automatique.
 
-**Stack** : Next.js 16 · Convex · Tailwind v4 · Motion · Vercel.
+**Stack** : Astro · Tailwind v4 · WebGL2 maison · Vercel.
 **État** : cadrage (aucun code). Voir [docs/REPRISE.md](docs/REPRISE.md).
 
 ## Documents

@@ -7,3 +7,4 @@
 - Skills design installés en global : emil-design-eng (+14 skills Emil), impeccable, taste-skill, minimalist-skill.
 - Direction visuelle : « Ordre et transformation », deux mondes liés au thème.
 - Docs rédigés : PRD, TRD, APP_FLOW, BACKEND_SCHEMA, DESIGN_BRIEF.
+- Conseil LLM (mode léger, 5 conseillers) : convergence 5/5 contre l'admin + Convex en V1. Décision : Astro statique + fichiers Git + jobs d'instantanés + 1 fonction de contact, Vercel Hobby (site non commercial). Docs révisés en v1.1.

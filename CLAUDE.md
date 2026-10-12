@@ -1,6 +1,6 @@
 # Portfolio : consignes Claude
 
-Site profil + projets de Richard. Next.js 16 + Convex + Vercel. Phase actuelle : voir `docs/REPRISE.md`.
+Site profil + projets de Richard. Astro statique + contenu en fichiers Git + Vercel. Phase actuelle : voir `docs/REPRISE.md`.
 
 ## Démarrage de session (économie de contexte)
 
@@ -14,7 +14,8 @@ Site profil + projets de Richard. Next.js 16 + Convex + Vercel. Phase actuelle :
 | Comprendre le besoin, une fonctionnalité, le périmètre | `docs/PRD.md` (§5 périmètre, §10 critères) |
 | Stack, versions, cache, sécurité, env, outils | `docs/TRD.md` |
 | Routes, parcours, états d'interface | `docs/APP_FLOW.md` |
-| Tables, fonctions Convex, crons, export | `docs/BACKEND_SCHEMA.md` |
+| Schémas de contenu, instantanés, action contact, scripts | `docs/BACKEND_SCHEMA.md` |
+| Ajouter ou modifier un projet | `docs/APP_FLOW.md` §3 puis `pnpm projet:nouveau` |
 | Couleurs, typo, mouvement, champ génératif, composants | `docs/DESIGN_BRIEF.md` |
 | Ordre des étapes, tâche en cours | `docs/IMPLEMENTATION_PLAN.md` + fin de `PROGRESS.md` |
 

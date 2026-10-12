@@ -6,14 +6,13 @@
 
 ## 0. Lecture du brief
 
-**Lecture (taste-skill)** : portfolio de développeur pour un public mixte (recruteurs, clients, pairs), dans un langage minimal et mathématique où le mouvement est la signature, reposant sur Tailwind v4 + Motion + un moteur génératif WebGL maison très léger.
+**Lecture (taste-skill)** : portfolio de développeur pour un public mixte (recruteurs, clients, pairs), dans un langage minimal et mathématique où le mouvement est la signature, reposant sur Astro (HTML statique) + Tailwind v4 + CSS/WAAPI/View Transitions + un moteur génératif WebGL maison très léger.
 
 | Surface | Mode (impeccable) | Ce que réussir veut dire |
 |---|---|---|
 | Accueil, Projets, Fiche projet | **Experience** | Le travail mène dès le premier écran ; l'interface s'efface |
 | Contact | **Persuade** | Le visiteur écrit, sans friction |
 | À propos | **Read** | On comprend le parcours en 2 minutes |
-| Admin | **Operate** | Publier vite, sans erreur ; aucune expression gratuite |
 
 **Réglages (taste-skill)**
 
@@ -62,8 +61,8 @@ Toutes les couleurs sont en OKLCH, déclarées dans `@theme` (Tailwind v4) via d
 | `--line-strong` | `oklch(0.78 0.006 265)` | `oklch(0.43 0.010 265)` | Bordures actives, lignes proches du pointeur |
 | `--accent` | `oklch(0.47 0.21 264)` (outremer) | `oklch(0.74 0.14 264)` (outremer clair) | Action principale, vecteurs, liens, focus |
 | `--accent-ink` | `oklch(0.985 0.002 265)` | `oklch(0.165 0.006 265)` | Texte posé sur l'accent |
-| `--danger` | `oklch(0.55 0.19 25)` | `oklch(0.70 0.15 25)` | Erreurs (formulaires, admin) |
-| `--success` | `oklch(0.55 0.12 155)` | `oklch(0.75 0.12 155)` | Confirmations (admin, contact) |
+| `--danger` | `oklch(0.55 0.19 25)` | `oklch(0.70 0.15 25)` | Erreurs (formulaire) |
+| `--success` | `oklch(0.55 0.12 155)` | `oklch(0.75 0.12 155)` | Confirmations (contact) |
 
 Règles : **un seul accent**, utilisé partout de la même façon (taste-skill, *color consistency lock*) ; ni noir ni blanc purs ; pas de dégradé décoratif ; le danger et le succès ne servent qu'aux états.
 
@@ -71,7 +70,7 @@ Règles : **un seul accent**, utilisé partout de la même façon (taste-skill, 
 
 | Rôle | Police | Détails |
 |---|---|---|
-| Titres et texte | **Switzer** (Fontshare, licence gratuite y compris commerciale, auto-hébergée via `next/font/local`, fichier variable) | Néo-grotesque précise, avec du caractère dans les graisses de titre ; évite Inter et les polices « par défaut d'IA » listées par impeccable |
+| Titres et texte | **Switzer** (Fontshare, licence gratuite y compris commerciale, auto-hébergée en `@font-face` avec préchargement, fichier variable) | Néo-grotesque précise, avec du caractère dans les graisses de titre ; évite Inter et les polices « par défaut d'IA » listées par impeccable |
 | Chiffres, matrices, métadonnées | **Geist Mono** (OFL, paquet `geist`) | Usage strictement fonctionnel : matrices, stats GitHub, dates, raccourcis clavier |
 
 | Niveau | Taille | Graisse / interlignage / approche |
@@ -116,18 +115,17 @@ L'emphase se fait par la graisse ou l'italique de la **même** famille ; jamais 
 | Survol des cartes | Bordure qui passe à `--line-strong`, capture qui monte de 2 px | 180 ms, ease | Indique ce qui est cliquable (uniquement si `hover: hover`) |
 | Navigation entre pages | View Transitions : fondu, et la capture de la carte devient le cadre de la fiche (élément partagé) | 280 ms, ease-out | Continuité spatiale |
 | Apparition des sections | Opacité 0 → 1, `translateY(12px)` → 0, une seule fois | 600 ms, ease-out, décalage de 50 ms (6 éléments maximum) | Rythme de lecture |
-| Filtres de la grille | Réorganisation animée (`layout` de Motion) | 220 ms, ease-in-out | Montrer ce qui a changé |
+| Filtres de la grille | Réorganisation animée (`document.startViewTransition`, natif) | 220 ms, ease-in-out | Montrer ce qui a changé |
 | Aperçu live | La capture laisse place à l'iframe, fondu avec un flou de 4 px | 300 ms | Transition d'état |
-| Toasts (admin) | Sonner (paramètres par défaut) | Défauts Sonner | Retour d'action |
 
 ### 4.3 Règles
 
-- Jamais d'animation sur une action clavier (`⌘K`, changement de langue, raccourcis de l'admin).
+- Jamais d'animation sur une action clavier (changement de langue, raccourcis).
 - Jamais d'apparition depuis `scale(0)` : partir de `0.95` avec opacité 0.
 - La sortie est plus rapide que l'entrée.
 - Pas de `transition: all` : nommer les propriétés. Animer uniquement `transform`, `opacity` et `filter`.
-- Avec Motion, utiliser la chaîne `transform` (accélérée par le GPU) plutôt que les raccourcis `x`/`y` pour tout ce qui joue pendant un chargement.
-- Pas de `window.addEventListener('scroll')` : utiliser `useScroll` de Motion ou IntersectionObserver.
+- Préférer CSS et WAAPI (hors du fil principal) ; si la librairie `motion` est ajoutée, animer la chaîne `transform` plutôt que les raccourcis `x`/`y`.
+- Pas de `window.addEventListener('scroll')` : IntersectionObserver ou animations CSS liées au défilement (`animation-timeline`).
 - **Réduction des animations** (`prefers-reduced-motion`) : le champ devient une image SVG fixe ; plus de déplacement ni de décalage ; les fondus courts sont conservés.
 - Revoir les animations au ralenti (×4) avant chaque fin d'étape, avec le skill `review-animations`.
 
@@ -236,12 +234,9 @@ Chaque page utilise des familles de mise en page **différentes** (taste-skill :
 - **Icônes** : **Phosphor** uniquement (graisse Regular, épaisseur uniforme). Ni Lucide, ni icônes dessinées à la main.
 - **Focus** : anneau de 2 px `--accent` avec un décalage de 2 px, visible partout.
 
-### 6.7 Admin (mode Operate)
+### 6.7 Pas d'admin en V1
 
-- shadcn/ui **personnalisé** avec les mêmes tokens (couleurs, rayons, Switzer), densité 6, **aucun champ génératif**, sauf une bande statique sur la page de connexion.
-- Barre latérale ; tableaux denses avec chiffres mono ; toasts Sonner.
-- **Champs bilingues** : FR et EN côte à côte sur desktop, empilés sur mobile, avec une alerte « Traduction manquante » quand l'EN est vide.
-- **Éditeur de projet** : enregistrement automatique avec indicateur « Enregistré il y a 3 s », aperçu de la carte publique en direct, bouton « Publier » unique.
+Le contenu se gère en fichiers via Claude Code (voir [APP_FLOW §3](APP_FLOW.md#3-parcours-éditeur-richard)). Si une admin Keystatic arrive en V2, elle reprendra les mêmes tokens (couleurs, rayons, Switzer), sans champ génératif.
 
 ## 7. Textes et voix
 
@@ -271,9 +266,9 @@ Chaque page utilise des familles de mise en page **différentes** (taste-skill :
 | Élément | Source | Statut |
 |---|---|---|
 | Portrait | Photo réelle de Richard (3:4, fond neutre) | **À fournir** |
-| Captures des projets | Automatiques (Microlink) ou ajoutées dans l'admin | Automatique |
-| Images de galerie | Ajoutées dans l'admin | À fournir par projet |
-| Images Open Graph | Générées (`next/og`) : titre, sceau, champ statique | Automatique |
+| Captures des projets | Automatiques (Playwright hebdomadaire) ou `cover.webp` manuelle | Automatique |
+| Images de galerie | Déposées dans le dossier du projet | À fournir par projet |
+| Images Open Graph | Générées au build (satori) : titre, sceau, champ statique | Automatique |
 | Favicon / monogramme | Sceau dérivé du nom « Richard » | À valider |
 
 Pas de photos de banque d'images, pas de fausses captures construites en `div`.
