@@ -58,11 +58,11 @@ Toutes les couleurs sont en OKLCH, déclarées dans `@theme` (Tailwind v4) via d
 | `--ink` | `oklch(0.20 0.006 265)` | `oklch(0.95 0.004 265)` | Texte principal |
 | `--ink-muted` | `oklch(0.47 0.010 265)` | `oklch(0.73 0.010 265)` | Texte secondaire (contraste AA vérifié) |
 | `--line` | `oklch(0.91 0.004 265)` | `oklch(0.30 0.008 265)` | Bordures, séparateurs, lignes du champ |
-| `--line-strong` | `oklch(0.78 0.006 265)` | `oklch(0.43 0.010 265)` | Bordures actives, lignes proches du pointeur |
+| `--line-strong` | `oklch(0.65 0.006 265)` | `oklch(0.50 0.010 265)` | Bordures actives, lignes proches du pointeur |
 | `--accent` | `oklch(0.47 0.21 264)` (outremer) | `oklch(0.74 0.14 264)` (outremer clair) | Action principale, vecteurs, liens, focus |
 | `--accent-ink` | `oklch(0.985 0.002 265)` | `oklch(0.165 0.006 265)` | Texte posé sur l'accent |
 | `--danger` | `oklch(0.55 0.19 25)` | `oklch(0.70 0.15 25)` | Erreurs (formulaire) |
-| `--success` | `oklch(0.55 0.12 155)` | `oklch(0.75 0.12 155)` | Confirmations (contact) |
+| `--success` | `oklch(0.53 0.12 155)` | `oklch(0.75 0.12 155)` | Confirmations (contact) |
 
 Règles : **un seul accent**, utilisé partout de la même façon (taste-skill, *color consistency lock*) ; ni noir ni blanc purs ; pas de dégradé décoratif ; le danger et le succès ne servent qu'aux états.
 
@@ -70,7 +70,7 @@ Règles : **un seul accent**, utilisé partout de la même façon (taste-skill, 
 
 | Rôle | Police | Détails |
 |---|---|---|
-| Titres et texte | **Switzer** (Fontshare, licence gratuite y compris commerciale, auto-hébergée en `@font-face` avec préchargement, fichier variable) | Néo-grotesque précise, avec du caractère dans les graisses de titre ; évite Inter et les polices « par défaut d'IA » listées par impeccable |
+| Titres et texte | **Geist** (Vercel, licence OFL, auto-hébergée en `@font-face` avec préchargement, fichier variable) | Même famille que Geist Mono : cohérence totale, très lisible, esprit « minimal élégant » ; licence libre compatible avec un dépôt public (Switzer, envisagée d'abord, l'interdit) |
 | Chiffres, matrices, métadonnées | **Geist Mono** (OFL, paquet `geist`) | Usage strictement fonctionnel : matrices, stats GitHub, dates, raccourcis clavier |
 
 | Niveau | Taille | Graisse / interlignage / approche |
@@ -236,7 +236,7 @@ Chaque page utilise des familles de mise en page **différentes** (taste-skill :
 
 ### 6.7 Pas d'admin en V1
 
-Le contenu se gère en fichiers via Claude Code (voir [APP_FLOW §3](APP_FLOW.md#3-parcours-éditeur-richard)). Si une admin Keystatic arrive en V2, elle reprendra les mêmes tokens (couleurs, rayons, Switzer), sans champ génératif.
+Le contenu se gère en fichiers via Claude Code (voir [APP_FLOW §3](APP_FLOW.md#3-parcours-éditeur-richard)). Si une admin Keystatic arrive en V2, elle reprendra les mêmes tokens (couleurs, rayons, Geist), sans champ génératif.
 
 ## 7. Textes et voix
 
@@ -299,6 +299,6 @@ Hero centré sur un fond de dégradé · trois cartes égales · violet d'IA · 
 ## 12. Décisions ouvertes (à trancher par Richard)
 
 1. Teinte exacte de l'accent : outremer proposé, à confirmer sur une maquette.
-2. Police : Switzer proposée (alternatives : Satoshi, General Sans).
+2. ~~Police~~ : **Geist** retenue le 2026-10-13 (Switzer écartée : sa licence interdit un dépôt public).
 3. Monogramme : sceau génératif ou simple texte « Richard ».
 4. Portrait : disponible ou à prendre.

@@ -1,0 +1,44 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Locale } from "../i18n/config";
+import { t } from "../i18n/ui";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  aria-pressed="false"
+  aria-label={t(locale, "theme.dark")}
+  class="inline-flex size-11 items-center justify-center rounded-control text-ink-muted transition-[color,transform] duration-[var(--dur-hover)] ease-out hover:text-ink motion-safe:active:scale-[0.97]"
+>
+  <Icon name="ph:moon" class="size-5 dark:hidden" aria-hidden="true" />
+  <Icon name="ph:sun" class="hidden size-5 dark:block" aria-hidden="true" />
+</button>
+
+<script>
+  const buttons = () => document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]");
+  function syncAll() {
+    const dark = String(document.documentElement.dataset.theme === "dark");
+    buttons().forEach((btn) => btn.setAttribute("aria-pressed", dark));
+  }
+  function init() {
+    syncAll();
+    buttons().forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("theme", next);
+        } catch {
+          // stockage indisponible (navigation privée) : le thème reste valable pour la page
+        }
+        syncAll();
+      });
+    });
+  }
+  document.addEventListener("astro:page-load", init);
+</script>

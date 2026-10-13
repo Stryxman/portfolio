@@ -1,0 +1,20 @@
+---
+// Repli local : en production, vercel.json redirige selon Accept-Language avant d'atteindre cette page.
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Richard</title>
+    <script is:inline>
+      const first = (navigator.languages && navigator.languages[0]) || navigator.language || "fr";
+      location.replace(/^en\b/i.test(first) ? "/en/" : "/fr/");
+    </script>
+    <meta http-equiv="refresh" content="2;url=/fr/" />
+  </head>
+  <body>
+    <a href="/fr/">Français</a>
+    <a href="/en/">English</a>
+  </body>
+</html>

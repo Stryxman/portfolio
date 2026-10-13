@@ -1,0 +1,86 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Locale } from "../i18n/config";
+import { t } from "../i18n/ui";
+import { pathFor } from "../i18n/routes";
+import LanguageSwitch from "./LanguageSwitch.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+interface Props {
+  locale: Locale;
+  alternates: Record<Locale, string>;
+}
+const { locale, alternates } = Astro.props;
+const links = [
+  ["projects", "nav.projects"],
+  ["about", "nav.about"],
+  ["contact", "nav.contact"],
+] as const;
+---
+
+<button
+  type="button"
+  data-menu-open
+  aria-haspopup="dialog"
+  aria-label={t(locale, "nav.menu")}
+  class="inline-flex size-11 items-center justify-center rounded-control motion-safe:active:scale-[0.97] md:hidden"
+>
+  <Icon name="ph:list" class="size-6" aria-hidden="true" />
+</button>
+<dialog
+  data-menu
+  aria-label={t(locale, "nav.menu")}
+  class="m-0 h-dvh max-h-none w-full max-w-none bg-bg p-6 text-ink backdrop:bg-transparent"
+>
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-1">
+      <LanguageSwitch locale={locale} alternates={alternates} />
+      <ThemeToggle locale={locale} />
+    </div>
+    <button
+      type="button"
+      data-menu-close
+      aria-label={t(locale, "nav.close")}
+      class="inline-flex size-11 items-center justify-center rounded-control"
+    >
+      <Icon name="ph:x" class="size-6" aria-hidden="true" />
+    </button>
+  </div>
+  <nav aria-label={t(locale, "nav.primary")} class="mt-8 flex flex-col gap-6">
+    {links.map(([key, label]) => <a href={pathFor(key, locale)} class="text-h1">{t(locale, label)}</a>)}
+  </nav>
+</dialog>
+
+<style>
+  dialog[open] {
+    animation: menu-in var(--dur-panel) var(--ease-drawer);
+  }
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes menu-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open] {
+      animation-name: menu-fade;
+    }
+  }
+</style>
+
+<script>
+  function init() {
+    const dialog = document.querySelector<HTMLDialogElement>("[data-menu]");
+    const open = document.querySelector<HTMLButtonElement>("[data-menu-open]");
+    if (!dialog || !open) return;
+    open.addEventListener("click", () => dialog.showModal());
+    dialog.querySelector("[data-menu-close]")?.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("close", () => open.focus());
+    dialog.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => dialog.close()));
+  }
+  document.addEventListener("astro:page-load", init);
+</script>

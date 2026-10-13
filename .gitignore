@@ -20,3 +20,7 @@ test-results/
 .impeccable/config.local.json
 *.log
 .DS_Store
+
+# outillage
+.superpowers/
+dist/

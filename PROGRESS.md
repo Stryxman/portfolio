@@ -8,3 +8,13 @@
 - Direction visuelle : « Ordre et transformation », deux mondes liés au thème.
 - Docs rédigés : PRD, TRD, APP_FLOW, BACKEND_SCHEMA, DESIGN_BRIEF.
 - Conseil LLM (mode léger, 5 conseillers) : convergence 5/5 contre l'admin + Convex en V1. Décision : Astro statique + fichiers Git + jobs d'instantanés + 1 fonction de contact, Vercel Hobby (site non commercial). Docs révisés en v1.1.
+
+## 2026-10-13 : Phases 0 et 1 (socle)
+
+- Phase 0 : fnm 1.39, Node 24.21, pnpm 12.11.
+- Phase 1 : Astro 7.3 + TS 6.0 (TS 7 pas encore supporté par typescript-eslint), Tailwind 4, i18n FR/EN, tokens OKLCH (3 ajustés pour WCAG AA), Geist + Geist Mono, thème sans flash, en-tête, menu mobile, 404, CI.
+- Tests : 28 unitaires, 25 E2E (desktop + mobile), axe sans violation sérieuse.
+- Revue `/code-review` : 9 constats, 6 corrigés (police invalide, thème sans stockage, sombre sans JS, mouvement réduit, menu mobile, barre de dev), 2 mineurs reportés, 1 à vérifier au déploiement (vercel.json).
+- Police : Switzer écartée (licence interdit un dépôt public) → Geist.
+- Dépôt public https://github.com/Stryxman/portfolio, PR #1.
+- Bloqué : création du projet Vercel (MCP en 403 sur l'espace « stryxman »).

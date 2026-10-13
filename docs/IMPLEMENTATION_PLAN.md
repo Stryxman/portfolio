@@ -384,7 +384,7 @@ Branche : `phase-1`. Fin de phase : `/code-review`, PR, aperçu Vercel.
 ### Tâche 1.3 : tokens, typographie et polices
 
 **Fichiers :**
-- Créer : `src/styles/global.css`, `src/assets/fonts/` (Switzer + Geist Mono)
+- Créer : `src/styles/global.css`, `src/assets/fonts/` (Geist + Geist Mono)
 - Modifier : `astro.config.mjs` (bloc `fonts`)
 - Test : `tests/unit/tokens.test.ts`
 
