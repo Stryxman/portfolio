@@ -1,0 +1,68 @@
+---
+import "../styles/global.css";
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import type { Locale } from "../i18n/config";
+import { t } from "../i18n/ui";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  alternates: Record<Locale, string>;
+}
+const { locale, title, description, alternates } = Astro.props;
+const site = Astro.site!;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(alternates[locale], site)} />
+    <link rel="alternate" hreflang="fr" href={new URL(alternates.fr, site)} />
+    <link rel="alternate" hreflang="en" href={new URL(alternates.en, site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates.fr, site)} />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      (() => {
+        const apply = () => {
+          let theme = "light";
+          try {
+            const saved = localStorage.getItem("theme");
+            theme =
+              saved === "light" || saved === "dark"
+                ? saved
+                : matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light";
+          } catch {}
+          document.documentElement.dataset.theme = theme;
+        };
+        apply();
+        // ClientRouter remplace les attributs de <html> au swap : on réapplique avant le rendu
+        document.addEventListener("astro:after-swap", apply);
+      })();
+    </script>
+    <Font cssVariable="--font-geist-mono" />
+    <ClientRouter />
+  </head>
+  <body class="min-h-dvh bg-bg text-ink">
+    <a
+      href="#contenu"
+      class="sr-only rounded-control bg-accent px-4 py-2 text-accent-ink focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70]"
+    >
+      {t(locale, "nav.skip")}
+    </a>
+    <Header locale={locale} alternates={alternates} />
+    <main id="contenu" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>
