@@ -8,8 +8,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: process.env.SITE_URL ?? "http://localhost:4321",
   trailingSlash: "always",
-  // la barre d'outils de dev ajoute ses propres boutons (« Menu ») qui faussent les tests E2E
-  devToolbar: { enabled: false },
   adapter: vercel(),
   integrations: [mdx(), sitemap(), icon()],
   i18n: {

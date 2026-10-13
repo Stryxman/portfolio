@@ -3,10 +3,13 @@ import { Icon } from "astro-icon/components";
 import type { Locale } from "../i18n/config";
 import { t } from "../i18n/ui";
 import { pathFor } from "../i18n/routes";
+import LanguageSwitch from "./LanguageSwitch.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 interface Props {
   locale: Locale;
+  alternates: Record<Locale, string>;
 }
-const { locale } = Astro.props;
+const { locale, alternates } = Astro.props;
 const links = [
   ["projects", "nav.projects"],
   ["about", "nav.about"],
@@ -19,7 +22,7 @@ const links = [
   data-menu-open
   aria-haspopup="dialog"
   aria-label={t(locale, "nav.menu")}
-  class="inline-flex size-11 items-center justify-center rounded-control active:scale-[0.97] md:hidden"
+  class="inline-flex size-11 items-center justify-center rounded-control motion-safe:active:scale-[0.97] md:hidden"
 >
   <Icon name="ph:list" class="size-6" aria-hidden="true" />
 </button>
@@ -28,7 +31,11 @@ const links = [
   aria-label={t(locale, "nav.menu")}
   class="m-0 h-dvh max-h-none w-full max-w-none bg-bg p-6 text-ink backdrop:bg-transparent"
 >
-  <div class="flex justify-end">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-1">
+      <LanguageSwitch locale={locale} alternates={alternates} />
+      <ThemeToggle locale={locale} />
+    </div>
     <button
       type="button"
       data-menu-close
@@ -51,6 +58,16 @@ const links = [
     from {
       opacity: 0;
       transform: translateY(-8px);
+    }
+  }
+  @keyframes menu-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open] {
+      animation-name: menu-fade;
     }
   }
 </style>

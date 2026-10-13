@@ -34,6 +34,12 @@ const pairs: [string, string, number][] = [
   ["line-strong", "bg", 3], // bordures des contrôles (boutons secondaires, champs)
 ];
 
+describe("thème sombre sans JavaScript", () => {
+  it("reprend exactement les valeurs du bloc [data-theme=dark]", () => {
+    expect(block(":root:not([data-theme])")).toEqual(themes.sombre);
+  });
+});
+
 describe.each(Object.entries(themes))("contrastes du thème %s", (_nom, tokens) => {
   it.each(pairs)("%s sur %s ≥ %d:1", (fg, bg, min) => {
     expect(ratio(tokens[fg]!, tokens[bg]!)).toBeGreaterThanOrEqual(min);

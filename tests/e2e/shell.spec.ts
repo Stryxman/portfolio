@@ -69,7 +69,7 @@ test("le lien d'évitement mène au contenu", async ({ page, isMobile }) => {
 test("le menu mobile s'ouvre et se ferme avec Échap", async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile uniquement");
   await page.goto("/fr/");
-  const bouton = page.getByRole("button", { name: "Menu" });
+  const bouton = page.getByRole("banner").getByRole("button", { name: "Menu" });
   await bouton.click();
   const menu = page.getByRole("dialog");
   await expect(menu).toBeVisible();
