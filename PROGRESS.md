@@ -19,3 +19,11 @@
 - Dépôt public https://github.com/Stryxman/portfolio, PR #1.
 - Vercel : projet importé par Richard (MCP en 403). PR #1 fusionnée ; production https://portfolio-lac-nine-ql5m5f65wy.vercel.app : 307 selon la langue, en-têtes vercel.json appliqués, 25 E2E verts.
 - Emails des commits passés au noreply GitHub (historique réécrit, push forcé).
+
+## 2026-10-13 : Phase 2 (contenu et schémas)
+
+- URL canonique automatique (`VERCEL_PROJECT_PRODUCTION_URL`), `SITE_URL` devient optionnel.
+- Schémas Zod partagés (Astro + script), règles de contenu, vérification avant chaque build (`pnpm check:content`, aussi lancé par Vercel via `buildCommand`).
+- Contenu initial : profil (sans email, dépôt public), 7 compétences, projets compagnon et portfolio en brouillon.
+- `pnpm projet:nouveau owner/repo` : brouillon depuis GitHub, README rendu compilable en MDX (testé sur le vrai README d'Astro).
+- Tests : 68 unitaires, 25 E2E. Revue : 9 constats, 5 corrigés, 4 mineurs reportés.

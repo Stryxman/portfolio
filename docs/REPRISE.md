@@ -19,10 +19,10 @@
 
 ## Prochaines actions
 
-1. Richard : `SITE_URL` = URL de production dans Vercel (Production), puis redéployer ; optionnel : renommer le domaine (Domains → Edit).
-2. Phase 2 : écrire `docs/plans/phase-2.md` (contenu et schémas), le faire valider, exécuter sur la branche `phase-2`.
+1. Fusionner la PR de la Phase 2 après CI verte et accord de Richard ; vérifier dans les journaux Vercel la ligne « contenu : 0 erreur(s) » et le canonical de production.
+2. Phase 3 : écrire `docs/plans/phase-3.md` (géométrie : matrices, bruit, sceaux SVG, champ statique), le faire valider, exécuter.
 
-Reportés (mineurs) : liste des liens de navigation dupliquée Header/MobileMenu ; canonical/hreflang de la 404 (Phase 8).
+Reportés (mineurs) : liens de navigation dupliqués Header/MobileMenu ; canonical/hreflang de la 404 (Phase 8) ; blocs de code indentés échappés par cleanReadme ; getEntry(profile) non-null en dev ; regex tiret dupliquée ; slug vide dans projet:nouveau.
 
 ## Décisions ouvertes
 
