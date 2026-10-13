@@ -1,0 +1,16 @@
+# Profil (une seule entrée « main »). Pas d'email ici : le dépôt est public (CONTACT_TO_EMAIL côté Vercel).
+main:
+  fullName: Richard
+  role:
+    fr: Développeur web
+    en: Web developer
+  tagline:
+    fr: Je conçois et je construis des sites rapides, à la main, avec Claude Code ou un CMS.
+    en: I design and build fast websites, by hand, with Claude Code or a CMS.
+  bio:
+    fr: Je réunis ici mes projets web et mes outils, quelle que soit la façon dont ils ont été fabriqués.
+    en: This is where I gather my web projects and tools, however they were built.
+  githubLogin: Stryxman
+  socials:
+    - kind: github
+      url: https://github.com/Stryxman

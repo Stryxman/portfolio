@@ -49,7 +49,9 @@ public/cv/
 ## 3. Schémas (`src/content.config.ts`)
 
 ```ts
-import { defineCollection, reference, z } from "astro:content";
+import { defineCollection, reference } from "astro:content";
+import { z } from "astro/zod"; // Zod 4 : z.email(), z.url()
+// Implémentation réelle : schémas dans src/lib/content/schemas.ts, partagés avec scripts/check-content.ts
 import { glob, file } from "astro/loaders";
 
 const localized = z.object({ fr: z.string().min(1), en: z.string().default("") });
@@ -65,7 +67,7 @@ const profile = defineCollection({
     bio: localized,               // Markdown court
     location: localized.optional(),
     portrait: image().optional(),
-    email: z.string().email(),
+    email: z.email().optional(),   // dépôt public : laissé vide, contact via CONTACT_TO_EMAIL (Vercel)
     showEmail: z.boolean().default(false),
     githubLogin: z.string(),      // compte synchronisé
     socials: z.array(z.object({
