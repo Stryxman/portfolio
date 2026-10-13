@@ -44,7 +44,7 @@
 | Mouvement UI | CSS, WAAPI, View Transitions natives (`<ClientRouter />`) ; `motion` (mini `animate`) seulement si nécessaire | 14.1 | Micro-interactions sans framework |
 | Champ génératif | WebGL2 maison (repli Canvas 2D) | — | ≤ 15 Ko gzip, voir [DESIGN_BRIEF §5](DESIGN_BRIEF.md#5-le-moteur-génératif--champ-) |
 | Icônes | `astro-icon` + `@iconify-json/ph` (Phosphor) | 1.2 | SVG en ligne au build, zéro JS |
-| Polices | Switzer (Fontshare) + Geist Mono, auto-hébergées | — | `@font-face`, `font-display: swap`, préchargement |
+| Polices | Geist + Geist Mono (OFL, via fontsource), auto-hébergées | — | API Fonts d'Astro, préchargement de Geist |
 | Images OG | `satori` + `@resvg/resvg-js` (endpoint prérendu) | 0.51 / 2.6 | Image de partage par page/projet |
 | SEO | `@astrojs/sitemap` | 3.7 | Sitemap multilingue |
 | Email | Resend | 6.x | Envoi du message de contact |

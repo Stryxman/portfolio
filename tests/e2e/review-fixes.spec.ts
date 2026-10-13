@@ -1,9 +1,21 @@
 import { test, expect } from "@playwright/test";
 
-test("la police de repli est une sans empattement tant que Switzer est absente", async ({ page }) => {
+test("la pile de polices garde un repli sans empattement", async ({ page }) => {
   await page.goto("/fr/");
   const family = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
   expect(family).toContain("ui-sans-serif");
+});
+
+test("le texte utilise Geist, chargée depuis le site", async ({ page }) => {
+  await page.goto("/fr/");
+  const family = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+  expect(family).toContain("Geist");
+  expect(family).not.toContain("Switzer");
+  const loaded = await page.evaluate(async () => {
+    await document.fonts.ready;
+    return document.fonts.check('16px "Geist"');
+  });
+  expect(loaded).toBe(true);
 });
 
 test("stockage bloqué : la préférence système sombre est quand même appliquée", async ({ browser }) => {

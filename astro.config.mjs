@@ -15,8 +15,18 @@ export default defineConfig({
     locales: ["fr", "en"],
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
-  // Switzer (Fontshare) sera ajoutée ici dès que le fichier est téléchargé (accord de Richard requis).
   fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "Geist",
+      cssVariable: "--font-geist",
+      options: {
+        variants: [
+          { weight: "100 900", style: "normal", src: ["./src/assets/fonts/Geist-Variable.woff2"] },
+          { weight: "100 900", style: "italic", src: ["./src/assets/fonts/Geist-VariableItalic.woff2"] },
+        ],
+      },
+    },
     {
       provider: fontProviders.local(),
       name: "Geist Mono",

@@ -70,7 +70,7 @@ Règles : **un seul accent**, utilisé partout de la même façon (taste-skill, 
 
 | Rôle | Police | Détails |
 |---|---|---|
-| Titres et texte | **Switzer** (Fontshare, licence gratuite y compris commerciale, auto-hébergée en `@font-face` avec préchargement, fichier variable) | Néo-grotesque précise, avec du caractère dans les graisses de titre ; évite Inter et les polices « par défaut d'IA » listées par impeccable |
+| Titres et texte | **Geist** (Vercel, licence OFL, auto-hébergée en `@font-face` avec préchargement, fichier variable) | Même famille que Geist Mono : cohérence totale, très lisible, esprit « minimal élégant » ; licence libre compatible avec un dépôt public (Switzer, envisagée d'abord, l'interdit) |
 | Chiffres, matrices, métadonnées | **Geist Mono** (OFL, paquet `geist`) | Usage strictement fonctionnel : matrices, stats GitHub, dates, raccourcis clavier |
 
 | Niveau | Taille | Graisse / interlignage / approche |
@@ -236,7 +236,7 @@ Chaque page utilise des familles de mise en page **différentes** (taste-skill :
 
 ### 6.7 Pas d'admin en V1
 
-Le contenu se gère en fichiers via Claude Code (voir [APP_FLOW §3](APP_FLOW.md#3-parcours-éditeur-richard)). Si une admin Keystatic arrive en V2, elle reprendra les mêmes tokens (couleurs, rayons, Switzer), sans champ génératif.
+Le contenu se gère en fichiers via Claude Code (voir [APP_FLOW §3](APP_FLOW.md#3-parcours-éditeur-richard)). Si une admin Keystatic arrive en V2, elle reprendra les mêmes tokens (couleurs, rayons, Geist), sans champ génératif.
 
 ## 7. Textes et voix
 
@@ -299,6 +299,6 @@ Hero centré sur un fond de dégradé · trois cartes égales · violet d'IA · 
 ## 12. Décisions ouvertes (à trancher par Richard)
 
 1. Teinte exacte de l'accent : outremer proposé, à confirmer sur une maquette.
-2. Police : Switzer proposée (alternatives : Satoshi, General Sans).
+2. ~~Police~~ : **Geist** retenue le 2026-10-13 (Switzer écartée : sa licence interdit un dépôt public).
 3. Monogramme : sceau génératif ou simple texte « Richard ».
 4. Portrait : disponible ou à prendre.

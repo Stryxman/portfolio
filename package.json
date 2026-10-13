@@ -29,6 +29,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@axe-core/playwright": "^4.13.0",
+    "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@playwright/test": "^1.64.0",
     "@types/culori": "^4.0.1",
