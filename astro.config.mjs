@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import vercel from "@astrojs/vercel";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -15,5 +15,18 @@ export default defineConfig({
     locales: ["fr", "en"],
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
+  // Switzer (Fontshare) sera ajoutée ici dès que le fichier est téléchargé (accord de Richard requis).
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "Geist Mono",
+      cssVariable: "--font-geist-mono",
+      options: {
+        variants: [
+          { weight: "100 900", style: "normal", src: ["./src/assets/fonts/GeistMono-Variable.woff2"] },
+        ],
+      },
+    },
+  ],
   vite: { plugins: [tailwindcss()] },
 });
