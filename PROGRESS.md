@@ -17,4 +17,5 @@
 - Revue `/code-review` : 9 constats, 6 corrigés (police invalide, thème sans stockage, sombre sans JS, mouvement réduit, menu mobile, barre de dev), 2 mineurs reportés, 1 à vérifier au déploiement (vercel.json).
 - Police : Switzer écartée (licence interdit un dépôt public) → Geist.
 - Dépôt public https://github.com/Stryxman/portfolio, PR #1.
-- Bloqué : création du projet Vercel (MCP en 403 sur l'espace « stryxman »).
+- Vercel : projet importé par Richard (MCP en 403). PR #1 fusionnée ; production https://portfolio-lac-nine-ql5m5f65wy.vercel.app : 307 selon la langue, en-têtes vercel.json appliqués, 25 E2E verts.
+- Emails des commits passés au noreply GitHub (historique réécrit, push forcé).
