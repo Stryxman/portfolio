@@ -9,6 +9,7 @@ export type RepoInput = {
   topics: string[];
   readme: string | null;
   pushedAt: string;
+  createdAt: string;
 };
 
 export const toSlug = (name: string) =>
@@ -25,7 +26,16 @@ const mdxSafe = (text: string) =>
   text
     .split(/(`[^`]*`)/) // les morceaux impairs sont du code en ligne, laissé intact
     .map((part, i) =>
-      i % 2 ? part : part.replace(/<br\s*\/?>/gi, " ").replace(/<\/?[A-Za-z][^>]*>/g, "").replace(/[{}<]/g, (c) => `\\${c}`),
+      i % 2
+        ? part
+        : part
+            .replace(/<((?:https?:\/\/|mailto:)[^>\s]+)>/g, "[$1]($1)") // MDX ne gère pas les autoliens
+            .replace(/<br\s*\/?>/gi, " ")
+            .replace(/<\/?[A-Za-z][\w-]*(?:\s[^>]*)?\/?>/g, "")
+            .replace(/[{}<]/g, (c) => `\\${c}`)
+            // une ligne de prose qui commence par import/export serait lue comme de l'ESM
+            .replace(/^(\s*)import(\s)/, "$1&#105;mport$2")
+            .replace(/^(\s*)export(\s)/, "$1&#101;xport$2"),
     )
     .join("");
 
@@ -48,15 +58,19 @@ export function cleanReadme(md: string, repo?: string): string {
   return md
     .replace(/<!--[\s\S]*?-->/g, "")
     .split("\n")
-    .filter((line, i, all) => !(line.startsWith("# ") && all.slice(0, i).every((l) => !l.trim())))
     .filter((line) => !/^\s*\[!\[.*\]\(.*\)\]\(.*\)\s*$/.test(line))
     .map((line) => {
       if (/^\s*(```|~~~)/.test(line)) {
         inFence = !inFence;
         return line;
       }
-      return inFence ? line : mdxSafe(absolutize(line, repo)).replace(/ {2,}(?=\S)/g, (sp, i) => (i === 0 ? sp : " ")).trimEnd();
+      return inFence
+        ? line
+        : mdxSafe(absolutize(line, repo))
+            .replace(/ {2,}(?=\S)/g, (sp, i) => (i === 0 ? sp : " "))
+            .trimEnd();
     })
+    .filter((line, i, all) => !(line.startsWith("# ") && all.slice(0, i).every((l) => !l.trim())))
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
@@ -79,7 +93,7 @@ export function scaffold(input: RepoInput, knownSkills: Set<string>): { slug: st
     status: "draft",
     repo: input.fullName,
     ...(input.homepage ? { liveUrl: input.homepage } : {}),
-    start: input.pushedAt.slice(0, 7),
+    start: input.createdAt.slice(0, 7), // date de création du dépôt, pas du dernier push
   };
   const body = input.readme ? cleanReadme(input.readme, input.fullName) : summary;
   return { slug, files: { "meta.yaml": stringify(meta), "fr.mdx": `${body}\n` } };

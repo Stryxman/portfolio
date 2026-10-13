@@ -23,6 +23,18 @@ describe("cleanReadme", () => {
   it("retire une image relative quand le dépôt est inconnu", () => {
     expect(cleanReadme("Avant ![logo](./logo.png) après")).toBe("Avant après");
   });
+  it("convertit les autoliens (non supportés par MDX) en liens explicites", async () => {
+    const out = cleanReadme("Docs : <https://docs.exemple.dev> ou <mailto:moi@exemple.dev>");
+    expect(out).toBe("Docs : [https://docs.exemple.dev](https://docs.exemple.dev) ou [mailto:moi@exemple.dev](mailto:moi@exemple.dev)");
+    await expect(compile(out)).resolves.toBeDefined();
+  });
+  it("retire le H1 même précédé d'un bloc HTML ou d'un badge", () => {
+    expect(cleanReadme('<p align="center"><img src="https://x/l.png"></p>\n\n# Titre\nTexte.')).toBe("Texte.");
+  });
+  it("neutralise une ligne de prose commençant par import ou export", async () => {
+    const out = cleanReadme("export PATH=$HOME/bin:$PATH\nimport le fichier ensuite");
+    await expect(compile(out)).resolves.toBeDefined();
+  });
   it("garde l'indentation des listes imbriquées", () => {
     expect(cleanReadme("- un\n  - sous-élément")).toBe("- un\n  - sous-élément");
   });
@@ -59,6 +71,7 @@ describe("scaffold", () => {
     topics: ["Claude-Code"],
     readme: "# Compagnon\nUn renard.",
     pushedAt: "2026-10-11T18:22:00Z",
+    createdAt: "2019-03-02T10:00:00Z",
   };
   it("crée un brouillon valide avec la stack connue et le reste en tags", () => {
     const { slug, files } = scaffold(input, new Set(["python"]));
@@ -69,7 +82,7 @@ describe("scaffold", () => {
       repo: "Stryxman/compagnon",
       stack: ["python"],
       tags: ["shell", "claude-code"],
-      start: "2026-10",
+      start: "2019-03",
     });
     expect(files["fr.mdx"]).toBe("Un renard.\n");
   });

@@ -22,6 +22,7 @@ const info = JSON.parse(gh(`repos/${repo}`)) as {
   homepage: string | null;
   topics?: string[];
   pushed_at: string;
+  created_at: string;
 };
 const languages = Object.keys(JSON.parse(gh(`repos/${repo}/languages`)) as Record<string, number>);
 let readme: string | null = null;
@@ -42,6 +43,7 @@ const { slug, files } = scaffold(
     topics: info.topics ?? [],
     readme,
     pushedAt: info.pushed_at,
+    createdAt: info.created_at,
   },
   new Set(skills.map((s) => s.id)),
 );

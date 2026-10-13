@@ -23,4 +23,14 @@ describe("loadAndCheck", () => {
     const { errors } = loadAndCheck(fixture("content-bad"));
     expect(errors.find((e) => e.field === "stack")?.message).toBe("skill inconnu : inconnu");
   });
+  it("signale un YAML invalide et un fichier manquant sans planter", () => {
+    const { errors } = loadAndCheck(fixture("content-broken"));
+    const fields = errors.map((e) => `${e.file}#${e.field}`);
+    expect(fields).toEqual(
+      expect.arrayContaining([
+        "src/content/projects/casse/meta.yaml#(syntaxe YAML)",
+        "src/content/experiences.yaml#(fichier manquant)",
+      ]),
+    );
+  });
 });
