@@ -18,8 +18,9 @@
 
 ## Prochaines actions
 
-1. Relecture des 5 docs par Richard.
-2. Rédaction de `docs/IMPLEMENTATION_PLAN.md` (mode plan + skill writing-plans).
+- Les 6 docs sont validés (2026-10-13). Exécution native, `/code-review` en fin de phase.
+1. **Phase 0** : installer Node 24 via fnm (accord de Richard requis pour le téléchargement), puis pnpm.
+2. **Phase 1** : socle (tâches 1.1 à 1.6 de `docs/IMPLEMENTATION_PLAN.md`), sur la branche `phase-1`.
 
 ## Décisions ouvertes
 
