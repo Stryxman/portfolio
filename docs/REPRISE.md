@@ -6,7 +6,7 @@
 
 - Cadrage terminé et révisé après le conseil LLM : PRD, TRD, APP_FLOW, BACKEND_SCHEMA, DESIGN_BRIEF (v1.1) dans `docs/`.
 - Rapport du conseil : `docs/council/`.
-- Phase 0 faite (Node 24 via fnm). Phase 1 codée et relue : PR https://github.com/Stryxman/portfolio/pull/1 (branche `phase-1`).
+- Phases 0 et 1 terminées et fusionnées (PR #1). **Production : https://portfolio-lac-nine-ql5m5f65wy.vercel.app** (redirection langue + en-têtes vérifiés, 25 E2E verts). Aperçus Vercel protégés par authentification.
 - Note : dans le shell de Claude, préfixer par `export PATH="$HOME/.local/share/fnm:$PATH"; eval "$(fnm env --shell bash)"`.
 
 ## Décisions clés
@@ -19,12 +19,10 @@
 
 ## Prochaines actions
 
-1. Richard : réautoriser le connecteur Vercel (ou importer le dépôt dans le tableau de bord), puis ajouter `SITE_URL`.
-2. Vérifier l'aperçu : redirection `/` selon la langue et en-têtes de `vercel.json` (curl), `BASE_URL=<aperçu> pnpm e2e`.
-3. Fusionner la PR #1 après accord de Richard.
-4. Phase 2 : écrire `docs/plans/phase-2.md` (contenu et schémas), le faire valider, exécuter.
+1. Fusionner la PR de la Phase 2 après CI verte et accord de Richard ; vérifier dans les journaux Vercel la ligne « contenu : 0 erreur(s) » et le canonical de production.
+2. Phase 3 : écrire `docs/plans/phase-3.md` (géométrie : matrices, bruit, sceaux SVG, champ statique), le faire valider, exécuter.
 
-Reportés (mineurs) : liste des liens de navigation dupliquée Header/MobileMenu ; canonical/hreflang de la 404 (Phase 8).
+Reportés (mineurs) : liens de navigation dupliqués Header/MobileMenu ; canonical/hreflang de la 404 (Phase 8) ; blocs de code indentés échappés par cleanReadme ; getEntry(profile) non-null en dev ; regex tiret dupliquée ; slug vide dans projet:nouveau.
 
 ## Décisions ouvertes
 

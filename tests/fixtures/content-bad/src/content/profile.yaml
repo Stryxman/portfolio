@@ -1,0 +1,8 @@
+main:
+  fullName: Test
+  role: { fr: Développeur, en: Developer }
+  tagline: { fr: Une accroche courte., en: A short tagline. }
+  bio: { fr: Une bio., en: A bio. }
+  githubLogin: test
+  socials:
+    - { kind: github, url: "https://github.com/test" }

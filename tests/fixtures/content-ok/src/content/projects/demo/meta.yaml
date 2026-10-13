@@ -1,0 +1,4 @@
+title: { fr: Démo }
+summary: { fr: Un projet de démonstration. }
+provenance: other
+stack: [astro]

@@ -1,0 +1,7 @@
+- { id: html-css, name: HTML et CSS, category: language, order: 1 }
+- { id: javascript, name: JavaScript, category: language, order: 2 }
+- { id: typescript, name: TypeScript, category: language, order: 3 }
+- { id: python, name: Python, category: language, order: 4 }
+- { id: astro, name: Astro, category: framework, order: 10 }
+- { id: tailwindcss, name: Tailwind CSS, category: framework, order: 11 }
+- { id: claude-code, name: Claude Code, category: tool, order: 20 }

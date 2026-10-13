@@ -1,0 +1,13 @@
+title:
+  fr: Portfolio
+  en: Portfolio
+summary:
+  fr: Ce site, qui réunit mes projets avec leur provenance et un champ géométrique génératif.
+  en: This site, which gathers my projects with their origin and a generative geometric field.
+provenance: claude-code
+stack: [astro, typescript, tailwindcss, claude-code]
+tags: [webgl, i18n]
+status: draft
+repo: Stryxman/portfolio
+liveUrl: https://portfolio-lac-nine-ql5m5f65wy.vercel.app
+start: 2026-10
