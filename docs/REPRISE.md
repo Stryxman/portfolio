@@ -7,7 +7,9 @@
 - Cadrage terminé et révisé après le conseil LLM : PRD, TRD, APP_FLOW, BACKEND_SCHEMA, DESIGN_BRIEF (v1.1) dans `docs/`.
 - Rapport du conseil : `docs/council/`.
 - Phases 0 et 1 terminées et fusionnées (PR #1). **Production : https://portfolio-lac-nine-ql5m5f65wy.vercel.app** (redirection langue + en-têtes vérifiés, 25 E2E verts). Aperçus Vercel protégés par authentification.
-- Note : dans le shell de Claude, préfixer par `export PATH="$HOME/.local/share/fnm:$PATH"; eval "$(fnm env --shell bash)"`.
+- Phase 2 fusionnée (PR #2) : vérification du contenu confirmée dans les journaux Vercel, canonical de production correct.
+- Shell de Claude : préfixer par `export PATH="$HOME/.local/share/pnpm/bin:$HOME/.local/share/fnm:$PATH"; eval "$(fnm env --shell bash)"`.
+- Vercel : CLI 63 installée et connectée (`vercel ... --scope stryxman`) ; le connecteur MCP reste en 403 tant qu'il n'est pas réautorisé avec l'équipe.
 
 ## Décisions clés
 
@@ -19,8 +21,7 @@
 
 ## Prochaines actions
 
-1. Fusionner la PR de la Phase 2 après CI verte et accord de Richard ; vérifier dans les journaux Vercel la ligne « contenu : 0 erreur(s) » et le canonical de production.
-2. Phase 3 : écrire `docs/plans/phase-3.md` (géométrie : matrices, bruit, sceaux SVG, champ statique), le faire valider, exécuter.
+1. Phase 3 : écrire `docs/plans/phase-3.md` (géométrie : matrices, bruit, sceaux SVG, champ statique), le faire valider, exécuter.
 
 Reportés (mineurs) : liens de navigation dupliqués Header/MobileMenu ; canonical/hreflang de la 404 (Phase 8) ; blocs de code indentés échappés par cleanReadme ; getEntry(profile) non-null en dev ; regex tiret dupliquée ; slug vide dans projet:nouveau.
 
