@@ -47,7 +47,7 @@ Arrivée typique : un recruteur sur ordinateur en journée (lien depuis un CV ou
 
 ## 3. Design tokens
 
-Toutes les couleurs sont en OKLCH, déclarées dans `@theme` (Tailwind v4) via des variables CSS. Thème par défaut : celui du système, avec un bouton de bascule mémorisé.
+Toutes les couleurs sont en OKLCH, déclarées dans `@theme` (Tailwind v4) via des variables CSS. Thème par défaut : **sombre** (choix de Richard, 2026-10-15 ; sans JavaScript, celui du système), avec un bouton de bascule mémorisé.
 
 ### 3.1 Couleurs
 

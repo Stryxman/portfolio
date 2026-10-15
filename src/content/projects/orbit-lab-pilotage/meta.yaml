@@ -1,0 +1,17 @@
+title:
+  fr: "Orbit Lab : pilotage marketing et ventes"
+  en: "Orbit Lab: marketing and sales dashboard"
+summary:
+  fr: Tableau de bord réalisé sur un cas pratique de cours, de la dépense publicitaire jusqu'aux contrats signés.
+  en: A dashboard built for a course case study, from ad spend all the way to signed contracts.
+category: artifact
+provenance: other
+platform: Artefact Claude
+stack: [javascript, html-css]
+tags: [tableau-de-bord, marketing]
+status: published
+featured: true
+order: 2
+cover: ./cover.png
+start: 2026-10
+end: 2026-10

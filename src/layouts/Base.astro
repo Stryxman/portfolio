@@ -36,14 +36,10 @@ const site = Astro.site!;
           try {
             saved = localStorage.getItem("theme");
           } catch {
-            // stockage bloqué (navigation privée, cookies refusés) : on suit le système
+            // stockage bloqué (navigation privée, cookies refusés) : thème sombre par défaut
           }
-          document.documentElement.dataset.theme =
-            saved === "light" || saved === "dark"
-              ? saved
-              : matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
+          // sombre par défaut (choix de Richard, 2026-10-15) ; le choix du visiteur est mémorisé
+          document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
         };
         apply();
         // ClientRouter remplace les attributs de <html> au swap : on réapplique avant le rendu

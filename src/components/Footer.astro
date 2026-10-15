@@ -1,20 +1,26 @@
 ---
-import { getEntry } from "astro:content";
 import type { Locale } from "../i18n/config";
 import { t } from "../i18n/ui";
 import { pathFor } from "../i18n/routes";
+import { getProfile } from "../lib/content/queries";
+import SocialLinks from "./SocialLinks.astro";
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const { fullName } = (await getEntry("profile", "main"))!.data;
+const { fullName } = await getProfile();
 ---
 
 <footer class="border-t border-line">
-  <div
-    class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 py-10 text-small text-ink-muted md:px-10"
-  >
-    <p>© {new Date().getFullYear()} {fullName}</p>
-    <a href={pathFor("legal", locale)} class="hover:text-ink">{t(locale, "footer.legal")}</a>
+  <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 py-10 text-small text-ink-muted md:px-10">
+    <p>
+      © {new Date().getFullYear()} {fullName}
+    </p>
+    <div class="flex items-center gap-4">
+      <SocialLinks locale={locale} />
+      <a href={pathFor("legal", locale)} class="hover:text-ink">
+        {t(locale, "footer.legal")}
+      </a>
+    </div>
   </div>
 </footer>

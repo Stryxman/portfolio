@@ -1,0 +1,31 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import type { Provenance } from "../lib/geometry/families";
+import Seal from "./Seal.astro";
+interface Props {
+  image: ImageMetadata | undefined;
+  slug: string;
+  provenance: Provenance;
+  alt: string;
+  sizes: string;
+  eager?: boolean;
+}
+const { image, slug, provenance, alt, sizes, eager = false } = Astro.props;
+---
+
+<!-- capture réelle, ou sceau en repli (décoratif : le titre voisin nomme le projet) -->
+{image ? (
+  <Image
+    src={image}
+    alt={alt}
+    widths={[480, 768, 1080, 1440]}
+    sizes={sizes}
+    loading={eager ? "eager" : "lazy"}
+    class="size-full object-cover object-top"
+  />
+) : (
+  <div class="flex size-full items-center justify-center bg-surface">
+    <Seal slug={slug} provenance={provenance} class="aspect-square w-1/4 max-w-32" />
+  </div>
+)}

@@ -2,14 +2,17 @@
 main:
   fullName: Richard
   role:
-    fr: Développeur web
-    en: Web developer
+    fr: Automatisation, IA et web
+    en: Automation, AI and web
+  headline:
+    fr: Richard
+    en: Richard
   tagline:
-    fr: Je conçois et je construis des sites rapides, à la main, avec Claude Code ou un CMS.
-    en: I design and build fast websites, by hand, with Claude Code or a CMS.
+    fr: J'aime créer des automatismes et des applications avec l'IA, ainsi que des sites web.
+    en: I enjoy building automations and AI-powered apps, as well as websites.
   bio:
-    fr: Je réunis ici mes projets web et mes outils, quelle que soit la façon dont ils ont été fabriqués.
-    en: This is where I gather my web projects and tools, however they were built.
+    fr: Je réunis ici mes automatisations, mes applications d'IA et mes sites, avec la façon dont chacun a été fabriqué.
+    en: This is where I gather my automations, AI apps and websites, along with how each one was built.
   githubLogin: Stryxman
   socials:
     - kind: github

@@ -4,9 +4,11 @@ title:
 summary:
   fr: Un petit renard animé qui accompagne les sessions de travail sur le bureau, entièrement en local.
   en: A small animated fox that keeps you company during work sessions on your desktop, fully offline.
+category: application
 provenance: claude-code
 stack: [python, claude-code]
 tags: [desktop, focus]
-status: draft
-repo: Stryxman/compagnon
+status: published
+featured: true
+order: 1
 start: 2026-10

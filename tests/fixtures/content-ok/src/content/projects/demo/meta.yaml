@@ -1,4 +1,5 @@
 title: { fr: Démo }
 summary: { fr: Un projet de démonstration. }
+category: website
 provenance: other
 stack: [astro]

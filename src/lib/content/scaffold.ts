@@ -45,11 +45,21 @@ const isAbsolute = (url: string) => /^(https?:|mailto:|#|data:)/i.test(url);
 // GitHub quand le dépôt est connu, sinon on la retire. Les liens relatifs suivent la même logique.
 const absolutize = (text: string, repo?: string) =>
   text
-    .replace(/!\[([^\]]*)\]\(([^)\s]+)((?:\s+["'][^"')]*["'])?)\)/g, (all, alt: string, url: string, title: string) =>
-      isAbsolute(url) ? all : repo ? `![${alt}](https://raw.githubusercontent.com/${repo}/HEAD/${url.replace(/^\.\//, "")}${title})` : "",
+    .replace(
+      /!\[([^\]]*)\]\(([^)\s]+)((?:\s+["'][^"')]*["'])?)\)/g,
+      (all, alt: string, url: string, title: string) =>
+        isAbsolute(url)
+          ? all
+          : repo
+            ? `![${alt}](https://raw.githubusercontent.com/${repo}/HEAD/${url.replace(/^\.\//, "")}${title})`
+            : "",
     )
-    .replace(/(?<!!)\[([^\]]*)\]\(([^)\s]+)((?:\s+["'][^"')]*["'])?)\)/g, (all, label: string, url: string, title: string) =>
-      isAbsolute(url) || !repo ? all : `[${label}](https://github.com/${repo}/blob/HEAD/${url.replace(/^\.\//, "")}${title})`,
+    .replace(
+      /(?<!!)\[([^\]]*)\]\(([^)\s]+)((?:\s+["'][^"')]*["'])?)\)/g,
+      (all, label: string, url: string, title: string) =>
+        isAbsolute(url) || !repo
+          ? all
+          : `[${label}](https://github.com/${repo}/blob/HEAD/${url.replace(/^\.\//, "")}${title})`,
     );
 
 // README → description de projet : sans le titre principal (déjà dans meta.yaml), sans badges ni commentaires
@@ -78,7 +88,10 @@ export function cleanReadme(md: string, repo?: string): string {
 
 const noDash = (s: string) => s.replace(/\s*[—–]\s*/g, " - ");
 
-export function scaffold(input: RepoInput, knownSkills: Set<string>): { slug: string; files: Record<string, string> } {
+export function scaffold(
+  input: RepoInput,
+  knownSkills: Set<string>,
+): { slug: string; files: Record<string, string> } {
   const slug = toSlug(input.name);
   const techs = [...input.languages, ...input.topics].map(toSlug);
   const stack = [...new Set(techs.filter((t) => knownSkills.has(t)))];
@@ -87,6 +100,7 @@ export function scaffold(input: RepoInput, knownSkills: Set<string>): { slug: st
   const meta = {
     title: { fr: input.name, en: input.name },
     summary: { fr: summary, en: "" },
+    category: "website", // à ajuster : website, artifact, ai-agent, application ou business-case
     provenance: "other",
     stack,
     tags,

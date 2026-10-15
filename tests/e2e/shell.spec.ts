@@ -81,10 +81,20 @@ test("le menu mobile s'ouvre et se ferme avec Échap", async ({ page, isMobile }
 for (const theme of ["light", "dark"] as const) {
   test(`aucune violation d'accessibilité sérieuse (thème ${theme})`, async ({ page }) => {
     await page.addInitScript((t) => localStorage.setItem("theme", t), theme);
-    for (const path of ["/fr/", "/en/projects/", "/fr/a-propos/", "/en/contact/", "/fr/mentions-legales/"]) {
+    for (const path of [
+      "/fr/",
+      "/en/projects/",
+      "/fr/projets/orbit-lab-pilotage/",
+      "/en/projects/compagnon/",
+      "/fr/a-propos/",
+      "/en/legal/",
+      "/fr/nulle-part/",
+    ]) {
       await page.goto(path);
       const { violations } = await new AxeBuilder({ page }).analyze();
-      expect(violations.filter((v) => v.impact === "serious" || v.impact === "critical")).toEqual([]);
+      expect(violations.filter((v) => v.impact === "serious" || v.impact === "critical")).toEqual(
+        [],
+      );
     }
   });
 }

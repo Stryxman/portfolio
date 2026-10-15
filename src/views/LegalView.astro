@@ -1,0 +1,31 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import type { Locale } from "../i18n/config";
+import { t } from "../i18n/ui";
+import { alternatesFor } from "../i18n/routes";
+import { getProfile } from "../lib/content/queries";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { fullName } = await getProfile();
+const entry = (await getEntry("legal", locale)) ?? (await getEntry("legal", "fr"));
+if (!entry) throw new Error("src/content/legal/fr.mdx introuvable");
+const { Content } = await render(entry);
+const title = t(locale, "page.legal.title");
+---
+
+<Base
+  locale={locale}
+  title={`${title} | ${fullName}`}
+  description={t(locale, "page.legal.description")}
+  alternates={alternatesFor("legal")}
+>
+  <section class="mx-auto max-w-[1240px] px-6 py-16 md:px-10 md:py-28">
+    <h1 class="text-h1">{title}</h1>
+    <div class="prose mt-10" lang={entry.id === locale ? undefined : "fr"}>
+      <Content />
+    </div>
+  </section>
+</Base>

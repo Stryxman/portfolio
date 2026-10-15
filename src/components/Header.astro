@@ -1,8 +1,9 @@
 ---
-import { getEntry } from "astro:content";
 import type { Locale } from "../i18n/config";
 import { t } from "../i18n/ui";
 import { pathFor } from "../i18n/routes";
+import { ariaCurrent, navLinks } from "../i18n/nav";
+import { getProfile } from "../lib/content/queries";
 import ThemeToggle from "./ThemeToggle.astro";
 import LanguageSwitch from "./LanguageSwitch.astro";
 import MobileMenu from "./MobileMenu.astro";
@@ -11,28 +12,28 @@ interface Props {
   alternates: Record<Locale, string>;
 }
 const { locale, alternates } = Astro.props;
-const { fullName } = (await getEntry("profile", "main"))!.data;
-const links = [
-  ["projects", "nav.projects"],
-  ["about", "nav.about"],
-  ["contact", "nav.contact"],
-] as const;
+const { fullName } = await getProfile();
+const path = Astro.url.pathname;
 ---
 
 <header class="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md">
   <div class="mx-auto flex h-16 max-w-[1240px] items-center justify-between px-6 md:px-10">
-    <a href={pathFor("home", locale)} class="font-semibold tracking-tight">{fullName}</a>
+    <a href={pathFor("home", locale)} class="font-semibold tracking-tight">
+      {fullName}
+    </a>
     <nav aria-label={t(locale, "nav.primary")} class="hidden items-center gap-8 md:flex">
-      {
-        links.map(([key, label]) => (
+      {navLinks.map(([key, label]) => {
+        const href = pathFor(key, locale);
+        return (
           <a
-            href={pathFor(key, locale)}
-            class="text-small text-ink-muted transition-colors duration-[var(--dur-hover)] hover:text-ink"
+            href={href}
+            aria-current={ariaCurrent(path, href)}
+            class="text-small text-ink-muted transition-colors duration-[var(--dur-hover)] hover:text-ink [&[aria-current]]:text-ink"
           >
             {t(locale, label)}
           </a>
-        ))
-      }
+        );
+      })}
     </nav>
     <div class="flex items-center gap-1">
       <LanguageSwitch locale={locale} alternates={alternates} />

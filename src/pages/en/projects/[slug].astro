@@ -1,0 +1,12 @@
+---
+import ProjectView from "../../../views/ProjectView.astro";
+import { getProjectEntries } from "../../../lib/content/queries";
+
+// un brouillon n'a pas de page en production ; un slug inconnu tombe sur la 404
+export async function getStaticPaths() {
+  return (await getProjectEntries()).map((e) => ({ params: { slug: e.id } }));
+}
+const { slug } = Astro.params;
+---
+
+<ProjectView locale="en" slug={slug} />

@@ -8,7 +8,10 @@ const profile = defineCollection({
   schema: ({ image }) => profileSchema(image),
 });
 const skills = defineCollection({ loader: file("src/content/skills.yaml"), schema: skillSchema });
-const experiences = defineCollection({ loader: file("src/content/experiences.yaml"), schema: experienceSchema });
+const experiences = defineCollection({
+  loader: file("src/content/experiences.yaml"),
+  schema: experienceSchema,
+});
 const projects = defineCollection({
   loader: glob({
     pattern: "*/meta.yaml",
@@ -21,4 +24,7 @@ const projectBodies = defineCollection({
   loader: glob({ pattern: "*/{fr,en}.mdx", base: "src/content/projects" }),
 });
 
-export const collections = { profile, skills, experiences, projects, projectBodies };
+// Mentions légales : src/content/legal/{fr,en}.mdx, ids « fr » et « en »
+const legal = defineCollection({ loader: glob({ pattern: "*.mdx", base: "src/content/legal" }) });
+
+export const collections = { profile, skills, experiences, projects, projectBodies, legal };

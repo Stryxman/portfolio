@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
-import { alternatesFor } from "../i18n/routes";
+import Seal from "../components/Seal.astro";
+import { alternatesFor, pathFor } from "../i18n/routes";
+const link = "text-accent underline underline-offset-4";
 ---
 
 <Base
@@ -9,12 +11,35 @@ import { alternatesFor } from "../i18n/routes";
   description="404"
   alternates={alternatesFor("home")}
 >
-  <section class="mx-auto max-w-[1240px] px-6 py-16 md:px-10 md:py-28">
-    <h1 class="text-h1">Page introuvable</h1>
-    <p lang="en" class="mt-2 text-h3 text-ink-muted">Page not found</p>
-    <p class="mt-8 flex gap-6">
-      <a href="/fr/" class="text-accent underline">Accueil</a>
-      <a href="/en/" lang="en" class="text-accent underline">Home</a>
-    </p>
+  <section class="mx-auto flex max-w-[1240px] flex-col items-start gap-8 px-6 py-16 md:px-10 md:py-28">
+    <Seal slug="404" provenance="other" class="aspect-square w-16" />
+    <div>
+      <h1 class="text-h1">Page introuvable</h1>
+      <p lang="en" class="mt-2 text-h3 text-ink-muted">
+        Page not found
+      </p>
+    </div>
+    <ul class="flex flex-wrap gap-x-6 gap-y-2">
+      <li>
+        <a href={pathFor("home", "fr")} class={link}>
+          Accueil
+        </a>
+      </li>
+      <li>
+        <a href={pathFor("projects", "fr")} class={link}>
+          Projets
+        </a>
+      </li>
+      <li lang="en">
+        <a href={pathFor("home", "en")} class={link}>
+          Home
+        </a>
+      </li>
+      <li lang="en">
+        <a href={pathFor("projects", "en")} class={link}>
+          Projects
+        </a>
+      </li>
+    </ul>
   </section>
 </Base>

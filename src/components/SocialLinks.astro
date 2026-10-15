@@ -1,0 +1,48 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Locale } from "../i18n/config";
+import { t } from "../i18n/ui";
+import { getProfile } from "../lib/content/queries";
+interface Props {
+  locale: Locale;
+  withLabels?: boolean;
+  class?: string;
+}
+const { locale, withLabels = false, class: cls } = Astro.props;
+const { socials } = await getProfile();
+const icons = {
+  github: "ph:github-logo",
+  linkedin: "ph:linkedin-logo",
+  x: "ph:x-logo",
+  bluesky: "ph:butterfly",
+  website: "ph:globe",
+  other: "ph:link",
+} as const;
+const names = {
+  github: "GitHub",
+  linkedin: "LinkedIn",
+  x: "X",
+  bluesky: "Bluesky",
+  website: t(locale, "social.website"),
+  other: t(locale, "social.other"),
+};
+---
+
+<ul class:list={["flex flex-wrap items-center gap-1", cls]} aria-label={t(locale, "social.label")}>
+  {socials.map((s) => {
+    const name = s.label ?? names[s.kind];
+    return (
+      <li>
+        <a
+          href={s.url}
+          rel="me"
+          aria-label={withLabels ? undefined : name}
+          class="inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-control px-2 text-ink-muted transition-colors duration-[var(--dur-hover)] hover:text-ink"
+        >
+          <Icon name={icons[s.kind]} class="size-5" aria-hidden="true" />
+          {withLabels && <span class="text-small">{name}</span>}
+        </a>
+      </li>
+    );
+  })}
+</ul>

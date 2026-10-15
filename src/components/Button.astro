@@ -1,0 +1,26 @@
+---
+// Boutons de DESIGN_BRIEF §6.6 : principal (accent) ou secondaire (bordure), rayon 6 px, une ligne.
+interface Props {
+  href: string;
+  variant?: "primary" | "secondary";
+  class?: string;
+  [attr: string]: unknown;
+}
+const { href, variant = "primary", class: cls, ...attrs } = Astro.props;
+const look = {
+  primary: "bg-accent text-accent-ink",
+  secondary: "border border-line-strong text-ink hover:border-ink",
+}[variant];
+---
+
+<a
+  href={href}
+  class:list={[
+    "inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-control px-5 text-small font-medium transition-[transform,border-color] duration-[var(--dur-press)] ease-out motion-safe:active:scale-[0.97]",
+    look,
+    cls,
+  ]}
+  {...attrs}
+>
+  <slot />
+</a>
