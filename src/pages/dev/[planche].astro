@@ -1,0 +1,31 @@
+---
+import Base from "../../layouts/Base.astro";
+import Seal from "../../components/Seal.astro";
+import FieldStatic from "../../components/FieldStatic.astro";
+import { alternatesFor } from "../../i18n/routes";
+
+// planche de revue visuelle : générée en dev uniquement, aucune page en production
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { planche: "geometrie" } }] : [];
+}
+const provenances = ["claude-code", "hand-coded", "cms", "other"] as const;
+const slugs = ["compagnon", "portfolio", "atelier-lumen"];
+---
+
+<Base locale="fr" title="Planche géométrie" description="Revue visuelle" alternates={alternatesFor("home")}>
+  <section class="relative h-[60vh] border-b border-line"><FieldStatic /></section>
+  <section class="mx-auto grid max-w-[1240px] gap-10 px-6 py-16 md:px-10">
+    {
+      provenances.map((p) => (
+        <div>
+          <h2 class="text-meta text-ink-muted">{p}</h2>
+          <div class="mt-4 flex gap-6">
+            {slugs.map((s) => (
+              <Seal slug={s} provenance={p} size={96} />
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </section>
+</Base>

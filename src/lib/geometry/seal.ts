@@ -53,7 +53,7 @@ export function sealGeometry(slug: string, provenance: Provenance) {
   const squares: Polygon[] = [];
   for (let y = 0; y < SQUARES; y++) {
     for (let x = 0; x < SQUARES; x++) {
-      const a = amp[y]![x]! * cell * 0.35;
+      const a = amp[y]![x]! * cell * 0.6; // assez marqué pour se lire à 64-96 px
       const corner = (cx: number, cy: number, k: number): Vec2 => [
         cx + n(cx * 0.3 + k, cy * 0.3) * a,
         cy + n(cx * 0.3, cy * 0.3 + k) * a,
