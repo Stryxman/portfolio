@@ -84,7 +84,7 @@ for (const theme of ["light", "dark"] as const) {
     for (const path of [
       "/fr/",
       "/en/projects/",
-      "/fr/projets/portfolio/",
+      "/fr/projets/orbit-lab-pilotage/",
       "/en/projects/compagnon/",
       "/fr/a-propos/",
       "/en/legal/",

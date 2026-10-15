@@ -41,8 +41,8 @@ const section = "mx-auto max-w-[1240px] px-6 py-16 md:px-10 md:py-28";
     <FieldStatic />
     <div class="relative z-10 mx-auto flex min-h-[calc(100dvh-4rem)] max-w-[1240px] flex-col justify-center px-6 py-16 md:px-10">
       <div class="md:w-5/12">
-        <p class="text-small text-ink-muted">
-          {profile.fullName} · <span lang={langOf(role.lang)}>{role.text}</span>
+        <p class="text-small text-ink-muted" lang={langOf(role.lang)}>
+          {role.text}
         </p>
         <h1 class="mt-4 text-display text-balance" lang={langOf(headline.lang)}>
           {headline.text}

@@ -3,8 +3,10 @@ import type { Locale } from "../../i18n/config";
 import { fmt } from "../../i18n/ui";
 import { localize } from "../content/select";
 import type { Provenance } from "../geometry/families";
+import type { PROJECT_CATEGORIES } from "../content/schemas";
 
 export type Text = { text: string; lang: Locale };
+export type Category = (typeof PROJECT_CATEGORIES)[number];
 type Localized = { fr: string; en: string };
 
 // Ce que la couche de requêtes fournit, sans dépendre d'astro:content (testable sous Vitest)
@@ -12,6 +14,7 @@ export interface ProjectInput {
   slug: string;
   title: Localized;
   summary: Localized;
+  category: Category;
   provenance: Provenance;
   start?: string | undefined;
   end?: string | undefined;
@@ -22,6 +25,7 @@ export interface ProjectCard {
   slug: string;
   title: Text;
   summary: Text;
+  category: Category;
   provenance: Provenance;
   period: string | undefined;
   image: ImageMetadata | undefined;
@@ -58,6 +62,7 @@ export function toCard(p: ProjectInput, locale: Locale, now = new Date()): Proje
     slug: p.slug,
     title: localize(p.title, locale),
     summary: localize(p.summary, locale),
+    category: p.category,
     provenance: p.provenance,
     period: formatPeriod(p.start, p.end, locale, now),
     image: p.image,

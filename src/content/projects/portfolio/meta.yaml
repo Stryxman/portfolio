@@ -4,11 +4,12 @@ title:
 summary:
   fr: Ce site, qui réunit mes projets avec leur provenance et un champ géométrique génératif.
   en: This site, which gathers my projects with their origin and a generative geometric field.
+category: website
 provenance: claude-code
 stack: [astro, typescript, tailwindcss, claude-code]
 tags: [webgl, i18n]
-status: published
-featured: true
+# archivé : ce site est le portfolio lui-même, inutile de le présenter dans sa propre grille
+status: archived
 order: 2
 repo: Stryxman/portfolio
 liveUrl: https://portfolio-lac-nine-ql5m5f65wy.vercel.app

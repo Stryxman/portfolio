@@ -35,6 +35,7 @@ export const cardOf = (e: ProjectEntry, locale: Locale): ProjectCard =>
       slug: e.id,
       title: e.data.title,
       summary: e.data.summary,
+      category: e.data.category,
       provenance: e.data.provenance,
       start: e.data.start,
       end: e.data.end,

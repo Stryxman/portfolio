@@ -66,6 +66,8 @@ const dt = "text-ink-muted";
         {card.summary.text}
       </p>
       <dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-3 border-t border-line pt-6 text-small">
+        <dt class={dt}>{t(locale, "project.category")}</dt>
+        <dd>{t(locale, `category.${data.category}`)}</dd>
         <dt class={dt}>{t(locale, "project.fabrication")}</dt>
         <dd class="flex flex-wrap items-center gap-2">
           <Tag accent>{t(locale, `provenance.${data.provenance}`)}</Tag>

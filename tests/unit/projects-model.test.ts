@@ -42,6 +42,7 @@ describe("toCard", () => {
         slug: "demo",
         title: { fr: "Démo", en: "" },
         summary: { fr: "Un site.", en: "A site." },
+        category: "website",
         provenance: "cms",
         start: "2025",
       },

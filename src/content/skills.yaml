@@ -1,7 +1,9 @@
-- { id: html-css, name: HTML/CSS, category: language, order: 1 }
-- { id: javascript, name: JavaScript, category: language, order: 2 }
-- { id: typescript, name: TypeScript, category: language, order: 3 }
+- { id: claude-code, name: Claude Code, category: tool, order: 1 }
+- { id: n8n, name: n8n, category: tool, order: 2 }
+- { id: make, name: Make, category: tool, order: 3 }
 - { id: python, name: Python, category: language, order: 4 }
+- { id: typescript, name: TypeScript, category: language, order: 5 }
+- { id: javascript, name: JavaScript, category: language, order: 6 }
+- { id: html-css, name: HTML/CSS, category: language, order: 7 }
 - { id: astro, name: Astro, category: framework, order: 10 }
 - { id: tailwindcss, name: Tailwind CSS, category: framework, order: 11 }
-- { id: claude-code, name: Claude Code, category: tool, order: 20 }

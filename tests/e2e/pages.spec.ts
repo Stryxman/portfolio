@@ -12,13 +12,19 @@ const projects = readdirSync(DIR)
     (m) => m.status === "published" || (!process.env.BASE_URL && (m.status ?? "draft") === "draft"),
   )
   .sort((a, b) => (a.order ?? 100) - (b.order ?? 100) || a.slug.localeCompare(b.slug));
+// ordre de la grille : par catégorie (PROJECT_CATEGORIES), puis order et slug
+const CATEGORIES = ["website", "artifact", "ai-agent", "application", "business-case"];
+const grid = [...projects].sort(
+  (a, b) => CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category),
+);
 const profile = parse(readFileSync("src/content/profile.yaml", "utf8")).main;
 const linked = projects.find((m) => m.liveUrl && m.repo);
 const bare = projects.find((m) => !m.liveUrl && !m.repo);
 
-test("accueil : titre, accroche, actions et projets", async ({ page }) => {
+test("accueil : nom, rôle, accroche, actions et projets", async ({ page }) => {
   await page.goto("/fr/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(profile.headline.fr);
+  await expect(page.getByText(profile.role.fr, { exact: true })).toBeVisible();
   await expect(page.getByText(profile.tagline.fr)).toBeVisible();
   await expect(page.getByRole("link", { name: "Voir les projets" })).toHaveAttribute(
     "href",
@@ -45,11 +51,34 @@ test("le titre du hero tient sur 2 lignes, en FR et en EN", async ({ page }) => 
   }
 });
 
-test("projets : la grille montre tous les projets visibles, dans l'ordre", async ({ page }) => {
+test("projets : une section par catégorie présente, tous les projets visibles, dans l'ordre", async ({
+  page,
+}) => {
   await page.goto("/fr/projets/");
+  await expect(page.locator("[data-category]")).toHaveCount(
+    new Set(projects.map((m) => m.category)).size,
+  );
   const cards = page.locator("[data-grid] [data-project]");
   await expect(cards).toHaveCount(projects.length);
-  await expect(cards.first().getByRole("link")).toHaveText(projects[0]!.title.fr);
+  await expect(cards.first().getByRole("link")).toHaveText(grid[0]!.title.fr);
+});
+
+test("une fiche avec image montre la capture, sans sceau en double", async ({ page }) => {
+  const withCover = projects.find((m) => m.cover);
+  test.skip(!withCover, "aucun projet avec cover");
+  await page.goto(`/fr/projets/${withCover!.slug}/`);
+  await expect(page.locator("[data-preview] img")).toBeVisible();
+  await expect(page.locator("[data-preview] svg")).toHaveCount(0);
+});
+
+test("sans choix enregistré, le site s'ouvre en sombre, même si le système est clair", async ({
+  browser,
+}) => {
+  const ctx = await browser.newContext({ colorScheme: "light" });
+  const page = await ctx.newPage();
+  await page.goto("/fr/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await ctx.close();
 });
 
 test("fiche : cartel, liens externes, sceau en repli", async ({ page }) => {

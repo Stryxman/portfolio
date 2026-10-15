@@ -51,6 +51,15 @@ export const profileSchema = <I extends z.ZodType>(image: ImageFn<I>) =>
     ),
   });
 
+// Catégories de la grille des projets, dans l'ordre d'affichage
+export const PROJECT_CATEGORIES = [
+  "website",
+  "artifact",
+  "ai-agent",
+  "application",
+  "business-case",
+] as const;
+
 export const projectSchema = <I extends z.ZodType, R extends z.ZodType>(
   image: ImageFn<I>,
   skillRef: R,
@@ -59,6 +68,7 @@ export const projectSchema = <I extends z.ZodType, R extends z.ZodType>(
     title: localized,
     summary: localized,
     role: localized.optional(),
+    category: z.enum(PROJECT_CATEGORIES),
     provenance: z.enum(["claude-code", "hand-coded", "cms", "other"]),
     platform: z.string().optional(),
     stack: z.array(skillRef).default([]),
