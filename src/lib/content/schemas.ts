@@ -1,10 +1,13 @@
 import { z } from "astro/zod";
 
 // Fabriques partagées par content.config.ts (vrais image() et reference()) et par scripts/check-content.ts.
-export type ImageFn = () => z.ZodType;
+// Génériques : les types d'image et de référence d'Astro remontent jusqu'aux vues.
+export type ImageFn<I extends z.ZodType = z.ZodType> = () => I;
 
 export const localized = z.object({ fr: z.string().min(1), en: z.string().default("") });
-export const slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "kebab-case attendu (a-z, 0-9, tirets)");
+export const slug = z
+  .string()
+  .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "kebab-case attendu (a-z, 0-9, tirets)");
 export const yearMonth = z.string().regex(/^\d{4}(-(0[1-9]|1[0-2]))?$/, "format AAAA ou AAAA-MM");
 
 export const skillSchema = z.object({
@@ -27,7 +30,7 @@ export const experienceSchema = z.object({
   order: z.number().int(),
 });
 
-export const profileSchema = (image: ImageFn) =>
+export const profileSchema = <I extends z.ZodType>(image: ImageFn<I>) =>
   z.object({
     fullName: z.string().min(1),
     role: localized,
@@ -48,7 +51,10 @@ export const profileSchema = (image: ImageFn) =>
     ),
   });
 
-export const projectSchema = (image: ImageFn, skillRef: z.ZodType) =>
+export const projectSchema = <I extends z.ZodType, R extends z.ZodType>(
+  image: ImageFn<I>,
+  skillRef: R,
+) =>
   z.object({
     title: localized,
     summary: localized,
@@ -63,7 +69,10 @@ export const projectSchema = (image: ImageFn, skillRef: z.ZodType) =>
     start: yearMonth.optional(),
     end: yearMonth.optional(),
     liveUrl: z.url().optional(),
-    repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/, "format owner/nom").optional(),
+    repo: z
+      .string()
+      .regex(/^[\w.-]+\/[\w.-]+$/, "format owner/nom")
+      .optional(),
     cover: image().optional(),
     gallery: z.array(z.object({ src: image(), alt: localized })).default([]),
     preview: z

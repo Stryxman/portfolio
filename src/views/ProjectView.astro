@@ -1,0 +1,188 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import type { Locale } from "../i18n/config";
+import { fmt, t } from "../i18n/ui";
+import { projectPath } from "../i18n/routes";
+import { localize } from "../lib/content/select";
+import {
+  cardOf,
+  getProfile,
+  getProjectBody,
+  getProjectEntries,
+  getSkills,
+} from "../lib/content/queries";
+import { domainOf, neighbours, projectStatus } from "../lib/projects/model";
+import ProjectImage from "../components/ProjectImage.astro";
+import Seal from "../components/Seal.astro";
+import Tag from "../components/Tag.astro";
+import Button from "../components/Button.astro";
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+const { locale, slug } = Astro.props;
+const entries = await getProjectEntries();
+const entry = entries.find((e) => e.id === slug);
+if (!entry) throw new Error(`projet introuvable : ${slug}`); // getStaticPaths ne génère que les projets visibles
+const { data } = entry;
+const { fullName } = await getProfile();
+const card = cardOf(entry, locale);
+const skillNames = new Map((await getSkills()).map((s) => [s.id, s.name]));
+const stack = data.stack.map((s) => skillNames.get(s.id) ?? s.id);
+const role = data.role ? localize(data.role, locale) : undefined;
+const status = projectStatus(data.start, data.end);
+const body = await getProjectBody(slug, locale);
+const { prev, next } = neighbours(
+  entries.map((e) => e.id),
+  slug,
+);
+const titleOf = (id: string) => localize(entries.find((e) => e.id === id)!.data.title, locale);
+const langOf = (lang: Locale) => (lang === locale ? undefined : lang);
+const dt = "text-ink-muted";
+---
+
+<Base
+  locale={locale}
+  title={`${card.title.text} | ${fullName}`}
+  description={card.summary.text}
+  alternates={{ fr: projectPath(slug, "fr"), en: projectPath(slug, "en") }}
+>
+  <article class="mx-auto grid max-w-[1240px] gap-12 px-6 py-16 md:grid-cols-12 md:gap-10 md:px-10 md:py-28">
+    <!-- cartel (DESIGN_BRIEF §6.3) : collant sur ordinateur, au-dessus de l'image sur mobile -->
+    <div data-cartel class="flex flex-col gap-8 md:sticky md:top-24 md:col-span-4 md:self-start">
+      <div class="flex items-start justify-between gap-6">
+        <div class="min-w-0">
+          <h1 class="text-h1 text-balance break-words" lang={langOf(card.title.lang)}>
+            {card.title.text}
+          </h1>
+          {card.period && <p class="mt-3 text-meta text-ink-muted">{card.period}</p>}
+        </div>
+        <Seal slug={slug} provenance={data.provenance} class="aspect-square w-14" />
+      </div>
+      <p class="text-ink-muted" lang={langOf(card.summary.lang)}>
+        {card.summary.text}
+      </p>
+      <dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-3 border-t border-line pt-6 text-small">
+        <dt class={dt}>{t(locale, "project.fabrication")}</dt>
+        <dd class="flex flex-wrap items-center gap-2">
+          <Tag accent>{t(locale, `provenance.${data.provenance}`)}</Tag>
+          {data.platform && <span>{data.platform}</span>}
+        </dd>
+        {stack.length > 0 && (
+          <>
+            <dt class={dt}>{t(locale, "project.stack")}</dt>
+            <dd>{stack.join(", ")}</dd>
+          </>
+        )}
+        {role && (
+          <>
+            <dt class={dt}>{t(locale, "project.role")}</dt>
+            <dd lang={langOf(role.lang)}>{role.text}</dd>
+          </>
+        )}
+        {status && (
+          <>
+            <dt class={dt}>{t(locale, "project.status")}</dt>
+            <dd>{t(locale, `status.${status}`)}</dd>
+          </>
+        )}
+      </dl>
+      {(data.liveUrl || data.repo) && (
+        <div class="flex flex-wrap gap-3">
+          {data.liveUrl && (
+            <Button href={data.liveUrl} target="_blank" rel="noopener noreferrer">
+              {t(locale, "cta.site")}
+              <Icon name="ph:arrow-up-right" class="size-4" aria-hidden="true" />
+              <span class="sr-only">{t(locale, "a11y.newTab")}</span>
+            </Button>
+          )}
+          {data.repo && (
+            <Button
+              href={`https://github.com/${data.repo}`}
+              variant={data.liveUrl ? "secondary" : "primary"}
+            >
+              <Icon name="ph:github-logo" class="size-4" aria-hidden="true" />
+              {t(locale, "cta.code")}
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+
+    <div class="flex min-w-0 flex-col gap-12 md:col-span-8">
+      <!-- cadre sobre : bordure 1 px, rayon 10 px, domaine en barre supérieure, pas de fausses pastilles -->
+      <figure
+        data-preview
+        transition:name={`apercu-${slug}`}
+        class="overflow-hidden rounded-panel border border-line"
+      >
+        {data.liveUrl && (
+          <figcaption class="flex h-9 items-center border-b border-line bg-surface px-4 text-meta text-ink-muted">
+            {domainOf(data.liveUrl)}
+          </figcaption>
+        )}
+        <div class="aspect-[16/10]">
+          <ProjectImage
+            image={card.image}
+            slug={slug}
+            provenance={data.provenance}
+            alt={fmt(locale, "capture.alt", { title: card.title.text })}
+            sizes="(min-width: 768px) 66vw, 100vw"
+            eager
+          />
+        </div>
+      </figure>
+      {body && (
+        <div class="prose" lang={langOf(body.lang)}>
+          <body.Content />
+        </div>
+      )}
+      {data.gallery.length > 0 && (
+        <div class="grid gap-6 sm:grid-cols-2">
+          {data.gallery.map((g) => (
+            <Image
+              src={g.src}
+              alt={localize(g.alt, locale).text}
+              widths={[480, 960]}
+              sizes="(min-width: 768px) 33vw, 100vw"
+              class="w-full rounded-panel border border-line"
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </article>
+  {(prev || next) && (
+    <nav
+      aria-label={t(locale, "project.more")}
+      class="mx-auto max-w-[1240px] px-6 pb-16 md:px-10 md:pb-28"
+    >
+      <div class="flex flex-wrap justify-between gap-6 border-t border-line pt-10">
+        {prev ? (
+          <a href={projectPath(prev, locale)} rel="prev" class="flex flex-col gap-1">
+            <span class="text-small text-ink-muted">{t(locale, "project.prev")}</span>
+            <span class="text-h3" lang={langOf(titleOf(prev).lang)}>
+              {titleOf(prev).text}
+            </span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a
+            href={projectPath(next, locale)}
+            rel="next"
+            class="flex flex-col items-end gap-1 text-right"
+          >
+            <span class="text-small text-ink-muted">{t(locale, "project.next")}</span>
+            <span class="text-h3" lang={langOf(titleOf(next).lang)}>
+              {titleOf(next).text}
+            </span>
+          </a>
+        )}
+      </div>
+    </nav>
+  )}
+</Base>

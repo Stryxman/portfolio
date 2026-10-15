@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { pathFor, projectPath, alternatesFor } from "../../src/i18n/routes";
-import { ui, t } from "../../src/i18n/ui";
+import { ui, t, fmt } from "../../src/i18n/ui";
 import { otherLocale } from "../../src/i18n/config";
 
 describe("routes", () => {
@@ -25,13 +25,22 @@ describe("routes", () => {
 describe("textes d'interface", () => {
   it("ont les mêmes clés et aucune valeur vide", () => {
     expect(Object.keys(ui.en).sort()).toEqual(Object.keys(ui.fr).sort());
-    for (const dict of [ui.fr, ui.en]) for (const v of Object.values(dict)) expect(v.trim()).not.toBe("");
+    for (const dict of [ui.fr, ui.en])
+      for (const v of Object.values(dict)) expect(v.trim()).not.toBe("");
   });
   it("ne contiennent ni tiret cadratin ni demi-cadratin", () => {
-    for (const dict of [ui.fr, ui.en]) for (const v of Object.values(dict)) expect(v).not.toMatch(/[—–]/);
+    for (const dict of [ui.fr, ui.en])
+      for (const v of Object.values(dict)) expect(v).not.toMatch(/[—–]/);
   });
   it("traduit une clé", () => {
     expect(t("fr", "cta.contact")).toBe("Me contacter");
     expect(t("en", "cta.contact")).toBe("Get in touch");
+  });
+});
+
+describe("fmt", () => {
+  it("remplace les variables", () => {
+    expect(fmt("fr", "period.since", { y: 2024 })).toBe("Depuis 2024");
+    expect(fmt("en", "period.since", { y: 2024 })).toBe("Since 2024");
   });
 });

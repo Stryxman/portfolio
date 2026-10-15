@@ -1,0 +1,18 @@
+---
+// Étiquette en pilule ; la provenance est la seule étiquette accentuée (DESIGN_BRIEF §6.6)
+interface Props {
+  accent?: boolean;
+  class?: string;
+}
+const { accent = false, class: cls } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-small",
+    accent ? "border-accent/60 text-accent" : "border-line bg-surface text-ink-muted",
+    cls,
+  ]}
+>
+  <slot />
+</span>

@@ -4,7 +4,6 @@ export const routes = {
   home: { fr: "/fr/", en: "/en/" },
   projects: { fr: "/fr/projets/", en: "/en/projects/" },
   about: { fr: "/fr/a-propos/", en: "/en/about/" },
-  contact: { fr: "/fr/contact/", en: "/en/contact/" },
   legal: { fr: "/fr/mentions-legales/", en: "/en/legal/" },
 } as const satisfies Record<string, Record<Locale, string>>;
 

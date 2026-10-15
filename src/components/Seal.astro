@@ -8,12 +8,16 @@ interface Props {
   size?: number;
   class?: string;
 }
-const { slug, provenance, size = 64, class: cls = "" } = Astro.props;
+const { slug, provenance, size, class: cls = "" } = Astro.props;
 const { dark, light } = renderSeal(slug, provenance, nextId("k"));
 ---
 
 <!-- sceau décoratif : monde clair « Traceur » ou sombre « Transformation » selon le thème -->
-<span class:list={["inline-block shrink-0", cls]} style={{ width: `${size}px`, height: `${size}px` }}>
+<!-- sans « size », la classe donne la taille (ex. « aspect-square w-16 ») -->
+<span
+  class:list={["inline-block shrink-0", cls]}
+  style={size ? { width: `${size}px`, height: `${size}px` } : undefined}
+>
   <span class="block size-full dark:hidden [&>svg]:size-full" set:html={light} />
   <span class="hidden size-full dark:block [&>svg]:size-full" set:html={dark} />
 </span>

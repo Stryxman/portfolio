@@ -1,0 +1,53 @@
+---
+import type { Locale } from "../i18n/config";
+import { fmt, t } from "../i18n/ui";
+import { projectPath } from "../i18n/routes";
+import type { ProjectCard } from "../lib/projects/model";
+import ProjectImage from "./ProjectImage.astro";
+import Tag from "./Tag.astro";
+interface Props {
+  card: ProjectCard;
+  locale: Locale;
+  heading?: "h2" | "h3";
+}
+const { card, locale, heading: Heading = "h3" } = Astro.props;
+// repli FR sur une page EN : on balise la langue du texte réellement affiché
+const langOf = (lang: Locale) => (lang === locale ? undefined : lang);
+---
+
+<article
+  data-project={card.slug}
+  class="group relative flex flex-col gap-5 transition-transform duration-[var(--dur-press)] ease-out motion-safe:active:scale-[0.97]"
+>
+  <div
+    data-frame
+    transition:name={`apercu-${card.slug}`}
+    class="aspect-[16/10] overflow-hidden rounded-panel border border-line transition-[transform,border-color] duration-[var(--dur-hover)] ease-out group-hover:border-line-strong motion-safe:group-hover:-translate-y-0.5"
+  >
+    <ProjectImage
+      image={card.image}
+      slug={card.slug}
+      provenance={card.provenance}
+      alt={fmt(locale, "capture.alt", { title: card.title.text })}
+      sizes="(min-width: 768px) 50vw, 100vw"
+    />
+  </div>
+  <div class="flex flex-col gap-2">
+    <p class="flex flex-wrap items-center gap-3 text-meta text-ink-muted">
+      <Tag accent>{t(locale, `provenance.${card.provenance}`)}</Tag>
+      {card.period && <span>{card.period}</span>}
+    </p>
+    <Heading class="text-h3 text-balance break-words">
+      <a
+        href={projectPath(card.slug, locale)}
+        lang={langOf(card.title.lang)}
+        class="outline-none after:absolute after:inset-0 after:rounded-panel focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-accent"
+      >
+        {card.title.text}
+      </a>
+    </Heading>
+    <p class="max-w-prose text-small text-ink-muted" lang={langOf(card.summary.lang)}>
+      {card.summary.text}
+    </p>
+  </div>
+</article>
