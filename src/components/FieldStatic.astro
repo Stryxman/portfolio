@@ -1,0 +1,16 @@
+---
+import { renderField } from "../lib/geometry/field";
+import { nextId } from "../lib/geometry/ids";
+interface Props {
+  class?: string;
+}
+const { class: cls = "" } = Astro.props;
+const { dark, light } = renderField(1440, 900, nextId("c"));
+---
+
+<!-- première image du champ (DESIGN_BRIEF §5.2) : repli sans JS et en mouvement réduit ; le canvas WebGL (Phase 5) s'y superposera -->
+<!-- sur mobile, le texte occupe toute la largeur : le champ y est atténué -->
+<div data-field class:list={["pointer-events-none absolute inset-0 overflow-hidden opacity-60 md:opacity-100", cls]} aria-hidden="true">
+  <div class="size-full dark:hidden [&>svg]:size-full" set:html={light} />
+  <div class="hidden size-full dark:block [&>svg]:size-full" set:html={dark} />
+</div>

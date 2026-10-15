@@ -27,3 +27,11 @@
 - Contenu initial : profil (sans email, dépôt public), 7 compétences, projets compagnon et portfolio en brouillon.
 - `pnpm projet:nouveau owner/repo` : brouillon depuis GitHub, README rendu compilable en MDX (testé sur le vrai README d'Astro).
 - Tests : 68 unitaires, 25 E2E. Revue : 9 constats, 5 corrigés, 4 mineurs reportés.
+
+## 2026-10-15 : Phase 3 (géométrie)
+
+- Bases mathématiques pures et déterministes : matrices 2×2, courbe ease-in-out du brief, graine FNV-1a + mulberry32, bruit lissé.
+- Cycle du champ sombre (identité → rotation → cisaillement → échelle → identité) et familles de sceaux par provenance, vérifiées par leurs propriétés.
+- Sceaux SVG serveur (< 4 Ko, instantané), première image du champ sur l'accueil (masque derrière le titre, cadrage mobile), planche /dev/geometrie/ en dev uniquement.
+- Revue visuelle sur captures (desktop + mobile, deux thèmes) : flèches î ĵ, trait du traceur allégé, désordre des sceaux lisible.
+- Tests : 101 unitaires, 33 E2E. Revue : 8 constats, 3 corrigés, 1 reporté en Phase 5 (coût du bruit), 4 mineurs.
