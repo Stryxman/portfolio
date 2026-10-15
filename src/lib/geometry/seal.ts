@@ -14,7 +14,7 @@ export function sealDisorder(slug: string, provenance: Provenance, n = SQUARES):
   const grid = Array.from({ length: n }, () => Array.from({ length: n }, () => 0));
   if (provenance === "hand-coded") return grid.map((row) => row.map(() => 0.08 + r() * 0.02));
   if (provenance === "cms") return grid.map((row, y) => row.map(() => 0.05 + (y / (n - 1)) * 0.6 + r() * 0.03));
-  if (provenance === "claude-code") {
+  if (provenance === "claude-code" || provenance === "claude") {
     const [fx, fy] = [r() * (n - 1), r() * (n - 1)];
     return grid.map((row, y) => row.map((_, x) => 0.05 + 0.85 * Math.exp(-((x - fx) ** 2 + (y - fy) ** 2) / 2)));
   }

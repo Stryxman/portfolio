@@ -1,0 +1,18 @@
+# Contexte : cours « Stack marketing et outils no-code » (intitulé à confirmer par Richard).
+# Première maquette faite avec Claude sous le nom « Médilink » (artefact) ; la version en ligne s'appelle
+# « Trouver mon médecin » (nom à confirmer, le nom pourra changer). Projet pas terminé.
+# Premier chatbot de Richard, construit avec n8n.
+# À compléter : lien en ligne (liveUrl), capture (cover.png).
+title:
+  fr: Trouver mon médecin
+  en: Trouver mon médecin
+summary:
+  fr: Un site d'orientation médicale où l'on remplit une demande ou l'on discute directement avec un chatbot, construit avec n8n.
+  en: A medical guidance site where visitors either fill in a request or chat directly with a chatbot built with n8n.
+category: website
+provenance: claude
+stack: [n8n]
+tags: [chatbot, formulaire, no-code]
+status: published
+order: 4
+start: 2026-10

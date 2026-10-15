@@ -1,0 +1,18 @@
+# Contexte : exercice du cours « Stack marketing et outils no-code » (intitulé à confirmer par Richard).
+# Maquette faite avec Claude (artefact Design « Vertige – Landing page »), salle et avis fictifs.
+# Le formulaire envoie les inscriptions dans Airtable, déjà classées, via une automatisation n8n.
+# À compléter : lien en ligne (liveUrl), capture (cover.png).
+title:
+  fr: "Vertige : landing page de séance découverte"
+  en: "Vertige: discovery session landing page"
+summary:
+  fr: Landing page d'une salle d'escalade fictive dont le formulaire range chaque inscription, déjà classée, dans Airtable.
+  en: Landing page for a fictional climbing gym whose form files each sign-up, already sorted, into Airtable.
+category: website
+provenance: claude
+stack: [n8n, airtable]
+tags: [landing-page, formulaire, no-code]
+status: published
+order: 3
+start: 2026-10
+end: 2026-10

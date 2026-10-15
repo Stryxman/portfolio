@@ -1,0 +1,18 @@
+An exercise from the "Marketing stack and no-code tools" course: build a landing page that automates lead capture, from the visitor's input to an already-sorted database.
+
+## The site
+
+Vertige is a fictional 600 m² bouldering gym. The page sells a single offer, a €15 discovery session with gear included:
+
+- a deliberately short form (first name, email, preferred day), no commitment;
+- the key arguments (beginner-friendly, no gear to buy, staff on hand);
+- how the session works in three steps, the gym itself, and the membership offered afterwards;
+- sample reviews, an FAQ and a final reminder of the offer.
+
+## The automation
+
+When the form is sent, an **n8n** workflow picks up the request and stores it in **Airtable**, already sorted, so the gym's team finds each sign-up in the right place without retyping anything.
+
+## How it was built
+
+The page was designed with Claude, then connected to n8n and Airtable. The content is a mockup: the gym, its figures and reviews are fictional.
