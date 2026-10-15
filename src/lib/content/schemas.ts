@@ -31,6 +31,7 @@ export const profileSchema = (image: ImageFn) =>
   z.object({
     fullName: z.string().min(1),
     role: localized,
+    headline: localized, // titre du hero (6 mots maximum, vérifié par checkProfile)
     tagline: localized,
     bio: localized,
     location: localized.optional(),

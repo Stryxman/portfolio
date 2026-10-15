@@ -60,11 +60,7 @@ export function checkProjects(projects: ProjectInput[]): Report {
     if (data.status !== "published") continue;
     if (!p.hasFrBody) errors.push({ file, field: "fr.mdx", message: "un projet publié doit avoir fr.mdx" });
     if (!data.cover && !p.hasCapture) {
-      errors.push({
-        file,
-        field: "cover",
-        message: "un projet publié doit avoir une image (cover.webp ou capture automatique)",
-      });
+      warnings.push({ file, field: "cover", message: "aucune image (cover.webp ou capture) : le sceau sert de repli" });
     }
     if (!data.title.en) warnings.push({ file, field: "title.en", message: "titre anglais manquant (repli sur le français)" });
     if (!data.summary.en) warnings.push({ file, field: "summary.en", message: "résumé anglais manquant (repli sur le français)" });
@@ -81,11 +77,19 @@ export function checkProjects(projects: ProjectInput[]): Report {
   return { errors, warnings };
 }
 
-export function checkProfile(file: string, data: { tagline: Localized }): Report {
-  const errors: Issue[] = dashes(file, { "tagline.fr": data.tagline.fr, "tagline.en": data.tagline.en });
+export function checkProfile(file: string, data: { tagline: Localized; headline: Localized }): Report {
+  const errors: Issue[] = dashes(file, {
+    "tagline.fr": data.tagline.fr,
+    "tagline.en": data.tagline.en,
+    "headline.fr": data.headline.fr,
+    "headline.en": data.headline.en,
+  });
   for (const lang of ["fr", "en"] as const) {
     if (words(data.tagline[lang]) > 20) {
       errors.push({ file, field: `tagline.${lang}`, message: "accroche limitée à 20 mots (DESIGN_BRIEF §2)" });
+    }
+    if (words(data.headline[lang]) > 6) {
+      errors.push({ file, field: `headline.${lang}`, message: "titre du hero limité à 6 mots (2 lignes, DESIGN_BRIEF §2)" });
     }
   }
   return { errors, warnings: [] };

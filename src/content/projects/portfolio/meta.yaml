@@ -7,7 +7,9 @@ summary:
 provenance: claude-code
 stack: [astro, typescript, tailwindcss, claude-code]
 tags: [webgl, i18n]
-status: draft
+status: published
+featured: true
+order: 2
 repo: Stryxman/portfolio
 liveUrl: https://portfolio-lac-nine-ql5m5f65wy.vercel.app
 start: 2026-10

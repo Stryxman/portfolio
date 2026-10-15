@@ -1,6 +1,7 @@
 main:
   fullName: Test
   role: { fr: Développeur, en: Developer }
+  headline: { fr: Un titre court., en: A short title. }
   tagline: { fr: Une accroche courte., en: A short tagline. }
   bio: { fr: Une bio., en: A bio. }
   githubLogin: test

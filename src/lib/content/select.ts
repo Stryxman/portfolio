@@ -6,11 +6,11 @@ export function localize(field: { fr: string; en: string }, locale: Locale): { t
   return { text: field.fr, lang: "fr" };
 }
 
-export function visibleProjects<T extends { data: { status: string; order: number } }>(
+export function visibleProjects<T extends { id: string; data: { status: string; order: number } }>(
   entries: T[],
   opts: { includeDrafts: boolean },
 ): T[] {
   return entries
     .filter((e) => e.data.status === "published" || (opts.includeDrafts && e.data.status === "draft"))
-    .sort((a, b) => a.data.order - b.data.order);
+    .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 }

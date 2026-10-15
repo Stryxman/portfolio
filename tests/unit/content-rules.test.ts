@@ -25,9 +25,10 @@ describe("checkProjects", () => {
     const { errors } = checkProjects([base({ hasFrBody: false })]);
     expect(errors).toContainEqual(expect.objectContaining({ field: "fr.mdx" }));
   });
-  it("exige une image (cover ou capture) pour un projet publié", () => {
-    const { errors } = checkProjects([base({ hasCapture: false })]);
-    expect(errors).toContainEqual(expect.objectContaining({ field: "cover" }));
+  it("avertit (sans bloquer) si un projet publié n'a pas d'image : le sceau sert de repli", () => {
+    const r = checkProjects([base({ hasCapture: false })]);
+    expect(r.errors).toEqual([]);
+    expect(r.warnings).toContainEqual(expect.objectContaining({ field: "cover" }));
   });
   it("tolère un brouillon incomplet", () => {
     expect(checkProjects([base({ hasFrBody: false, hasCapture: false }, { status: "draft" })]).errors).toEqual([]);
@@ -63,13 +64,23 @@ describe("checkPeriod", () => {
 });
 
 describe("checkProfile", () => {
+  const ok = { tagline: { fr: "Court.", en: "Short." }, headline: { fr: "Je fabrique des sites.", en: "I build websites." } };
+  it("accepte un profil conforme", () => {
+    expect(checkProfile("p", ok).errors).toEqual([]);
+  });
   it("limite l'accroche à 20 mots par langue", () => {
     const long = Array.from({ length: 21 }, () => "mot").join(" ");
-    expect(checkProfile("p", { tagline: { fr: long, en: "Short." } }).errors).toContainEqual(
+    expect(checkProfile("p", { ...ok, tagline: { fr: long, en: "Short." } }).errors).toContainEqual(
       expect.objectContaining({ field: "tagline.fr" }),
     );
   });
-  it("refuse un tiret cadratin dans l'accroche", () => {
-    expect(checkProfile("p", { tagline: { fr: "Vite — et bien", en: "ok" } }).errors).toHaveLength(1);
+  it("limite le titre du hero à 6 mots par langue", () => {
+    expect(
+      checkProfile("p", { ...ok, headline: { fr: "ok", en: "one two three four five six seven" } }).errors,
+    ).toContainEqual(expect.objectContaining({ field: "headline.en" }));
+  });
+  it("refuse un tiret cadratin dans l'accroche ou le titre", () => {
+    const r = checkProfile("p", { tagline: { fr: "Vite — et bien", en: "ok" }, headline: { fr: "A – B", en: "ok" } });
+    expect(r.errors.map((e) => e.field)).toEqual(["tagline.fr", "headline.fr"]);
   });
 });

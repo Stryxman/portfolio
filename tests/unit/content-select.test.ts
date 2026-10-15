@@ -20,4 +20,8 @@ describe("visibleProjects", () => {
   it("inclut les brouillons en dev, jamais les archivés", () => {
     expect(visibleProjects(all, { includeDrafts: true }).map((x) => x.id)).toEqual(["d", "a", "b"]);
   });
+  it("départage un ordre égal par identifiant", () => {
+    const tie = [e("z", "published", 1), e("m", "published", 1)];
+    expect(visibleProjects(tie, { includeDrafts: false }).map((x) => x.id)).toEqual(["m", "z"]);
+  });
 });

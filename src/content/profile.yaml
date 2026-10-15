@@ -4,9 +4,12 @@ main:
   role:
     fr: Développeur web
     en: Web developer
+  headline:
+    fr: Je fabrique des sites.
+    en: I build websites.
   tagline:
-    fr: Je conçois et je construis des sites rapides, à la main, avec Claude Code ou un CMS.
-    en: I design and build fast websites, by hand, with Claude Code or a CMS.
+    fr: Rapides et soignés, codés à la main, avec Claude Code ou sur un CMS.
+    en: Fast and carefully made, by hand, with Claude Code or on a CMS.
   bio:
     fr: Je réunis ici mes projets web et mes outils, quelle que soit la façon dont ils ont été fabriqués.
     en: This is where I gather my web projects and tools, however they were built.

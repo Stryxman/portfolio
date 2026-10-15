@@ -39,6 +39,7 @@ describe("schémas", () => {
     const p = profileSchema(img).parse({
       fullName: "Richard",
       role: { fr: "Développeur web" },
+      headline: { fr: "Je fabrique des sites." },
       tagline: { fr: "Accroche." },
       bio: { fr: "Bio." },
       githubLogin: "Stryxman",
