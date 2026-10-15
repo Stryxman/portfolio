@@ -1,7 +1,6 @@
 # Contexte : exercice du cours « Stack marketing et outils no-code » (intitulé à confirmer par Richard).
 # Maquette faite avec Claude (artefact Design « Vertige – Landing page »), salle et avis fictifs.
-# Le formulaire envoie les inscriptions dans Airtable, déjà classées, via une automatisation n8n.
-# À compléter : lien en ligne (liveUrl), capture (cover.png).
+# Le formulaire envoie les inscriptions dans Airtable, déjà classées, via une automatisation n8n (confirmé par Richard).
 title:
   fr: "Vertige : landing page de séance découverte"
   en: "Vertige: discovery session landing page"
@@ -16,3 +15,5 @@ status: published
 order: 3
 start: 2026-10
 end: 2026-10
+cover: ./cover.png
+liveUrl: https://vertige-landing-page.vercel.app/
