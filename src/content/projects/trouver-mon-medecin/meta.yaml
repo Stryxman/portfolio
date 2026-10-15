@@ -1,0 +1,19 @@
+# Contexte : cours « Stack marketing et outils no-code » (intitulé à confirmer par Richard).
+# Première maquette faite avec Claude sous le nom « Médilink » (artefact) ; la version en ligne,
+# sur trouver-mon-medecin.vercel.app, porte la marque « MédiMatch ». Le nom pourra changer. Projet pas terminé.
+# Premier chatbot de Richard, construit avec n8n. Offres, médecins et avis du site sont fictifs.
+title:
+  fr: "MédiMatch : trouver mon médecin"
+  en: "MédiMatch: find the right doctor"
+summary:
+  fr: Un site d'orientation médicale où l'on décrit son problème dans un formulaire en trois étapes ou à un chatbot construit avec n8n.
+  en: A medical guidance site where visitors describe their problem in a three-step form or to a chatbot built with n8n.
+category: website
+provenance: claude
+stack: [n8n]
+tags: [chatbot, formulaire, no-code]
+status: published
+order: 4
+cover: ./cover.png
+liveUrl: https://trouver-mon-medecin.vercel.app/
+start: 2026-10

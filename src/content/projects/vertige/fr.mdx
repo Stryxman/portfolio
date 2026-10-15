@@ -1,0 +1,18 @@
+Exercice réalisé pendant le cours « Stack marketing et outils no-code » : créer une landing page qui automatise la prise d'informations, de la saisie du visiteur jusqu'à une base de données déjà triée.
+
+## Le site
+
+Vertige est une salle d'escalade de bloc fictive de 600 m². La page vend une seule offre, la séance découverte à 15 €, matériel compris :
+
+- un formulaire court et « sans engagement » : prénom, e-mail, jour souhaité (à partir d'aujourd'hui) et créneau (matin, après-midi ou soirée), avec un message clair pour chaque erreur, pour l'échec d'envoi et pour la confirmation ;
+- les arguments (accessible dès la première fois, zéro équipement à acheter, une équipe présente) ;
+- le déroulé de la séance en trois temps, la présentation de la salle et l'abonnement proposé ensuite ;
+- des avis d'exemple, une FAQ et un rappel de l'offre en bas de page.
+
+## L'automatisation
+
+À l'envoi du formulaire, une automatisation **n8n** récupère la demande et l'enregistre dans **Airtable**, déjà classée : l'équipe de la salle retrouve chaque inscription au bon endroit, sans ressaisie.
+
+## Comment il a été fait
+
+La page a été conçue avec Claude, puis reliée à n8n et Airtable. Le contenu est une maquette : la salle, les chiffres et les avis sont fictifs.

@@ -1,7 +1,8 @@
 import { hashString, mulberry32 } from "./random";
 import { multiply, reflection, rotation, scale, shear, type Mat2 } from "./matrix";
 
-export type Provenance = "claude-code" | "hand-coded" | "cms" | "other";
+// « claude » (fait avec Claude, ex. un artefact) partage la famille de « claude-code »
+export type Provenance = "claude-code" | "claude" | "hand-coded" | "cms" | "other";
 
 const range = (r: () => number, min: number, max: number) => min + (max - min) * r();
 
@@ -9,6 +10,7 @@ const range = (r: () => number, min: number, max: number) => min + (max - min) *
 export function sealMatrix(slug: string, provenance: Provenance): Mat2 {
   const r = mulberry32(hashString(`${provenance}:${slug}`));
   switch (provenance) {
+    case "claude":
     case "claude-code": {
       const s = range(r, 0.75, 1.25);
       return multiply(scale(s, s), rotation(range(r, Math.PI / 12, Math.PI / 3)));

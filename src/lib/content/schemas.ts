@@ -69,7 +69,7 @@ export const projectSchema = <I extends z.ZodType, R extends z.ZodType>(
     summary: localized,
     role: localized.optional(),
     category: z.enum(PROJECT_CATEGORIES),
-    provenance: z.enum(["claude-code", "hand-coded", "cms", "other"]),
+    provenance: z.enum(["claude-code", "claude", "hand-coded", "cms", "other"]),
     platform: z.string().optional(),
     stack: z.array(skillRef).default([]),
     tags: z.array(z.string().toLowerCase()).default([]),

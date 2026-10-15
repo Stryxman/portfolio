@@ -4,9 +4,9 @@
 
 ## À lire en premier (mini récap, 2026-10-15)
 
-- **Où on en est :** phases 0 à 3 en production ; Phase 4 sobre (vraies pages) sur la branche `phase-4`, PR ouverte, fusion après accord de Richard. Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
+- **Où on en est :** Phase 4 sobre fusionnée (PR #4) et en ligne : sombre par défaut, projets groupés par catégorie. Contenu en cours sur la branche `contenu-1` (Vertige, Trouver mon médecin, provenance « Claude »). Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
 - **Cap fixé par Richard :** du concret vite, avec peu de ressources ; périmètre proportionné au contenu. Pas de filtres, stats, captures auto, formulaire ni WebGL tant que le contenu ne le justifie pas.
-- **Ensuite :** le contenu réel (projets, bio, CV, portrait éventuel), via `pnpm projet:nouveau` et Claude Code.
+- **Ensuite :** obtenir de Richard les liens en ligne de Vertige et de Trouver mon médecin (puis captures `cover.png`), confirmer l'intitulé du cours et le nom « Trouver mon médecin » ; partager l'artefact Orbit Lab en public ; puis les autres projets (veille-ia, inflation-fx-etl, ad-agent…).
 - **Méthode, pour chaque phase :**
   - plan **court** dans `docs/plans/phase-N.md` (tâches et tests, pas tout le code), validé par Richard ;
   - exécution native (skill `superpowers:executing-plans`, journal dans `.superpowers/sdd/phase-N/progress.md`, `task-done` du skill pour consigner chaque tâche) ;
