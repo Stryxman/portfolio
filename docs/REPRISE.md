@@ -2,6 +2,24 @@
 
 > Fichier court : où on en est et quoi faire ensuite. Mis à jour à chaque fin de session.
 
+## À lire en premier (mini récap, 2026-10-15)
+
+- **Où on en est :** phases 0 à 3 terminées, fusionnées et en production (PR #1, #2, #3). Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
+- **Question en attente de Richard :** pour la Phase 4, faire du **sceau l'image de repli** d'un projet sans capture (DESIGN_BRIEF §5.3), ce qui transforme l'erreur « publié sans image » de `src/lib/content/rules.ts` en avertissement, puis publier `compagnon` et `portfolio`. Ne rien coder avant sa réponse.
+- **Ensuite :** écrire `docs/plans/phase-4.md` (pages), le faire valider, l'exécuter sur la branche `phase-4`.
+- **Méthode, pour chaque phase :**
+  - plan détaillé en TDD dans `docs/plans/phase-N.md`, validé par Richard ;
+  - exécution native (skill `superpowers:executing-plans`, journal dans `.superpowers/sdd/phase-N/progress.md`, `task-done` du skill pour consigner chaque tâche) ;
+  - `/code-review high main...phase-N`, puis correction en TDD des constats importants, et `ReportFindings` avec leur statut ;
+  - revue visuelle sur captures pour les phases UI ;
+  - PR, correction automatique activée (`mcp__ccd_pr__set_monitor`), fusion **après accord de Richard**, vérification de la production ;
+  - mise à jour de `PROGRESS.md` et de ce fichier.
+- **Outils :**
+  - préfixe obligatoire pour le shell de Claude : `export PATH="$HOME/.local/share/pnpm/bin:$HOME/.local/share/fnm:$PATH"; eval "$(fnm env --shell bash)"` ;
+  - CLI Vercel connectée (`--scope stryxman`) ; le MCP Vercel reste en 403 ;
+  - E2E : Playwright lance `astro dev --ignore-lock`. Ne pas utiliser `pkill -f` avec un motif présent dans sa propre commande (il se tue lui-même).
+- **Style des réponses :** brèves, en français, sans tiret cadratin. Demander l'accord avant tout téléchargement, push sur `main` ou action publique.
+
 ## État (2026-10-15)
 
 - Cadrage terminé et révisé après le conseil LLM : PRD, TRD, APP_FLOW, BACKEND_SCHEMA, DESIGN_BRIEF (v1.1) dans `docs/`.
