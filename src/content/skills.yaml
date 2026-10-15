@@ -1,4 +1,4 @@
-- { id: html-css, name: HTML et CSS, category: language, order: 1 }
+- { id: html-css, name: HTML/CSS, category: language, order: 1 }
 - { id: javascript, name: JavaScript, category: language, order: 2 }
 - { id: typescript, name: TypeScript, category: language, order: 3 }
 - { id: python, name: Python, category: language, order: 4 }
