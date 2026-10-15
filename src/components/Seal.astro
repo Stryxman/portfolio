@@ -1,5 +1,6 @@
 ---
 import { renderSeal } from "../lib/geometry/seal";
+import { nextId } from "../lib/geometry/ids";
 import type { Provenance } from "../lib/geometry/families";
 interface Props {
   slug: string;
@@ -8,7 +9,7 @@ interface Props {
   class?: string;
 }
 const { slug, provenance, size = 64, class: cls = "" } = Astro.props;
-const { dark, light } = renderSeal(slug, provenance);
+const { dark, light } = renderSeal(slug, provenance, nextId("k"));
 ---
 
 <!-- sceau décoratif : monde clair « Traceur » ou sombre « Transformation » selon le thème -->

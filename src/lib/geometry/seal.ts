@@ -69,9 +69,9 @@ export function sealGeometry(slug: string, provenance: Provenance) {
 const open = (cls: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}" aria-hidden="true" focusable="false" class="${cls}" fill="none" stroke-linecap="round" stroke-linejoin="round">`;
 
-export function renderSeal(slug: string, provenance: Provenance): { dark: string; light: string } {
+export function renderSeal(slug: string, provenance: Provenance, idPrefix = ""): { dark: string; light: string } {
   const g = sealGeometry(slug, provenance);
-  const id = `s${hashString(`${provenance}:${slug}`).toString(36)}`;
+  const id = `${idPrefix}s${hashString(`${provenance}:${slug}`).toString(36)}`;
   const dark =
     open("seal-dark") +
     `<clipPath id="${id}"><rect width="${VIEW}" height="${VIEW}" rx="4"/></clipPath>` +

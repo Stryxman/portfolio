@@ -27,6 +27,22 @@ describe("champ statique", () => {
       expect(svg).not.toMatch(/#[0-9a-f]{3,6}"|oklch|rgb\(/i);
     }
   });
+  it("deux instances n'ont aucun identifiant en commun", () => {
+    const ids = (svg: string) => [...svg.matchAll(/id="([^"]+)"/g)].map((m) => m[1]);
+    const a = renderField(1440, 900, "a");
+    const b = renderField(1440, 900, "b");
+    const common = ids(a.dark + a.light).filter((id) => ids(b.dark + b.light).includes(id));
+    expect(common).toEqual([]);
+  });
+  it("reste lisible en portrait : cadrage à droite, vecteurs et accents dans la zone visible", () => {
+    // écran 390 × 844 : avec « xMaxYMid slice », seule la bande x ≥ 1440 - 900 × 390 / 844 reste visible
+    const visibleFrom = 1440 - (900 * 390) / 844;
+    const { accents } = fieldGeometry("dark", 1440, 900, 0);
+    expect(accents[0]![0]).toBeGreaterThan(visibleFrom);
+    const light = fieldGeometry("light", 1440, 900, 0);
+    for (const sq of light.accents) expect(Math.min(...sq.map(([x]) => x))).toBeGreaterThan(visibleFrom);
+    expect(renderField().dark).toContain('preserveAspectRatio="xMaxYMid slice"');
+  });
   it("est identique d'un appel à l'autre", () => {
     expect(renderField()).toEqual(renderField());
   });

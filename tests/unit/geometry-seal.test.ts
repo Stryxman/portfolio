@@ -52,6 +52,12 @@ describe("sceau", () => {
       expect(new TextEncoder().encode(svg).length).toBeLessThan(4096);
     }
   });
+  it("deux instances du même sceau n'ont aucun identifiant en commun", () => {
+    const ids = (svg: string) => [...svg.matchAll(/id="([^"]+)"/g)].map((m) => m[1]);
+    const a = renderSeal("compagnon", "claude-code", "a").dark;
+    const b = renderSeal("compagnon", "claude-code", "b").dark;
+    expect(ids(a).filter((id) => ids(b).includes(id))).toEqual([]);
+  });
   it("est stable d'un build à l'autre (instantané) et dépend du slug", () => {
     expect(renderSeal("compagnon", "claude-code")).toMatchSnapshot();
     expect(renderSeal("compagnon", "claude-code").dark).not.toBe(renderSeal("portfolio", "claude-code").dark);

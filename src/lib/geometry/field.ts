@@ -35,10 +35,11 @@ export function fieldGeometry(
       const [c, d] = [tr([cx - ext, y]), tr([cx + ext, y])];
       lines.push([a[0], a[1], b[0], b[1]], [c[0], c[1], d[0], d[1]]);
     }
-    // vecteurs de base î et ĵ, ancrés aux deux tiers de la largeur (hors de la colonne de texte)
-    const o = tr([w * (2 / 3), cy]);
-    const i = tr([w * (2 / 3) + step * 2, cy]);
-    const j = tr([w * (2 / 3), cy - step * 2]);
+    // vecteurs de base î et ĵ à droite (hors de la colonne de texte), visibles aussi en portrait (cadrage xMax)
+    const ax = w * 0.82;
+    const o = tr([ax, cy]);
+    const i = tr([ax + step * 2, cy]);
+    const j = tr([ax, cy - step * 2]);
     // pointe de flèche : deux segments de longueur fixe à ±25° de la direction du vecteur, depuis son extrémité
     const head = (from: Vec2, tip: Vec2): Segment[] => {
       const ang = Math.atan2(from[1] - tip[1], from[0] - tip[0]);
@@ -90,19 +91,19 @@ export function fieldGeometry(
 
 // Le champ s'atténue derrière la colonne de texte : masque en dégradé (opacité 0,15 → 1 sur 55 % de la largeur)
 const svgOpen = (w: number, h: number, cls: string, maskId: string) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" class="${cls}" fill="none">` +
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false" class="${cls}" fill="none">` +
   `<defs><linearGradient id="${maskId}g" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="white" stop-opacity="0.15"/><stop offset="0.55" stop-color="white" stop-opacity="1"/></linearGradient>` +
   `<mask id="${maskId}"><rect width="${w}" height="${h}" fill="url(#${maskId}g)"/></mask></defs><g mask="url(#${maskId})">`;
 
-export function renderField(w = 1440, h = 900): { dark: string; light: string } {
+export function renderField(w = 1440, h = 900, idPrefix = ""): { dark: string; light: string } {
   const d = fieldGeometry("dark", w, h, 0);
   const l = fieldGeometry("light", w, h, 0);
   const dark =
-    svgOpen(w, h, "field-dark", "fmd") +
+    svgOpen(w, h, "field-dark", `${idPrefix}fmd`) +
     `<path d="${toPath(d.lines)}" stroke="currentColor" stroke-width="1" class="text-line"/>` +
     `<path d="${toPath(d.accents)}" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-accent"/></g></svg>`;
   const light =
-    svgOpen(w, h, "field-light", "fml") +
+    svgOpen(w, h, "field-light", `${idPrefix}fml`) +
     `<path d="${polygonsToPath(l.squares)}" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.7" stroke-linejoin="round" class="text-line-strong"/>` +
     `<path d="${polygonsToPath(l.accents)}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" class="text-accent"/></g></svg>`;
   return { dark, light };
