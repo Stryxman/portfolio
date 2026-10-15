@@ -24,3 +24,6 @@ test-results/
 # outillage
 .superpowers/
 dist/
+
+# généré par Astro
+.astro/
