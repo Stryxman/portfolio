@@ -4,11 +4,11 @@
 
 ## À lire en premier (mini récap, 2026-10-15)
 
-- **Où on en est :** phases 0 à 3 terminées, fusionnées et en production (PR #1, #2, #3). Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
-- **Question en attente de Richard :** pour la Phase 4, faire du **sceau l'image de repli** d'un projet sans capture (DESIGN_BRIEF §5.3), ce qui transforme l'erreur « publié sans image » de `src/lib/content/rules.ts` en avertissement, puis publier `compagnon` et `portfolio`. Ne rien coder avant sa réponse.
-- **Ensuite :** écrire `docs/plans/phase-4.md` (pages), le faire valider, l'exécuter sur la branche `phase-4`.
+- **Où on en est :** phases 0 à 3 en production ; Phase 4 sobre (vraies pages) sur la branche `phase-4`, PR ouverte, fusion après accord de Richard. Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
+- **Cap fixé par Richard :** du concret vite, avec peu de ressources ; périmètre proportionné au contenu. Pas de filtres, stats, captures auto, formulaire ni WebGL tant que le contenu ne le justifie pas.
+- **Ensuite :** le contenu réel (projets, bio, CV, portrait éventuel), via `pnpm projet:nouveau` et Claude Code.
 - **Méthode, pour chaque phase :**
-  - plan détaillé en TDD dans `docs/plans/phase-N.md`, validé par Richard ;
+  - plan **court** dans `docs/plans/phase-N.md` (tâches et tests, pas tout le code), validé par Richard ;
   - exécution native (skill `superpowers:executing-plans`, journal dans `.superpowers/sdd/phase-N/progress.md`, `task-done` du skill pour consigner chaque tâche) ;
   - `/code-review high main...phase-N`, puis correction en TDD des constats importants, et `ReportFindings` avec leur statut ;
   - revue visuelle sur captures pour les phases UI ;
@@ -40,10 +40,11 @@
 
 ## Prochaines actions
 
-1. Phase 4 : écrire `docs/plans/phase-4.md` (pages : accueil, projets + filtres, fiche + aperçu, à propos, mentions, 404), le faire valider, exécuter.
-2. Phase 5 : rendre `noise2D` sans allocation (hash entier) avant de l'utiliser dans la boucle d'animation.
+1. Fusionner la PR de la Phase 4 (accord de Richard), vérifier la production.
+2. Contenu réel : ajouter les projets (`pnpm projet:nouveau owner/repo`), compléter la bio, déposer `public/cv/cv-fr.pdf` et `cv-en.pdf`, éventuellement un portrait et des `cover.webp`.
+3. Plus tard, seulement si le contenu le justifie : filtres de la grille, stats GitHub, captures auto, formulaire de contact, champ WebGL (rendre alors `noise2D` sans allocation).
 
-Reportés (mineurs) : liens de navigation dupliqués Header/MobileMenu ; canonical/hreflang de la 404 (Phase 8) ; blocs de code indentés échappés par cleanReadme ; getEntry(profile) non-null en dev ; regex tiret dupliquée ; slug vide dans projet:nouveau ; carrés de bord du sceau clair rognés ; transformation centrée et ouverture SVG dupliquées (seal/field) ; helper de test close recopié.
+Reportés (mineurs) : canonical/hreflang de la 404 ; blocs de code indentés échappés par cleanReadme ; regex tiret dupliquée ; slug vide dans projet:nouveau ; carrés de bord du sceau clair rognés ; transformation centrée et ouverture SVG dupliquées (seal/field) ; helper de test close recopié ; ancienne URL /fr/contact/ désormais en 404 (ajouter une redirection si un lien externe y pointe).
 
 ## Décisions ouvertes
 

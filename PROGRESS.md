@@ -35,3 +35,11 @@
 - Sceaux SVG serveur (< 4 Ko, instantané), première image du champ sur l'accueil (masque derrière le titre, cadrage mobile), planche /dev/geometrie/ en dev uniquement.
 - Revue visuelle sur captures (desktop + mobile, deux thèmes) : flèches î ĵ, trait du traceur allégé, désordre des sceaux lisible.
 - Tests : 101 unitaires, 33 E2E. Revue : 8 constats, 3 corrigés, 1 reporté en Phase 5 (coût du bruit), 4 mineurs.
+
+## 2026-10-15 : Phase 4 (pages, version sobre)
+
+- Premier plan détaillé (filtres, iframe live, stats GitHub, mosaïque) jugé démesuré pour 2 projets : Richard a choisi une version sobre, à étoffer avec l'arrivée des projets.
+- Pages réelles FR/EN : accueil (hero sur le champ, projets choisis, profil court), grille des projets, fiche (cartel, image ou sceau en repli, description, projet voisin), à propos (bio, compétences, section contact), mentions légales, 404. La page Contact séparée disparaît.
+- Contenu : `headline` du profil (≤ 6 mots), image manquante = avertissement (le sceau sert de repli), `compagnon` et `portfolio` publiés ; `compagnon` sans lien de code (dépôt privé).
+- Hygiène : `.astro/` hors de Git, navigation partagée avec page courante, `getProfile()` sans assertion, liens sociaux en pied de page.
+- Tests : 115 unitaires, 56 E2E (6 ignorés exprès).
