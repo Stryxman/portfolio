@@ -1,5 +1,5 @@
 import { matrixAt } from "./cycle";
-import { apply, type Vec2 } from "./matrix";
+import { apply, type Mat2, type Vec2 } from "./matrix";
 import { hashString, mulberry32, noise2D } from "./random";
 import { polygonsToPath, toPath, type Polygon, type Segment } from "./svg";
 
@@ -89,22 +89,41 @@ export function fieldGeometry(
   };
 }
 
-// Le champ s'atténue derrière la colonne de texte : masque en dégradé (opacité 0,15 → 1 sur 55 % de la largeur)
-const svgOpen = (w: number, h: number, cls: string, maskId: string) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false" class="${cls}" fill="none">` +
-  `<defs><linearGradient id="${maskId}g" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="white" stop-opacity="0.15"/><stop offset="0.55" stop-color="white" stop-opacity="1"/></linearGradient>` +
-  `<mask id="${maskId}"><rect width="${w}" height="${h}" fill="url(#${maskId}g)"/></mask></defs><g mask="url(#${maskId})">`;
+// SVG sans masque ni identifiant : l'atténuation derrière la colonne de texte est un mask-image CSS posé sur le
+// conteneur fixe (FieldStatic), pour qu'elle ne bouge pas quand le champ sombre s'anime.
+const svgOpen = (w: number, h: number, cls: string) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false" class="${cls}" fill="none">`;
 
-export function renderField(w = 1440, h = 900, idPrefix = ""): { dark: string; light: string } {
+export function renderField(w = 1440, h = 900): { dark: string; light: string } {
   const d = fieldGeometry("dark", w, h, 0);
   const l = fieldGeometry("light", w, h, 0);
   const dark =
-    svgOpen(w, h, "field-dark", `${idPrefix}fmd`) +
+    svgOpen(w, h, "field-dark") +
     `<path d="${toPath(d.lines)}" stroke="currentColor" stroke-width="1" class="text-line"/>` +
-    `<path d="${toPath(d.accents)}" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-accent"/></g></svg>`;
+    `<path d="${toPath(d.accents)}" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-accent"/></svg>`;
   const light =
-    svgOpen(w, h, "field-light", `${idPrefix}fml`) +
+    svgOpen(w, h, "field-light") +
     `<path d="${polygonsToPath(l.squares)}" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.7" stroke-linejoin="round" class="text-line-strong"/>` +
-    `<path d="${polygonsToPath(l.accents)}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" class="text-accent"/></g></svg>`;
+    `<path d="${polygonsToPath(l.accents)}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" class="text-accent"/></svg>`;
   return { dark, light };
+}
+
+const num = (v: number) => {
+  const r = Math.round(v * 1e4) / 1e4;
+  return String(r === 0 ? 0 : r); // jamais « -0 »
+};
+
+// Mat2 agit en repère mathématique (y vers le haut) ; à l'écran y descend : M' = S·M·S avec S = diag(1, -1).
+// matrix(a, b, c, d, e, f) de CSS donne x' = a·x + c·y et y' = b·x + d·y.
+export const cssMatrix = ([a, b, c, d]: Mat2): string =>
+  `matrix(${[a, -c, -b, d, 0, 0].map(num).join(", ")})`;
+
+// Le cycle du champ sombre (identité → rotation → cisaillement → échelle → identité) échantillonné pour une
+// animation CSS : appliquée à un calque entier, elle reste composée par le GPU, sans JavaScript.
+export function fieldMotionKeyframes(name: string, steps = 48): string {
+  const stops = Array.from({ length: steps + 1 }, (_, k) => {
+    const p = k / steps;
+    return `${num(p * 100)}% { transform: ${cssMatrix(matrixAt(p))} }`;
+  });
+  return `@keyframes ${name} { ${stops.join(" ")} }`;
 }

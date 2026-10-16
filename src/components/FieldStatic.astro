@@ -1,16 +1,61 @@
 ---
-import { renderField } from "../lib/geometry/field";
-import { nextId } from "../lib/geometry/ids";
+import { fieldMotionKeyframes, renderField } from "../lib/geometry/field";
 interface Props {
   class?: string;
 }
 const { class: cls = "" } = Astro.props;
-const { dark, light } = renderField(1440, 900, nextId("c"));
+const { dark, light } = renderField(1440, 900);
+const keyframes = fieldMotionKeyframes("field-cycle");
 ---
 
-<!-- première image du champ (DESIGN_BRIEF §5.2) : repli sans JS et en mouvement réduit ; le canvas WebGL (Phase 5) s'y superposera -->
+<!-- champ décoratif (DESIGN_BRIEF §5) : clair « Traceur » fixe, sombre « Transformation » animé en CSS -->
 <!-- sur mobile, le texte occupe toute la largeur : le champ y est atténué -->
-<div data-field class:list={["pointer-events-none absolute inset-0 overflow-hidden opacity-60 md:opacity-100", cls]} aria-hidden="true">
-  <div class="size-full dark:hidden [&>svg]:size-full" set:html={light} />
-  <div class="hidden size-full dark:block [&>svg]:size-full" set:html={dark} />
+<div
+  data-field
+  class:list={[
+    "field pointer-events-none absolute inset-0 overflow-hidden opacity-60 md:opacity-100",
+    cls,
+  ]}
+  aria-hidden="true"
+>
+  <div class="field-frame dark:hidden" set:html={light} />
+  <div class="field-frame hidden dark:block">
+    <div data-field-motion class="field-motion" set:html={dark} />
+  </div>
 </div>
+
+<Fragment set:html={`<style>${keyframes}</style>`} />
+
+<style>
+  /* atténuation derrière la colonne de texte, fixe à l'écran : opacité 0,15 → 1 sur 55 % de la largeur */
+  .field {
+    container-type: size;
+    mask-image: linear-gradient(to right, rgb(0 0 0 / 0.15), #000 55%);
+  }
+  /* cadre aux proportions du viewBox (1440 × 900), qui couvre l'écran, calé à droite et centré en hauteur
+     (l'équivalent de « xMaxYMid slice ») : la transformation tourne ainsi autour du centre de la grille */
+  .field-frame {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    height: max(100cqh, 62.5cqw);
+    aspect-ratio: 1440 / 900;
+    translate: 0 -50%;
+  }
+  .field-frame :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible; /* la grille déborde du cadre pour couvrir l'écran une fois transformée */
+  }
+  .field-motion {
+    width: 100%;
+    height: 100%;
+    animation: field-cycle 12s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .field-motion {
+      animation: none;
+    }
+  }
+</style>

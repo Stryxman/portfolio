@@ -59,3 +59,19 @@ test("aucun identifiant en double sur l'accueil et la planche (sceau répété c
     expect(dupes).toEqual([]);
   }
 });
+
+test("le champ sombre s'anime en CSS, et s'arrête en mouvement réduit", async ({ browser }) => {
+  for (const [reducedMotion, attendu] of [
+    ["no-preference", "field-cycle"],
+    ["reduce", "none"],
+  ] as const) {
+    const ctx = await browser.newContext({ reducedMotion });
+    const page = await ctx.newPage();
+    await page.goto("/fr/");
+    const name = await page
+      .locator("[data-field-motion]")
+      .evaluate((el) => getComputedStyle(el).animationName);
+    expect(name, reducedMotion).toBe(attendu);
+    await ctx.close();
+  }
+});
