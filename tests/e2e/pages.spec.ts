@@ -13,7 +13,14 @@ const projects = readdirSync(DIR)
   )
   .sort((a, b) => (a.order ?? 100) - (b.order ?? 100) || a.slug.localeCompare(b.slug));
 // ordre de la grille : par catégorie (PROJECT_CATEGORIES), puis order et slug
-const CATEGORIES = ["website", "artifact", "ai-agent", "application", "business-case"];
+const CATEGORIES = [
+  "website",
+  "artifact",
+  "ai-agent",
+  "automation",
+  "application",
+  "business-case",
+];
 const grid = [...projects].sort(
   (a, b) => CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category),
 );
@@ -97,8 +104,8 @@ test("fiche : cartel, liens externes, sceau en repli", async ({ page }) => {
     new URL(linked!.liveUrl).hostname.replace(/^www\./, ""),
   );
   if (
-    !existsSync(`src/assets/captures/${linked!.slug}.webp`) &&
-    !existsSync(`${DIR}/${linked!.slug}/cover.webp`)
+    !linked!.cover && // l'image déclarée dans meta.yaml, quel que soit son format
+    !existsSync(`src/assets/captures/${linked!.slug}.webp`)
   ) {
     await expect(page.locator("[data-preview] svg:visible")).toHaveCount(1);
   }
@@ -186,5 +193,21 @@ test("aucun défilement horizontal", async ({ page }) => {
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
       path,
     ).toBe(true);
+  }
+});
+
+test("la galerie d'une fiche charge ses images, avec une légende visible", async ({ page }) => {
+  const withGallery = projects.find((m) => (m.gallery ?? []).length > 0);
+  test.skip(!withGallery, "aucun projet avec galerie");
+  await page.goto(`/fr/projets/${withGallery!.slug}/`);
+  const figures = page.locator("[data-gallery] figure:has(figcaption)");
+  await expect(figures).toHaveCount(
+    withGallery!.gallery.filter((g: { caption?: unknown }) => g.caption).length,
+  );
+  for (const img of await page.locator("[data-gallery] img").all()) {
+    await img.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0))
+      .toBe(true);
   }
 });

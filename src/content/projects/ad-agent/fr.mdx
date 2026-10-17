@@ -1,0 +1,18 @@
+À partir d'un **brief** (objectif, direction artistique, accroche, produit, images), l'agent produit plusieurs **variantes de publicités statiques**, en s'appuyant sur une base de formats construite à partir de vraies publicités observées sur la Meta Ad Library.
+
+![Six variantes générées par l'agent pour trois produits fictifs](https://raw.githubusercontent.com/Stryxman/ad-agent/main/docs/screenshots/demo.png)
+
+## Comment il fonctionne
+
+1. Lecture du brief, puis analyse des images, avec détourage automatique seulement si le fond n'est pas déjà transparent.
+2. Choix des angles créatifs, par Claude ou par un rédacteur hors ligne déterministe.
+3. Sélection des formats selon le ratio, l'objectif, la niche et les promesses interdites.
+4. Rédaction des textes, vérifiés ligne par ligne par du code (longueur, promesses interdites, chiffres inventés) ; les prix, les avis et les faits ne passent jamais par le modèle.
+5. Rendu HTML puis PNG avec Jinja2 et Playwright, et export d'un récapitulatif à relire.
+
+## Ce qui le distingue
+
+- Une **base de connaissance réelle** : huit formats documentés à partir de publicités qui tournent depuis plusieurs semaines, sans jamais copier leurs visuels.
+- Un **rédacteur IA sous contrôle**, revérifié par du code avant chaque utilisation.
+- Un **modèle de détourage choisi volontairement** (licence réutilisable commercialement), après avoir évité un modèle par défaut sous licence non commerciale.
+- **101 tests**, plus des essais en conditions réelles à chaque étape.

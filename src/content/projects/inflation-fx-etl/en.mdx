@@ -1,0 +1,16 @@
+An analyst tracking the currency exposure of holdings spread across emerging and developed-market currencies wants to know whether exchange-rate moves are consistent with inflation.
+
+**The question tracked:** when a country's inflation exceeds the euro area's, does its currency depreciate against the euro by a comparable amount?
+
+## The pipeline
+
+- **Extract** public data from the ECB, the OECD and the World Bank in Python, with automatic retries and incremental loads.
+- **Load** it into PostgreSQL as received, with its source, load time and run identifier.
+- **Transform** it in versioned SQL: types, harmonised country codes, deduplication, fallback values, derived indicators and data-quality checks.
+- **Show** the result in a Grafana dashboard provisioned from files; every run is logged, source by source.
+
+Everything runs locally with Docker and is driven by a few `make` commands.
+
+## Status
+
+Scoping is done (approved project charter, decision log, risk register); extraction and loading are in progress.

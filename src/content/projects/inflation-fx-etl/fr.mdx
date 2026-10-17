@@ -1,0 +1,16 @@
+Un analyste qui suit l'exposition de placements répartis entre monnaies émergentes et développées veut savoir si les mouvements de change sont cohérents avec l'inflation.
+
+**La question suivie :** quand l'inflation d'un pays dépasse celle de la zone euro, sa monnaie se déprécie-t-elle face à l'euro dans des proportions comparables ?
+
+## Le pipeline
+
+- **Extraction** des données publiques de la BCE, de l'OCDE et de la Banque mondiale, en Python, avec reprises automatiques et chargement incrémental.
+- **Chargement** dans PostgreSQL, tel que reçu, avec la source, la date de chargement et l'identifiant de l'exécution.
+- **Transformation** en SQL versionné : types, codes pays harmonisés, dédoublonnage, valeurs de repli, indicateurs dérivés et contrôles de qualité.
+- **Restitution** dans un tableau de bord Grafana provisionné depuis des fichiers ; chaque exécution est tracée, source par source.
+
+Le tout tourne en local avec Docker et se pilote par quelques commandes `make`.
+
+## Où en est le projet
+
+Le cadrage est terminé (charte de projet validée, journal de décisions, registre des risques) ; l'extraction et le chargement sont en cours.
