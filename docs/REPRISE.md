@@ -5,6 +5,7 @@
 ## À lire en premier (mini récap, 2026-10-15)
 
 - **Où on en est :** Phase 4 sobre fusionnée (PR #4) et en ligne : sombre par défaut, projets groupés par catégorie. Contenu en cours sur la branche `contenu-1` (Vertige, Trouver mon médecin, provenance « Claude »). Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
+- **Champ de l'accueil :** animé en CSS seul (cycle de 12 s, calque composé par le GPU, arrêt en mouvement réduit) ; la version WebGL réactive au pointeur reste optionnelle.
 - **Cap fixé par Richard :** du concret vite, avec peu de ressources ; périmètre proportionné au contenu. Pas de filtres, stats, captures auto, formulaire ni WebGL tant que le contenu ne le justifie pas.
 - **Ensuite :** obtenir de Richard les liens en ligne de Vertige et de Trouver mon médecin (puis captures `cover.png`), confirmer l'intitulé du cours et le nom « Trouver mon médecin » ; partager l'artefact Orbit Lab en public ; puis les autres projets (veille-ia, inflation-fx-etl, ad-agent…).
 - **Méthode, pour chaque phase :**
