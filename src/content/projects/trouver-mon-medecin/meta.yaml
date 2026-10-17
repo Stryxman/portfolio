@@ -1,7 +1,7 @@
 # Contexte : cours « Stack marketing et outils no-code » (intitulé à confirmer par Richard).
 # Première maquette faite avec Claude sous le nom « Médilink » (artefact) ; la version en ligne,
 # sur trouver-mon-medecin.vercel.app, porte la marque « MédiMatch ». Le nom pourra changer. Projet pas terminé.
-# Premier chatbot de Richard, construit avec n8n. Offres, médecins et avis du site sont fictifs.
+# Premier chatbot de Richard : agent IA n8n (modèle OpenAI, mémoire de conversation, outil Airtable « prise de rdv »). Offres, médecins et avis du site sont fictifs.
 title:
   fr: "MédiMatch : trouver mon médecin"
   en: "MédiMatch: find the right doctor"
@@ -10,10 +10,25 @@ summary:
   en: A medical guidance site where visitors describe their problem in a three-step form or to a chatbot built with n8n.
 category: website
 provenance: claude
-stack: [n8n]
+stack: [n8n, openai, airtable]
 tags: [chatbot, formulaire, no-code]
 status: published
 order: 4
 cover: ./cover.png
 liveUrl: https://trouver-mon-medecin.vercel.app/
 start: 2026-10
+gallery:
+  - src: ./gallery/flux-n8n.png
+    alt:
+      fr: "Le flux n8n : un webhook et une entrée de chat mènent à un agent IA, relié à un modèle OpenAI, à une mémoire et à un outil Airtable, qui répond par le webhook."
+      en: "The n8n flow: a webhook and a chat trigger feed an AI agent, wired to an OpenAI model, a memory and an Airtable tool, which replies through the webhook."
+    caption:
+      fr: "Le flux n8n du chatbot : un agent IA avec un modèle OpenAI, une mémoire de conversation et un outil Airtable pour la prise de rendez-vous."
+      en: "The chatbot's n8n flow: an AI agent with an OpenAI model, conversation memory and an Airtable tool for booking appointments."
+  - src: ./gallery/conversation-billy.png
+    alt:
+      fr: "Conversation avec Billy : il demande pour qui est la consultation, puis l'intensité de la douleur, avec des boutons de réponse rapide."
+      en: "Conversation with Billy: he asks who the appointment is for, then how strong the pain is, with quick-reply buttons."
+    caption:
+      fr: "Un extrait de conversation avec Billy, sur le site en ligne."
+      en: "An excerpt of a conversation with Billy, on the live site."

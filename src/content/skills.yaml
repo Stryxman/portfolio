@@ -2,6 +2,7 @@
 - { id: n8n, name: n8n, category: tool, order: 2 }
 - { id: make, name: Make, category: tool, order: 3 }
 - { id: airtable, name: Airtable, category: tool, order: 4 }
+- { id: openai, name: OpenAI, category: tool, order: 9 }
 - { id: python, name: Python, category: language, order: 4 }
 - { id: typescript, name: TypeScript, category: language, order: 5 }
 - { id: javascript, name: JavaScript, category: language, order: 6 }
