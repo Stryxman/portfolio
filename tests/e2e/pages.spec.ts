@@ -13,7 +13,14 @@ const projects = readdirSync(DIR)
   )
   .sort((a, b) => (a.order ?? 100) - (b.order ?? 100) || a.slug.localeCompare(b.slug));
 // ordre de la grille : par catégorie (PROJECT_CATEGORIES), puis order et slug
-const CATEGORIES = ["website", "artifact", "ai-agent", "application", "business-case"];
+const CATEGORIES = [
+  "website",
+  "artifact",
+  "ai-agent",
+  "automation",
+  "application",
+  "business-case",
+];
 const grid = [...projects].sort(
   (a, b) => CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category),
 );
@@ -97,8 +104,8 @@ test("fiche : cartel, liens externes, sceau en repli", async ({ page }) => {
     new URL(linked!.liveUrl).hostname.replace(/^www\./, ""),
   );
   if (
-    !existsSync(`src/assets/captures/${linked!.slug}.webp`) &&
-    !existsSync(`${DIR}/${linked!.slug}/cover.webp`)
+    !linked!.cover && // l'image déclarée dans meta.yaml, quel que soit son format
+    !existsSync(`src/assets/captures/${linked!.slug}.webp`)
   ) {
     await expect(page.locator("[data-preview] svg:visible")).toHaveCount(1);
   }

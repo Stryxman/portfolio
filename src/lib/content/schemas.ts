@@ -56,6 +56,7 @@ export const PROJECT_CATEGORIES = [
   "website",
   "artifact",
   "ai-agent",
+  "automation",
   "application",
   "business-case",
 ] as const;

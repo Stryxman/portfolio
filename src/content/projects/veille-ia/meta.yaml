@@ -1,0 +1,18 @@
+# Provenance « claude-code » supposée (pilotage par jalons et documents, comme les autres projets) : à confirmer par Richard.
+title:
+  fr: Veille IA
+  en: AI news digest
+summary:
+  fr: Une page qui rassemble chaque jour l'actualité de l'IA, dédoublonnée, classée par thème et résumée, mise à jour automatiquement.
+  en: A page that gathers AI news every day, deduplicated, sorted by theme and summarised, updated automatically.
+category: automation
+provenance: claude-code
+stack: [python, github-actions]
+tags: [rss, veille, mistral]
+status: published
+featured: true
+order: 5
+repo: Stryxman/veille-ia
+liveUrl: https://stryxman.github.io/veille-ia/
+cover: ./cover.png
+start: 2026-09

@@ -8,3 +8,9 @@
 - { id: html-css, name: HTML/CSS, category: language, order: 7 }
 - { id: astro, name: Astro, category: framework, order: 10 }
 - { id: tailwindcss, name: Tailwind CSS, category: framework, order: 11 }
+- { id: sql, name: SQL, category: language, order: 8 }
+- { id: postgresql, name: PostgreSQL, category: tool, order: 12 }
+- { id: grafana, name: Grafana, category: tool, order: 13 }
+- { id: docker, name: Docker, category: tool, order: 14 }
+- { id: github-actions, name: GitHub Actions, category: tool, order: 15 }
+- { id: playwright, name: Playwright, category: tool, order: 16 }

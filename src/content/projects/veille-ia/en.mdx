@@ -1,0 +1,18 @@
+AI news is scattered and highly repetitive: the same announcement shows up everywhere on the same day. This digest sorts it out automatically, several times a day, with no account or install needed to read it.
+
+## What the pipeline does
+
+1. **Collects** six RSS feeds (four in English, two in French); one failing source never stops the others.
+2. **Processes** them: cleaning, keeping the last seven days, grouping duplicates (the kept article comes from the most reliable source, the others are listed as "Also covered by"), filling in missing excerpts from the article page, sorting by theme.
+3. **Summarises** (V2): one paragraph per theme written by a free language model (Mistral), where every sentence links to the articles that support it; a summary that fails the checks is not published.
+4. **Publishes** to GitHub Pages through GitHub Actions, three times a day; if no source answers, the previous page stays online.
+
+Sources, themes and model are set in configuration files, without touching the code. Everything runs for free.
+
+## How it was run
+
+Short milestones (scoping, collection, processing, rendering, polish), with a specification, a decision log, a risk register, acceptance checks for each feature and automated tests on every pull request. V1 is done; V2 adds the summaries.
+
+## Known limits
+
+Keyword-based sorting is approximate, only near-identical titles are detected as duplicates, and GitHub can delay scheduled runs by several hours.
