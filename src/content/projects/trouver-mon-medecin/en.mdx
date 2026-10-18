@@ -5,7 +5,7 @@ A project from the "Marketing stack and no-code tools" course, still in progress
 Visitors don't know which specialist to see: they describe how they feel, and the service points them to the right practitioner. There are two ways in:
 
 - **a three-step form**: the problem (nine situations, from back pain to gynaecological care, plus "I don't know") with optional details, then contact details, then location and who the appointment is for, with explicit GDPR consent;
-- **a chatbot**, opened from the bubble at the bottom of the screen, to describe the situation in conversation.
+- **a chatbot, Billy**, opened from the bubble at the bottom of the screen: he asks who the appointment is for and how strong the pain is, then suggests suitable doctors, with quick-reply buttons at each step.
 
 ## What the site shows
 
@@ -15,4 +15,6 @@ Visitors don't know which specialist to see: they describe how they feel, and th
 
 ## How it was built
 
-A first mockup was designed with Claude under the name "Médilink"; the live version then became MédiMatch. The chatbot and request handling run on **n8n**. The offers, doctors and reviews are fictional.
+A first mockup was designed with Claude under the name "Médilink"; the live version then became MédiMatch. The offers, doctors and reviews are fictional.
+
+The chatbot is an **AI agent built in n8n**: the site sends it each message through a webhook; the agent relies on an **OpenAI** model, keeps the conversation's memory and can look up an **Airtable** appointment base, then sends its answer back to the site.

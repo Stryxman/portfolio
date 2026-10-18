@@ -143,16 +143,29 @@ const dt = "text-ink-muted";
         </div>
       )}
       {data.gallery.length > 0 && (
-        <div class="grid gap-6 sm:grid-cols-2">
-          {data.gallery.map((g) => (
-            <Image
-              src={g.src}
-              alt={localize(g.alt, locale).text}
-              widths={[480, 960]}
-              sizes="(min-width: 768px) 33vw, 100vw"
-              class="w-full rounded-panel border border-line"
-            />
-          ))}
+        <div data-gallery class="flex flex-col gap-10">
+          {data.gallery.map((g) => {
+            const caption = g.caption ? localize(g.caption, locale) : undefined;
+            return (
+              <figure class="flex flex-col gap-3">
+                <Image
+                  src={g.src}
+                  alt={localize(g.alt, locale).text}
+                  widths={[480, 960, 1440]}
+                  sizes="(min-width: 768px) 66vw, 100vw"
+                  class="h-auto max-h-[40rem] w-auto max-w-full self-start rounded-panel border border-line"
+                />
+                {caption && (
+                  <figcaption
+                    class="max-w-prose text-small text-ink-muted"
+                    lang={langOf(caption.lang)}
+                  >
+                    {caption.text}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          })}
         </div>
       )}
     </div>

@@ -1,0 +1,15 @@
+# Provenance « claude-code » supposée : à confirmer par Richard. Projet en cours (M1 : extraction et chargement).
+title:
+  fr: "Inflation et change : pipeline ETL"
+  en: "Inflation and exchange rates: ETL pipeline"
+summary:
+  fr: Un pipeline de données qui croise l'inflation et le taux de change de huit pays face à l'euro, jusqu'à un tableau de bord Grafana.
+  en: A data pipeline that crosses inflation and exchange rates for eight countries against the euro, all the way to a Grafana dashboard.
+category: automation
+provenance: claude-code
+stack: [python, sql, postgresql, grafana, docker]
+tags: [etl, données, finance]
+status: published
+order: 6
+repo: Stryxman/inflation-fx-etl
+start: 2026-10

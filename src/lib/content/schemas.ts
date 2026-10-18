@@ -56,6 +56,7 @@ export const PROJECT_CATEGORIES = [
   "website",
   "artifact",
   "ai-agent",
+  "automation",
   "application",
   "business-case",
 ] as const;
@@ -84,7 +85,10 @@ export const projectSchema = <I extends z.ZodType, R extends z.ZodType>(
       .regex(/^[\w.-]+\/[\w.-]+$/, "format owner/nom")
       .optional(),
     cover: image().optional(),
-    gallery: z.array(z.object({ src: image(), alt: localized })).default([]),
+    // alt décrit l'image ; caption (facultatif) est la légende visible sous l'image
+    gallery: z
+      .array(z.object({ src: image(), alt: localized, caption: localized.optional() }))
+      .default([]),
     preview: z
       .object({ mode: z.enum(["auto", "iframe", "screenshot", "none"]).default("auto") })
       .default({ mode: "auto" }),

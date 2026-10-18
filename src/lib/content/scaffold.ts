@@ -100,7 +100,7 @@ export function scaffold(
   const meta = {
     title: { fr: input.name, en: input.name },
     summary: { fr: summary, en: "" },
-    category: "website", // à ajuster : website, artifact, ai-agent, application ou business-case
+    category: "website", // à ajuster : website, artifact, ai-agent, automation, application ou business-case
     provenance: "other",
     stack,
     tags,

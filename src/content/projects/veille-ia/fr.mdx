@@ -1,0 +1,18 @@
+L'actualité de l'IA est dispersée et très redondante : une même annonce est reprise partout le même jour. Cette veille fait le tri automatiquement, plusieurs fois par jour, sans compte ni installation pour la lire.
+
+## Ce que fait le pipeline
+
+1. **Collecte** de six flux RSS (quatre anglophones, deux francophones) ; une source en panne n'arrête pas les autres.
+2. **Traitement** : nettoyage, conservation des sept derniers jours, regroupement des doublons (l'article retenu vient de la source la plus fiable, les autres sont cités en « Aussi couvert par »), extraits complétés depuis la page de l'article, classement par thème.
+3. **Synthèse** (V2) : un paragraphe par thème rédigé par un modèle de langage gratuit (Mistral), dont chaque phrase renvoie aux articles qui la soutiennent ; une synthèse non conforme n'est pas publiée.
+4. **Publication** sur GitHub Pages par GitHub Actions, trois fois par jour ; si aucune source ne répond, la page précédente reste en ligne.
+
+Sources, thèmes et modèle se règlent dans des fichiers de configuration, sans toucher au code. Tout est gratuit.
+
+## La démarche
+
+Le projet a été mené en jalons courts (cadrage, collecte, traitement, restitution, finitions), avec un cahier des charges, un journal de décisions, un registre des risques, une recette de chaque fonctionnalité et des tests automatisés à chaque pull request. La V1 est terminée ; la V2 ajoute les synthèses.
+
+## Limites connues
+
+Le classement par mots-clés reste approximatif, seuls les titres quasi identiques sont reconnus comme doublons, et GitHub peut retarder les lancements planifiés de plusieurs heures.

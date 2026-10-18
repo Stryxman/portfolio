@@ -13,7 +13,12 @@ describe("localize", () => {
 
 describe("visibleProjects", () => {
   const e = (id: string, status: string, order: number) => ({ id, data: { status, order } });
-  const all = [e("b", "published", 2), e("a", "published", 1), e("d", "draft", 0), e("z", "archived", 0)];
+  const all = [
+    e("b", "published", 2),
+    e("a", "published", 1),
+    e("d", "draft", 0),
+    e("z", "archived", 0),
+  ];
   it("garde les publiés, triés par ordre", () => {
     expect(visibleProjects(all, { includeDrafts: false }).map((x) => x.id)).toEqual(["a", "b"]);
   });
@@ -23,5 +28,16 @@ describe("visibleProjects", () => {
   it("départage un ordre égal par identifiant", () => {
     const tie = [e("z", "published", 1), e("m", "published", 1)];
     expect(visibleProjects(tie, { includeDrafts: false }).map((x) => x.id)).toEqual(["m", "z"]);
+  });
+});
+
+describe("typographie française", () => {
+  it("met une espace insécable avant : ; ? ! et à l'intérieur des guillemets, en français seulement", () => {
+    expect(localize({ fr: "MédiMatch : trouver ? « oui » !", en: "" }, "fr").text).toBe(
+      "MédiMatch : trouver ? « oui » !",
+    );
+    expect(localize({ fr: "x", en: "Ad Agent: static ads" }, "en").text).toBe(
+      "Ad Agent: static ads",
+    );
   });
 });

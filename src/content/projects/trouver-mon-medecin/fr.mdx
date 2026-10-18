@@ -5,7 +5,7 @@ Projet du cours « Stack marketing et outils no-code », encore en cours. C'est 
 Le visiteur ne sait pas quel spécialiste consulter : il décrit ce qu'il ressent, et le service s'occupe de l'orienter vers le bon praticien. Deux chemins sont possibles :
 
 - **un formulaire en trois étapes** : le problème (neuf situations, des douleurs au suivi gynécologique, plus « je ne sais pas ») avec des précisions facultatives, puis les coordonnées, puis le lieu et la personne concernée, avec un consentement RGPD explicite ;
-- **un chatbot**, accessible depuis la bulle en bas de l'écran, pour décrire sa situation en discutant.
+- **un chatbot, Billy**, accessible depuis la bulle en bas de l'écran : il demande pour qui est la consultation, l'intensité de la douleur, puis propose les médecins adaptés, avec des boutons de réponse rapide à chaque étape.
 
 ## Ce que montre le site
 
@@ -15,4 +15,6 @@ Le visiteur ne sait pas quel spécialiste consulter : il décrit ce qu'il ressen
 
 ## Comment il a été fait
 
-Une première maquette a été conçue avec Claude sous le nom « Médilink », puis la version en ligne est devenue MédiMatch. Le chatbot et le traitement des demandes passent par **n8n**. Les offres, les médecins et les avis sont fictifs.
+Une première maquette a été conçue avec Claude sous le nom « Médilink », puis la version en ligne est devenue MédiMatch. Les offres, les médecins et les avis sont fictifs.
+
+Le chatbot est un **agent IA construit dans n8n** : le site lui envoie chaque message par un webhook ; l'agent s'appuie sur un modèle **OpenAI**, garde la mémoire de la conversation et peut consulter une base **Airtable** de prise de rendez-vous, puis renvoie sa réponse au site.

@@ -2,9 +2,16 @@
 - { id: n8n, name: n8n, category: tool, order: 2 }
 - { id: make, name: Make, category: tool, order: 3 }
 - { id: airtable, name: Airtable, category: tool, order: 4 }
+- { id: openai, name: OpenAI, category: tool, order: 9 }
 - { id: python, name: Python, category: language, order: 4 }
 - { id: typescript, name: TypeScript, category: language, order: 5 }
 - { id: javascript, name: JavaScript, category: language, order: 6 }
 - { id: html-css, name: HTML/CSS, category: language, order: 7 }
 - { id: astro, name: Astro, category: framework, order: 10 }
 - { id: tailwindcss, name: Tailwind CSS, category: framework, order: 11 }
+- { id: sql, name: SQL, category: language, order: 8 }
+- { id: postgresql, name: PostgreSQL, category: tool, order: 12 }
+- { id: grafana, name: Grafana, category: tool, order: 13 }
+- { id: docker, name: Docker, category: tool, order: 14 }
+- { id: github-actions, name: GitHub Actions, category: tool, order: 15 }
+- { id: playwright, name: Playwright, category: tool, order: 16 }

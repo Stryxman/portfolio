@@ -1,0 +1,17 @@
+# Provenance « claude-code » supposée : à confirmer par Richard. Le rédacteur de l'agent utilise l'API Claude.
+title:
+  fr: "Ad Agent : publicités statiques à partir d'un brief"
+  en: "Ad Agent: static ads from a brief"
+summary:
+  fr: Un agent IA qui transforme un brief en plusieurs variantes de publicités statiques, chacune un vrai fichier PNG prêt à publier.
+  en: An AI agent that turns a brief into several static ad variants, each one a real PNG file ready to publish.
+category: ai-agent
+provenance: claude-code
+stack: [python, playwright]
+tags: [agent, publicité, claude-api]
+status: published
+featured: true
+order: 7
+repo: Stryxman/ad-agent
+start: 2026-09
+end: 2026-09
