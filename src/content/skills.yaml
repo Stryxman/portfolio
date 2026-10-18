@@ -8,6 +8,7 @@
 - { id: javascript, name: JavaScript, category: language, order: 6 }
 - { id: html-css, name: HTML/CSS, category: language, order: 7 }
 - { id: astro, name: Astro, category: framework, order: 10 }
+- { id: react, name: React, category: framework, order: 9 }
 - { id: tailwindcss, name: Tailwind CSS, category: framework, order: 11 }
 - { id: sql, name: SQL, category: language, order: 8 }
 - { id: postgresql, name: PostgreSQL, category: tool, order: 12 }
