@@ -4,10 +4,10 @@
 
 ## À lire en premier (mini récap, 2026-10-15)
 
-- **Où on en est :** en production : pages sobres, sombre par défaut, champ animé en CSS, projets groupés par catégorie (compagnon, Orbit Lab, Vertige, MédiMatch). Branche `contenu-2` : veille-ia, inflation-fx-etl, ad-agent et catégorie « Automatisations ». Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
+- **Où on en est :** en production : 8 projets publiés (compagnon, Orbit Lab, Vertige, MédiMatch avec galerie, veille IA, ETL, Ad Agent) et champ animé. Branche `contenu-3` : AdPulse. Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
 - **Champ de l'accueil :** animé en CSS seul (cycle de 12 s, calque composé par le GPU, arrêt en mouvement réduit) ; la version WebGL réactive au pointeur reste optionnelle.
 - **Cap fixé par Richard :** du concret vite, avec peu de ressources ; périmètre proportionné au contenu. Pas de filtres, stats, captures auto, formulaire ni WebGL tant que le contenu ne le justifie pas.
-- **Ensuite :** captures du flux n8n et d'une conversation avec Billy (MédiMatch) dans `src/content/projects/trouver-mon-medecin/gallery/` ; confirmer la provenance Claude Code des trois dépôts et l'intitulé du cours ; partager l'artefact Orbit Lab en public ; captures pour ad-agent et l'ETL si Richard en a.
+- **Ensuite :** confirmer la provenance Claude Code (veille-ia, ETL, Ad Agent, AdPulse) et l'intitulé du cours ; partager l'artefact Orbit Lab en public ; publier AdPulse (dépôt et/ou Vercel) si Richard le veut ; CV, bio, portrait.
 - **Méthode, pour chaque phase :**
   - plan **court** dans `docs/plans/phase-N.md` (tâches et tests, pas tout le code), validé par Richard ;
   - exécution native (skill `superpowers:executing-plans`, journal dans `.superpowers/sdd/phase-N/progress.md`, `task-done` du skill pour consigner chaque tâche) ;

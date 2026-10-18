@@ -1,0 +1,18 @@
+Pensé pour les gérants de TPE-PME et les freelances non techniques : on charge l'export CSV de ses publicités Meta, et AdPulse repère ce qui cloche, l'explique avec des mots simples et propose une action. Tout reste dans le navigateur : aucun fichier n'est envoyé, il n'y a ni compte ni serveur.
+
+## Ce que montre l'outil
+
+- **Une synthèse sur 7 ou 30 jours** : dépense, résultats, coût par résultat et taux de clic, avec leur évolution par rapport à la période précédente (flèche, signe et pourcentage, jamais la couleur seule).
+- **Des alertes triées par gravité**, chacune avec un titre court, une explication chiffrée sans jargon et une action conseillée :
+  - coût par résultat en hausse (+30 % : à surveiller, +50 % : problème) ;
+  - publicité fatiguée (taux de clic en baisse et fréquence élevée) ;
+  - dépense sans résultat (plus de 50 € sur 7 jours sans conversion).
+- **Un graphique** du coût par résultat jour par jour, avec sa moyenne.
+- **Un tableau des campagnes**, trié au clic, avec une pastille OK, À surveiller ou Problème.
+- **Un rapport imprimable** au format A4, à enregistrer en PDF depuis le navigateur.
+
+## Comment il a été fait
+
+Vite, React et TypeScript strict, Tailwind pour la mise en forme, Recharts pour le graphique et PapaParse pour lire le CSV. Les fichiers exportés depuis Excel en français sont acceptés (point-virgule, virgule décimale), et chaque erreur de fichier est expliquée en nommant la cause (« Ligne 12 : … n'est pas un nombre valide »). Les seuils des alertes se règlent en haut d'un seul fichier, et chaque règle est couverte par des tests.
+
+Le projet a été mené en phases courtes avec un périmètre fermé : le MVP est terminé.

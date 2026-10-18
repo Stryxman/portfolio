@@ -1,0 +1,20 @@
+Built for small-business owners and non-technical freelancers: load the CSV export of your Meta ads, and AdPulse spots what is going wrong, explains it in plain words and suggests an action. Everything stays in the browser: no file is uploaded, and there is no account or server.
+
+## What the tool shows
+
+- **A 7 or 30-day overview**: spend, results, cost per result and click-through rate, with their change against the previous period (arrow, sign and percentage, never colour alone).
+- **Alerts sorted by severity**, each with a short title, a plain explanation with the figures and a suggested action:
+  - rising cost per result (+30%: watch, +50%: problem);
+  - ad fatigue (falling click-through rate with high frequency);
+  - spend without results (over €50 in 7 days with no conversion).
+- **A chart** of daily cost per result, with its average.
+- **A campaign table**, sortable by clicking, with an OK, Watch or Problem badge.
+- **A printable A4 report**, saved as PDF from the browser.
+
+## How it was built
+
+Vite, React and strict TypeScript, Tailwind for styling, Recharts for the chart and PapaParse to read the CSV. Files exported from French Excel are accepted (semicolons, decimal commas), and every file error names its cause ("Line 12: … is not a valid number"). Alert thresholds live at the top of a single file, and every rule is covered by tests.
+
+The project was run in short phases with a closed scope: the MVP is done.
+
+The interface is in French only.

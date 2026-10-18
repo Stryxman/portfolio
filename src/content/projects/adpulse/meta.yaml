@@ -1,0 +1,18 @@
+# Projet local (pas encore de dépôt GitHub ni de version en ligne) : ajouter repo et liveUrl le jour où il est publié.
+# Provenance « claude-code » supposée (CLAUDE.md et PLAN.md par phases) : à confirmer par Richard.
+title:
+  fr: "AdPulse : vos publicités Meta expliquées"
+  en: "AdPulse: your Meta ads, explained"
+summary:
+  fr: Une page web qui lit l'export CSV de publicités Meta, repère ce qui cloche et dit quoi faire, en français simple, sans rien envoyer.
+  en: A web page that reads a Meta ads CSV export, spots what is going wrong and says what to do, in plain French, without sending anything.
+category: application
+provenance: claude-code
+stack: [typescript, react, tailwindcss]
+tags: [meta-ads, csv, tpe-pme]
+status: published
+featured: true
+order: 8
+cover: ./cover.png
+start: 2026-10
+end: 2026-10
