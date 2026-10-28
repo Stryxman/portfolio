@@ -11,9 +11,17 @@ main:
     fr: J'aime créer des automatismes et des applications avec l'IA, ainsi que des sites web.
     en: I enjoy building automations and AI-powered apps, as well as websites.
   bio:
-    fr: Je réunis ici mes automatisations, mes applications d'IA et mes sites, avec la façon dont chacun a été fabriqué.
-    en: This is where I gather my automations, AI apps and websites, along with how each one was built.
+    fr: |-
+      Salut, c'est Richard. Ça fait quelques semaines que j'apprends à utiliser l'IA et les automatisations, et ça me plaît tellement que j'ai envie d'en faire ma passion, et de devenir expert du domaine.
+
+      Je réunis ici mes créations, avec la façon dont chacune a été fabriquée. Suis mon parcours avec moi, je publie au fil de ce que j'apprends.
+    en: |-
+      Hey, I'm Richard. I've been learning to use AI and automation for a few weeks now, and I enjoy it so much that I want to make it my passion and become an expert in the field.
+
+      This is where I gather what I build, along with how each project was made. Follow my journey with me, I post as I learn.
   githubLogin: Stryxman
   socials:
     - kind: github
       url: https://github.com/Stryxman
+    - kind: linkedin
+      url: https://www.linkedin.com/in/richard-sinama/
