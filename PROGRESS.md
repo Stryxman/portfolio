@@ -43,3 +43,12 @@
 - Contenu : `headline` du profil (≤ 6 mots), image manquante = avertissement (le sceau sert de repli), `compagnon` et `portfolio` publiés ; `compagnon` sans lien de code (dépôt privé).
 - Hygiène : `.astro/` hors de Git, navigation partagée avec page courante, `getProfile()` sans assertion, liens sociaux en pied de page.
 - Tests : 115 unitaires, 56 E2E (6 ignorés exprès).
+
+## 2026-11-16 : mouvement de l'accueil (branche `motion-fibonacci`, non fusionnée)
+
+- Audit du mouvement : grille sombre en boucle, clair figé, rien au défilement. Détail dans la note d'audit de la fiche du projet.
+- Spirale de phyllotaxie rendue en SVG au build : 233 polygones (3, 5, 8 côtés) en sombre, 21 bras et carrés au trait en clair. Ouverture en CSS seul, le texte du hero reste visible sans JavaScript et en mouvement réduit.
+- Sphère en treillis de Fibonacci sur canvas 2D : s'enroule depuis le disque (projection de Lambert), blob par somme de sinus, renflement vers le pointeur, en pause hors écran, image SVG en repli.
+- Aucune dépendance ajoutée. Accueil : 13 Ko → 34,5 Ko compressée.
+- Tests : 134 unitaires, 70 E2E (6 ignorés exprès). Pas encore de revue de code.
+

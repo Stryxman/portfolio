@@ -1,0 +1,264 @@
+---
+import { renderSphere } from "../lib/geometry/sphere";
+interface Props {
+  class?: string;
+}
+const { class: cls = "" } = Astro.props;
+const { dark, light } = renderSphere();
+---
+
+<!-- décor : la spirale de l'accueil s'enroule en sphère à l'entrée dans l'écran, puis respire comme un blob.
+     L'image SVG est le repli sans JavaScript ; le canvas la remplace dès qu'il dessine. -->
+<div data-sphere class:list={["sphere relative aspect-square", cls]} aria-hidden="true">
+  <div class="sphere-still dark:hidden" set:html={light} />
+  <div class="sphere-still hidden dark:block" set:html={dark} />
+  <canvas class="absolute inset-0 size-full"></canvas>
+</div>
+
+<style>
+  .sphere-still,
+  .sphere-still :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .sphere[data-live] .sphere-still {
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  import { isFibonacci } from "../lib/geometry/phyllo";
+  import {
+    LATTICE,
+    REST,
+    SPIRAL_TURNS,
+    SPIRAL_VERTICES,
+    poseInto,
+    sphereLattice,
+    sphereSpiral,
+  } from "../lib/geometry/sphere";
+
+  const SIDES = [3, 5, 8];
+  const BANDS = 6;
+  const TAU = Math.PI * 2;
+  const smooth = (v: number) => {
+    const c = Math.min(1, Math.max(0, v));
+    return c * c * (3 - 2 * c);
+  };
+
+  function mount(host: HTMLElement): () => void {
+    const canvas = host.querySelector("canvas")!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return () => {};
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    const lattice = sphereLattice(LATTICE);
+    const dots = new Float32Array(lattice.length);
+    const spiral = sphereSpiral(SPIRAL_VERTICES, SPIRAL_TURNS);
+    const line = new Float32Array(spiral.length);
+
+    let colors = { ink: "", muted: "", strong: "", accent: "" };
+    let dark = true;
+    const readTheme = () => {
+      const s = getComputedStyle(host);
+      colors = {
+        ink: s.getPropertyValue("--ink").trim(),
+        muted: s.getPropertyValue("--ink-muted").trim(),
+        strong: s.getPropertyValue("--line-strong").trim(),
+        accent: s.getPropertyValue("--accent").trim(),
+      };
+      dark = document.documentElement.dataset.theme !== "light";
+    };
+
+    let w = 0;
+    let h = 0;
+    const resize = () => {
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      w = host.clientWidth;
+      h = host.clientHeight;
+      canvas.width = Math.round(w * ratio);
+      canvas.height = Math.round(h * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    };
+
+    // pointeur : direction visée (repère de vue, y vers le haut) et force, amorties comme un ressort
+    const aim = { x: 0, y: 0, k: 0 };
+    const pull = { x: 0, y: 0, k: 0 };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      const r = canvas.getBoundingClientRect();
+      aim.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      aim.y = -(((e.clientY - r.top) / r.height) * 2 - 1);
+      aim.k = Math.hypot(aim.x, aim.y) < 1.5 ? 0.22 : 0;
+    };
+    const onLeave = () => (aim.k = 0);
+
+    const polygon = (x: number, y: number, rad: number, sides: number, rot: number) => {
+      ctx.moveTo(x + rad * Math.cos(rot), y + rad * Math.sin(rot));
+      for (let k = 1; k < sides; k++) {
+        const a = rot + (k * TAU) / sides;
+        ctx.lineTo(x + rad * Math.cos(a), y + rad * Math.sin(a));
+      }
+      ctx.closePath();
+    };
+
+    const draw = (seconds: number) => {
+      const rect = canvas.getBoundingClientRect();
+      const vh = innerHeight;
+      const center = rect.top + rect.height / 2;
+      // disque à plat tant que le centre est bas dans l'écran, sphère complète quand il atteint 58 % de la hauteur ;
+      // si la page finit avant, la fin de course est ramenée au point le plus haut que le défilement permet
+      const remaining = document.documentElement.scrollHeight - vh - scrollY;
+      const end = Math.max(vh * 0.58, center - remaining);
+      const morph = still.matches ? 1 : smooth((end + vh * 0.34 - center) / (vh * 0.34));
+      const t = still.matches ? 0 : seconds;
+      const len = Math.hypot(pull.x, pull.y, 0.6) || 1;
+      const pose = {
+        t,
+        morph,
+        amp: 0.17,
+        spin: REST.spin + t * (dark ? 0.16 : -0.1),
+        tilt: REST.tilt,
+        pull: [pull.x / len, pull.y / len, 0.6 / len] as const,
+        pullK: pull.k,
+      };
+      const R = Math.min(w, h) * 0.36;
+      const cx = w / 2;
+      const cy = h / 2;
+      ctx.clearRect(0, 0, w, h);
+
+      if (dark) {
+        // « Transformation » : 610 polygones pleins, plus gros et plus nets vers l'œil
+        poseInto(lattice, dots, pose);
+        // par tranche de profondeur (6 tranches, puis les accents) : la couleur et l'opacité ne changent que 7 fois par image
+        for (let band = 0; band <= BANDS; band++) {
+          const marks = band === BANDS;
+          const depth = (band + 0.5) / BANDS; // 0 au fond, 1 devant
+          ctx.globalAlpha = marks ? 0.9 : 0.16 + 0.74 * depth * depth;
+          ctx.fillStyle = marks ? colors.accent : depth > 0.6 ? colors.muted : colors.strong;
+          for (let i = 0; i < dots.length; i += 3) {
+            const n = i / 3;
+            const near = (dots[i + 2]! + 1) / 2; // peut sortir de [0, 1] : le blob dépasse le rayon 1
+            if (
+              isFibonacci(n + 1)
+                ? !marks
+                : band !== Math.max(0, Math.min(BANDS - 1, Math.floor(near * BANDS)))
+            )
+              continue;
+            ctx.beginPath();
+            polygon(
+              cx + dots[i]! * R,
+              cy + dots[i + 1]! * R,
+              R * (marks ? 0.016 + 0.012 * near : 0.012 + 0.02 * near),
+              SIDES[n % 3]!,
+              pose.spin + n,
+            );
+            ctx.fill();
+          }
+        }
+      } else {
+        // « Traceur » : un seul trait continu d'un pôle à l'autre, estompé sur la face cachée
+        poseInto(spiral, line, pose);
+        ctx.lineJoin = "round";
+        for (let pass = 0; pass < 2; pass++) {
+          const front = pass === 1;
+          ctx.beginPath();
+          let pen = false;
+          for (let i = 0; i < line.length; i += 3) {
+            if (line[i + 2]! >= 0 !== front) {
+              pen = false;
+              continue;
+            }
+            const x = cx + line[i]! * R;
+            const y = cy + line[i + 1]! * R;
+            if (pen) ctx.lineTo(x, y);
+            else ctx.moveTo(x, y);
+            pen = true;
+          }
+          ctx.globalAlpha = front ? 0.9 : 0.3;
+          ctx.strokeStyle = front ? colors.muted : colors.strong;
+          ctx.lineWidth = front ? 1 : 0.75;
+          ctx.stroke();
+        }
+        // carrés d'accent posés sur les graines de rang 1, 2, 3, 5, 8… (face visible)
+        poseInto(lattice, dots, pose);
+        ctx.strokeStyle = colors.accent;
+        ctx.lineWidth = 1.5;
+        for (let n = 0; n < LATTICE; n++) {
+          if (!isFibonacci(n + 1)) continue;
+          const z = dots[n * 3 + 2]!;
+          ctx.globalAlpha = z >= 0 ? 1 : 0.25;
+          ctx.beginPath();
+          polygon(cx + dots[n * 3]! * R, cy + dots[n * 3 + 1]! * R, R * 0.035, 4, pose.spin + n);
+          ctx.stroke();
+        }
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    let raf = 0;
+    let visible = false;
+    let last = 0;
+    let clock = 0;
+    const tick = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      clock += dt;
+      const ease = 1 - Math.exp(-dt * 6);
+      pull.x += (aim.x - pull.x) * ease;
+      pull.y += (aim.y - pull.y) * ease;
+      pull.k += (aim.k - pull.k) * ease;
+      draw(clock);
+      raf = visible && !still.matches ? requestAnimationFrame(tick) : 0;
+    };
+    const wake = () => {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry!.isIntersecting;
+        if (visible) wake();
+      },
+      { rootMargin: "80px" },
+    );
+    const ro = new ResizeObserver(() => {
+      resize();
+      wake();
+    });
+    const mo = new MutationObserver(() => {
+      readTheme();
+      wake();
+    });
+    readTheme();
+    resize();
+    io.observe(host);
+    ro.observe(host);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    still.addEventListener("change", wake);
+    addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    host.dataset.live = "";
+    wake();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+      mo.disconnect();
+      still.removeEventListener("change", wake);
+      removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+    };
+  }
+
+  let stop: (() => void)[] = [];
+  document.addEventListener("astro:page-load", () => {
+    stop = [...document.querySelectorAll<HTMLElement>("[data-sphere]")].map(mount);
+  });
+  document.addEventListener("astro:before-swap", () => {
+    stop.forEach((fn) => fn());
+    stop = [];
+  });
+</script>

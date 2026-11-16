@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { finishIntro } from "./intro";
 
 test.describe("redirection initiale", () => {
   for (const [locale, attendu] of [
@@ -91,6 +92,7 @@ for (const theme of ["light", "dark"] as const) {
       "/fr/nulle-part/",
     ]) {
       await page.goto(path);
+      await finishIntro(page);
       const { violations } = await new AxeBuilder({ page }).analyze();
       expect(violations.filter((v) => v.impact === "serious" || v.impact === "critical")).toEqual(
         [],

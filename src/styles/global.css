@@ -121,3 +121,19 @@
   animation-duration: var(--dur-page);
   animation-timing-function: var(--ease-out);
 }
+
+/* Ouverture de l'accueil : le texte du hero arrive quand la spirale lui laisse la place (SpiralField).
+   Visible par défaut ; masqué seulement par le remplissage arrière de l'animation, donc jamais sans JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-intro] .hero-in {
+    animation: hero-in 820ms var(--ease-out) backwards;
+    animation-delay: calc(1400ms + var(--n) * 90ms);
+  }
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(8px);
+  }
+}

@@ -42,6 +42,9 @@ const site = Astro.site!;
           document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
         };
         apply();
+        // ouverture du site : jouée une seule fois, au chargement complet. ClientRouter retire l'attribut au swap,
+        // la chorégraphie ne se rejoue donc pas en revenant sur l'accueil ; sans JavaScript, le texte reste visible.
+        document.documentElement.dataset.intro = "";
         // ClientRouter remplace les attributs de <html> au swap : on réapplique avant le rendu
         document.addEventListener("astro:after-swap", apply);
       })();

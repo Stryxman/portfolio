@@ -1,0 +1,162 @@
+---
+import { renderSpiral } from "../lib/geometry/phyllo";
+interface Props {
+  class?: string;
+}
+const { class: cls = "" } = Astro.props;
+const { dark, light } = renderSpiral();
+---
+
+<!-- décor de l'accueil : spirale de 233 graines à l'angle d'or.
+     Sombre « Transformation » : polygones pleins qui éclosent du centre. Clair « Traceur » : bras tracés au trait. -->
+<div
+  data-field
+  class:list={["spiral pointer-events-none absolute inset-0 overflow-hidden", cls]}
+  aria-hidden="true"
+>
+  <div class="spiral-place">
+    <div class="spiral-unwind">
+      <div class="spiral-leave">
+        <div data-field-motion class="spiral-spin">
+          <div class="dark:hidden" set:html={light} />
+          <div class="hidden dark:block" set:html={dark} />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .spiral {
+    container-type: size;
+  }
+  /* position de repos : à droite de la colonne de texte ; --ix / --iy ramènent la spirale au centre pour l'ouverture */
+  .spiral-place {
+    --rest: 1;
+    --ix: -23cqw;
+    --iy: 0cqh;
+    position: absolute;
+    left: 73cqw;
+    top: 50cqh;
+    width: min(104cqh, 60cqw);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    opacity: var(--rest);
+  }
+  /* sur mobile, le texte prend toute la largeur : la spirale monte dans le coin haut droit, au-dessus du nom, atténuée */
+  @media (max-width: 767px) {
+    .spiral-place {
+      --rest: 0.55;
+      --ix: -34cqw;
+      --iy: 36cqh;
+      left: 84cqw;
+      top: 14cqh;
+      width: 110cqw;
+    }
+  }
+  .spiral-unwind,
+  .spiral-leave,
+  .spiral-spin,
+  .spiral-spin > div,
+  .spiral-spin :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .spiral-spin :global(svg) {
+    display: block;
+    overflow: visible;
+  }
+  .spiral :global(.sp) {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* rotation lente au repos ; le monde clair tourne à contresens, plus lentement */
+    .spiral-spin {
+      animation: spiral-spin 240s linear infinite;
+    }
+    :global([data-theme="light"]) .spiral-spin {
+      animation-duration: 420s;
+      animation-direction: reverse;
+    }
+
+    /* éclosion : chaque graine à son tour, du centre vers le bord (à chaque apparition, y compris au changement de thème) */
+    .spiral :global(.sp) {
+      animation: sp-bloom 640ms var(--ease-out) backwards;
+      animation-delay: calc(var(--i) * 3ms);
+    }
+    /* tracé : le traceur dessine les 21 bras, puis pose les carrés anneau par anneau */
+    .spiral :global(.sp-arm) {
+      animation: sp-draw 1100ms var(--ease-in-out) backwards;
+      animation-delay: calc(var(--i) * 28ms);
+    }
+    .spiral :global(.sp-ring) {
+      animation: sp-ink 420ms steps(3, end) backwards;
+      animation-delay: calc(500ms + var(--i) * 110ms);
+    }
+
+    /* ouverture du site (data-intro posé par Base au premier chargement) : la spirale naît au centre,
+       se déroule, puis glisse à sa place pour laisser le nom apparaître */
+    :global(html[data-intro]) .spiral-place {
+      animation: spiral-settle 1150ms var(--ease-in-out) 900ms backwards;
+    }
+    :global(html[data-intro]) .spiral-unwind {
+      animation: spiral-unwind 2050ms var(--ease-out) backwards;
+    }
+
+    /* au défilement, la spirale s'ouvre et s'efface (sans écouteur : chronologie de défilement native) */
+    @supports (animation-timeline: scroll()) {
+      .spiral-leave {
+        animation: spiral-leave linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 90vh;
+      }
+    }
+  }
+
+  @keyframes spiral-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes sp-bloom {
+    from {
+      opacity: 0;
+      transform: scale(0) rotate(-120deg);
+    }
+  }
+  /* le pointillé n'existe que pendant le tracé : au repos, le trait est plein */
+  @keyframes sp-draw {
+    from {
+      stroke-dasharray: 1 1;
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dasharray: 1 1;
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes sp-ink {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes spiral-settle {
+    from {
+      transform: translate(var(--ix), var(--iy)) scale(1.16);
+      opacity: 1;
+    }
+  }
+  @keyframes spiral-unwind {
+    from {
+      transform: rotate(-75deg);
+    }
+  }
+  @keyframes spiral-leave {
+    to {
+      transform: scale(1.35) rotate(48deg);
+      opacity: 0.15;
+    }
+  }
+</style>

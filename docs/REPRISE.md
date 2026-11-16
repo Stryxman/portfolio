@@ -2,6 +2,15 @@
 
 > Fichier court : où on en est et quoi faire ensuite. Mis à jour à chaque fin de session.
 
+## Branche en attente (2026-11-16) : `motion-fibonacci`
+
+- **Quoi :** refonte du mouvement de l'accueil, faite par Claude en autonomie. Spirale de phyllotaxie (233 graines à l'angle d'or) à l'ouverture, qui laisse place au nom ; sphère en treillis de Fibonacci qui s'enroule puis respire comme un blob dans la section « En bref ». Clair et sombre ont chacun leur lecture (polygones pleins / trait du traceur).
+- **État :** commitée en local, **non poussée**. Types, lint, 134 unitaires, 70 E2E et build verts. Pas de revue de code ni de PR.
+- **Fichiers :** `src/lib/geometry/phyllo.ts`, `src/lib/geometry/sphere.ts`, `src/components/SpiralField.astro`, `src/components/BlobSphere.astro`, `src/views/HomeView.astro`, `tests/e2e/intro.ts`. `FieldStatic` (ancienne grille) reste pour la planche de dev.
+- **À faire par Richard :** regarder en mouvement réel (`pnpm dev`), puis trancher les 4 décisions listées dans la note d'audit de la fiche du projet.
+- **Ensuite, si validé :** `/code-review`, commit, PR, fusion après accord, vérification de la production. Mettre à jour `DESIGN_BRIEF.md` §5 (le champ n'est plus la grille).
+- **Pour tester un écran animé :** `finishIntro(page)` de `tests/e2e/intro.ts` avant toute mesure de contraste ou d'opacité sur l'accueil.
+
 ## À lire en premier (mini récap, 2026-10-15)
 
 - **Où on en est :** en production : 8 projets publiés (compagnon, Orbit Lab, Vertige, MédiMatch avec galerie, veille IA, ETL, Ad Agent) et champ animé. Branche `contenu-3` : AdPulse. Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app
