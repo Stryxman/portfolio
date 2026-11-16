@@ -61,3 +61,10 @@
 - Sphère aussi sur À propos tant qu'il n'y a pas de portrait. Couvertures : trois rendus réels pour Ad Agent, renard en polygones pour Compagnon.
 - Tests : 132 unitaires, 77 E2E (7 ignorés exprès). Accueil : 34,9 Ko compressée.
 
+## 2026-11-16 : lot 3 (ordre, bio, ouverture des fiches)
+
+- Mesure de l'à-coup à l'ouverture d'une fiche : la page arrive en moins de 100 ms, mais l'image de la fiche arrivait 110 à 190 ms après, en pleine animation, et l'ombre portée faisait sauter des images.
+- Correctif : l'image de la fiche est demandée au survol ou au focus du lien (carte, projet précédent ou suivant) et la navigation lui laisse 250 ms au plus ; ombre retirée, transition ramenée à 380 ms. Image prête dès l'ouverture dans tous les cas mesurés.
+- Contenu : ordre des projets, bio en deux phrases plus directes, MédiMatch décrit comme une landing page.
+- Tests : 132 unitaires, 77 E2E.
+

@@ -10,6 +10,7 @@
 - **À faire par Richard :** regarder en mouvement réel (`pnpm dev`), puis trancher les 4 décisions listées dans la note d'audit de la fiche du projet.
 - **Ensuite, si validé :** `/code-review`, commit, PR, fusion après accord, vérification de la production. Mettre à jour `DESIGN_BRIEF.md` §5 (le champ n'est plus la grille).
 - **Lot 2 (même soir, commité en local, non poussé) :** palette chaude (accent cuivre en clair, ambre en sombre, gris teintés vers 70°) ; sceau des fiches refait en mini spirale et placé sous le titre ; nombres de la suite sur les graines d'accent ; graines réactives à la souris ; aperçu qui sort de sa carte et y redescend (bouton « Fermer » sur la fiche) ; sphère sur la page À propos ; couvertures Ad Agent et Compagnon ; rôle et accroche du profil réécrits. `DESIGN_BRIEF.md` §3 (accent outremer) et §5 sont donc périmés.
+- **Lot 3 (même soir) :** ordre des projets (Ad Agent, Orbit Lab en tête, Compagnon en dernier), bio et résumé MédiMatch retouchés, ouverture d'une fiche sans à-coup (image de la fiche préchargée au survol du lien, ombre retirée de la transition, 380 ms).
 - **Piège du serveur de dev :** après l'ajout d'un `cover` dans un `meta.yaml`, relancer `pnpm dev` (le contenu reste en cache et l'image échoue avec `LocalImageUsedWrongly`). Le build n'est pas touché.
 - **Pour tester un écran animé :** `finishIntro(page)` de `tests/e2e/intro.ts` avant toute mesure de contraste ou d'opacité sur l'accueil.
 

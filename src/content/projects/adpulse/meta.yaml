@@ -12,7 +12,7 @@ stack: [typescript, react, tailwindcss]
 tags: [meta-ads, csv, tpe-pme]
 status: published
 featured: true
-order: 8
+order: 7
 cover: ./cover.png
 start: 2026-10
 end: 2026-10

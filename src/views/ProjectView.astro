@@ -1,6 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-import { Image } from "astro:assets";
+import { getImage, Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import type { Locale } from "../i18n/config";
 import { fmt, t } from "../i18n/ui";
@@ -8,12 +8,14 @@ import { pathFor, projectPath } from "../i18n/routes";
 import { localize } from "../lib/content/select";
 import {
   cardOf,
+  imageOf,
   getProfile,
   getProjectBody,
   getProjectEntries,
   getSkills,
 } from "../lib/content/queries";
 import { domainOf, neighbours, projectStatus } from "../lib/projects/model";
+import { FICHE_SIZES, PREVIEW_WIDTHS } from "../lib/projects/preview";
 import ProjectImage from "../components/ProjectImage.astro";
 import Seal from "../components/Seal.astro";
 import Tag from "../components/Tag.astro";
@@ -38,6 +40,15 @@ const { prev, next } = neighbours(
   entries.map((e) => e.id),
   slug,
 );
+// les liens « projet précédent / suivant » n'ont pas d'image dans la page : on leur donne le srcset de la fiche
+// visée, pour que Base la précharge au survol et que la fiche s'ouvre avec son image déjà là
+const srcsetOf = async (id: string | undefined) => {
+  const image = id && imageOf(entries.find((e) => e.id === id)!);
+  return image
+    ? (await getImage({ src: image, widths: PREVIEW_WIDTHS })).srcSet.attribute
+    : undefined;
+};
+const [prevSrcset, nextSrcset] = await Promise.all([srcsetOf(prev), srcsetOf(next)]);
 const titleOf = (id: string) => localize(entries.find((e) => e.id === id)!.data.title, locale);
 const langOf = (lang: Locale) => (lang === locale ? undefined : lang);
 const dt = "text-ink-muted";
@@ -146,7 +157,7 @@ const dt = "text-ink-muted";
             slug={slug}
             provenance={data.provenance}
             alt={fmt(locale, "capture.alt", { title: card.title.text })}
-            sizes="(min-width: 768px) 66vw, 100vw"
+            sizes={FICHE_SIZES}
             eager
           />
         </div>
@@ -191,7 +202,12 @@ const dt = "text-ink-muted";
     >
       <div class="flex flex-wrap justify-between gap-6 border-t border-line pt-10">
         {prev ? (
-          <a href={projectPath(prev, locale)} rel="prev" class="flex flex-col gap-1">
+          <a
+            href={projectPath(prev, locale)}
+            rel="prev"
+            data-preview-srcset={prevSrcset}
+            class="flex flex-col gap-1"
+          >
             <span class="text-small text-ink-muted">{t(locale, "project.prev")}</span>
             <span class="text-h3" lang={langOf(titleOf(prev).lang)}>
               {titleOf(prev).text}
@@ -204,6 +220,7 @@ const dt = "text-ink-muted";
           <a
             href={projectPath(next, locale)}
             rel="next"
+            data-preview-srcset={nextSrcset}
             class="flex flex-col items-end gap-1 text-right"
           >
             <span class="text-small text-ink-muted">{t(locale, "project.next")}</span>

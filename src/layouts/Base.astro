@@ -67,3 +67,38 @@ const site = Astro.site!;
     <Footer locale={locale} />
   </body>
 </html>
+
+<script>
+  // Ouverture d'un projet sans à-coup : l'image de la fiche est demandée dès le survol (ou le focus) du lien,
+  // et la navigation lui laisse jusqu'à 250 ms pour finir de se décoder. Sans cela, la fiche s'ouvre sur un
+  // cadre vide et l'image arrive en cours d'animation.
+  import { FICHE_SIZES } from "../lib/projects/preview";
+
+  const warm = new Map<string, Promise<unknown>>();
+  const warmUp = (e: Event) => {
+    const a = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>("a[href]") : null;
+    if (!a || warm.has(a.href)) return;
+    // carte : les fichiers de sa propre image, à la taille de la fiche ; lien précédent / suivant : srcset fourni au build
+    const srcset =
+      a.dataset.previewSrcset ?? a.closest("[data-project]")?.querySelector("img")?.srcset;
+    if (!srcset) return;
+    const img = new Image();
+    img.sizes = FICHE_SIZES;
+    img.srcset = srcset;
+    warm.set(
+      a.href,
+      img.decode().catch(() => undefined),
+    );
+  };
+  for (const type of ["pointerover", "focusin", "touchstart"])
+    document.addEventListener(type, warmUp, { passive: true });
+  document.addEventListener("astro:before-preparation", (e) => {
+    const ready = warm.get(e.to.href);
+    if (!ready) return;
+    const load = e.loader;
+    e.loader = async () => {
+      await load();
+      await Promise.race([ready, new Promise((done) => setTimeout(done, 250))]);
+    };
+  });
+</script>

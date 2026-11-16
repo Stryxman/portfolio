@@ -10,6 +10,6 @@ stack: [python, claude-code]
 tags: [desktop, focus]
 status: published
 featured: true
-order: 1
+order: 9
 cover: ./cover.png
 start: 2026-10
