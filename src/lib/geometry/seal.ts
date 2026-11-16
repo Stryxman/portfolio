@@ -1,86 +1,67 @@
-import { sealMatrix, type Provenance } from "./families";
-import { apply, type Vec2 } from "./matrix";
-import { hashString, mulberry32, noise2D } from "./random";
-import { polygonsToPath, toPath, type Polygon, type Segment } from "./svg";
+import type { Provenance } from "./families";
+import { phylloPoint, regularPolygon } from "./phyllo";
+import { hashString, mulberry32 } from "./random";
+import { polygonsToPath, type Polygon } from "./svg";
 
 const VIEW = 64;
 const C = VIEW / 2;
-const LINES = 7; // réseau 7 × 7 du monde sombre
-const SQUARES = 6; // grille 6 × 6 du monde clair
+const R = VIEW * 0.42;
+export const SEAL_SEEDS = 34;
 
-// Amplitude de désordre par carré (DESIGN_BRIEF §5.3, colonne « Désordre »)
-export function sealDisorder(slug: string, provenance: Provenance, n = SQUARES): number[][] {
-  const r = mulberry32(hashString(`desordre:${provenance}:${slug}`));
-  const grid = Array.from({ length: n }, () => Array.from({ length: n }, () => 0));
-  if (provenance === "hand-coded") return grid.map((row) => row.map(() => 0.08 + r() * 0.02));
-  if (provenance === "cms") return grid.map((row, y) => row.map(() => 0.05 + (y / (n - 1)) * 0.6 + r() * 0.03));
-  if (provenance === "claude-code" || provenance === "claude") {
-    const [fx, fy] = [r() * (n - 1), r() * (n - 1)];
-    return grid.map((row, y) => row.map((_, x) => 0.05 + 0.85 * Math.exp(-((x - fx) ** 2 + (y - fy) ** 2) / 2)));
-  }
-  // other : quelques carrés agités, éparpillés
-  const picks = new Set<number>();
-  while (picks.size < 4) picks.add(Math.floor(r() * n * n));
-  return grid.map((row, y) => row.map((_, x) => (picks.has(y * n + x) ? 0.6 + r() * 0.3 : 0.06)));
-}
+// La provenance choisit la forme des graines ; « claude » partage la famille de « claude-code » (les trois formes de l'accueil)
+const SIDES: Record<Provenance, readonly number[]> = {
+  "claude-code": [3, 5, 8],
+  claude: [3, 5, 8],
+  "hand-coded": [4],
+  cms: [5],
+  other: [8],
+};
 
+// Sceau d'un projet : la spirale de l'accueil en miniature (34 graines à l'angle d'or).
+// Le slug choisit l'orientation et le bras qui porte l'accent : une famille de 5 ou de 8, à partir d'une graine tirée au sort.
 export function sealGeometry(slug: string, provenance: Provenance) {
-  const m = sealMatrix(slug, provenance);
-  // repère mathématique centré (y vers le haut), puis retour en coordonnées SVG
-  const t = ([x, y]: Vec2): Vec2 => {
-    const [u, v] = apply(m, [x - C, C - y]);
-    return [C + u, C - v];
-  };
-  const step = VIEW / (LINES - 1);
-  const lattice: Segment[] = [];
-  for (let i = 0; i < LINES; i++) {
-    const k = i * step;
-    const [a, b] = [t([k, 0]), t([k, VIEW])];
-    const [c, d] = [t([0, k]), t([VIEW, k])];
-    lattice.push([a[0], a[1], b[0], b[1]], [c[0], c[1], d[0], d[1]]);
-  }
-  const o = t([C, C]);
-  const i = t([C + step * 1.5, C]);
-  const j = t([C, C - step * 1.5]);
-  const basis: [Segment, Segment] = [
-    [o[0], o[1], i[0], i[1]],
-    [o[0], o[1], j[0], j[1]],
-  ];
-
-  const amp = sealDisorder(slug, provenance);
-  const n = noise2D(hashString(`carres:${slug}`));
-  const cell = VIEW / SQUARES;
+  const r = mulberry32(hashString(`sceau:${provenance}:${slug}`));
+  const turn = r() * Math.PI * 2;
+  const family = r() < 0.5 ? 5 : 8;
+  const start = Math.floor(r() * family);
+  const pitch = R * Math.sqrt(Math.PI / SEAL_SEEDS);
+  const sides = SIDES[provenance];
+  const seeds: Polygon[] = [];
   const squares: Polygon[] = [];
-  for (let y = 0; y < SQUARES; y++) {
-    for (let x = 0; x < SQUARES; x++) {
-      const a = amp[y]![x]! * cell * 0.6; // assez marqué pour se lire à 64-96 px
-      const corner = (cx: number, cy: number, k: number): Vec2 => [
-        cx + n(cx * 0.3 + k, cy * 0.3) * a,
-        cy + n(cx * 0.3, cy * 0.3 + k) * a,
-      ];
-      const [x0, y0, x1, y1] = [x * cell + 1.5, y * cell + 1.5, (x + 1) * cell - 1.5, (y + 1) * cell - 1.5];
-      squares.push([corner(x0, y0, 1), corner(x1, y0, 2), corner(x1, y1, 3), corner(x0, y1, 4)]);
-    }
+  const accents: number[] = [];
+  for (let i = 0; i < SEAL_SEEDS; i++) {
+    const p = phylloPoint(i, SEAL_SEEDS);
+    const a = p.theta + turn;
+    const [x, y] = [C + p.r * R * Math.cos(a), C + p.r * R * Math.sin(a)];
+    const rad = pitch * (0.2 + 0.24 * p.r);
+    seeds.push(regularPolygon(x, y, rad, sides[i % sides.length]!, a));
+    // monde clair : carrés au contour, de plus en plus tournés vers le bord
+    squares.push(
+      regularPolygon(x, y, rad * 1.1, 4, a + Math.PI / 4 + (r() - 0.5) * 1.4 * p.r * p.r),
+    );
+    if (i % family === start) accents.push(i);
   }
-  const accentSquare = Math.floor(mulberry32(hashString(`accent:${slug}`))() * SQUARES * SQUARES);
-  return { lattice, basis, squares, accentSquare };
+  return { seeds, squares, accents };
 }
 
 const open = (cls: string) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}" aria-hidden="true" focusable="false" class="${cls}" fill="none" stroke-linecap="round" stroke-linejoin="round">`;
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}" aria-hidden="true" focusable="false" class="${cls}" fill="none" stroke-linejoin="round">`;
 
-export function renderSeal(slug: string, provenance: Provenance, idPrefix = ""): { dark: string; light: string } {
+export function renderSeal(slug: string, provenance: Provenance): { dark: string; light: string } {
   const g = sealGeometry(slug, provenance);
-  const id = `${idPrefix}s${hashString(`${provenance}:${slug}`).toString(36)}`;
+  const split = (polys: Polygon[]) => [
+    polys.filter((_, i) => !g.accents.includes(i)),
+    polys.filter((_, i) => g.accents.includes(i)),
+  ];
+  const [plain, marked] = split(g.seeds);
   const dark =
     open("seal-dark") +
-    `<clipPath id="${id}"><rect width="${VIEW}" height="${VIEW}" rx="4"/></clipPath>` +
-    `<g clip-path="url(#${id})"><path d="${toPath(g.lattice)}" stroke="currentColor" stroke-width="0.6" class="text-line-strong"/>` +
-    `<path d="${toPath(g.basis)}" stroke="currentColor" stroke-width="1.6" class="text-accent"/></g></svg>`;
-  const others = g.squares.filter((_, k) => k !== g.accentSquare);
+    `<path d="${polygonsToPath(plain!)}" fill="currentColor" class="text-line-strong"/>` +
+    `<path d="${polygonsToPath(marked!)}" fill="currentColor" class="text-accent"/></svg>`;
+  const [outline, inked] = split(g.squares);
   const light =
     open("seal-light") +
-    `<path d="${polygonsToPath(others)}" stroke="currentColor" stroke-width="0.7" class="text-ink"/>` +
-    `<path d="${polygonsToPath([g.squares[g.accentSquare]!])}" stroke="currentColor" stroke-width="1.2" class="text-accent"/></svg>`;
+    `<path d="${polygonsToPath(outline!)}" stroke="currentColor" stroke-width="0.7" class="text-ink-muted"/>` +
+    `<path d="${polygonsToPath(inked!)}" stroke="currentColor" stroke-width="1.2" class="text-accent"/></svg>`;
   return { dark, light };
 }

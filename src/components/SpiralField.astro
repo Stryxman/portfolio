@@ -1,14 +1,16 @@
 ---
-import { renderSpiral } from "../lib/geometry/phyllo";
+import { renderSpiral, spiralLabels } from "../lib/geometry/phyllo";
 interface Props {
   class?: string;
 }
 const { class: cls = "" } = Astro.props;
 const { dark, light } = renderSpiral();
+const labels = spiralLabels();
 ---
 
 <!-- décor de l'accueil : spirale de 233 graines à l'angle d'or.
-     Sombre « Transformation » : polygones pleins qui éclosent du centre. Clair « Traceur » : bras tracés au trait. -->
+     Sombre « Transformation » : polygones pleins qui éclosent du centre. Clair « Traceur » : bras tracés au trait.
+     Les graines de rang 1, 2, 3, 5, 8… portent leur nombre ; à la souris, les graines s'écartent et gonflent. -->
 <div
   data-field
   class:list={["spiral pointer-events-none absolute inset-0 overflow-hidden", cls]}
@@ -20,6 +22,16 @@ const { dark, light } = renderSpiral();
         <div data-field-motion class="spiral-spin">
           <div class="dark:hidden" set:html={light} />
           <div class="hidden dark:block" set:html={dark} />
+          {
+            /* chiffres en contenu généré (décoratif) : chacun tourne à contresens du disque pour rester droit */
+            labels.map(({ n, x, y, size }, k) => (
+              <span
+                class="sp-num"
+                style={`left:${x}%;top:${y}%;font-size:${size}cqw;--i:${k}`}
+                data-n={n}
+              />
+            ))
+          }
         </div>
       </div>
     </div>
@@ -35,6 +47,7 @@ const { dark, light } = renderSpiral();
     --rest: 1;
     --ix: -23cqw;
     --iy: 0cqh;
+    --spin: 240s;
     position: absolute;
     left: 73cqw;
     top: 50cqh;
@@ -42,6 +55,11 @@ const { dark, light } = renderSpiral();
     aspect-ratio: 1;
     translate: -50% -50%;
     opacity: var(--rest);
+    container-type: size; /* les chiffres se dimensionnent sur le disque */
+  }
+  /* le monde clair tourne à contresens, plus lentement */
+  :global([data-theme="light"]) .spiral-place {
+    --spin: 420s;
   }
   /* sur mobile, le texte prend toute la largeur : la spirale monte dans le coin haut droit, au-dessus du nom, atténuée */
   @media (max-width: 767px) {
@@ -62,27 +80,61 @@ const { dark, light } = renderSpiral();
     width: 100%;
     height: 100%;
   }
+  .spiral-spin {
+    position: relative;
+  }
   .spiral-spin :global(svg) {
     display: block;
     overflow: visible;
   }
-  .spiral :global(.sp) {
+  /* chaque graine se transforme autour de son propre centre (éclosion, puis réaction à la souris) */
+  .spiral :global(.spiral-dark path),
+  .spiral :global(.spiral-light g path) {
     transform-box: fill-box;
     transform-origin: center;
   }
 
+  .sp-num {
+    position: absolute;
+    translate: -50% -50%;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .sp-num::after {
+    content: attr(data-n);
+    display: block;
+  }
+  /* en sombre, le chiffre est posé sur un polygone plein couleur d'accent */
+  :global([data-theme="dark"]) .sp-num {
+    color: var(--accent-ink);
+  }
+  /* trop petits pour être lus sur téléphone */
+  @media (max-width: 767px) {
+    .sp-num {
+      display: none;
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    /* rotation lente au repos ; le monde clair tourne à contresens, plus lentement */
+    /* rotation lente au repos ; les chiffres tournent à l'envers du disque, à la même vitesse */
     .spiral-spin {
-      animation: spiral-spin 240s linear infinite;
+      animation: spiral-spin var(--spin) linear infinite;
+    }
+    .sp-num::after {
+      animation: spiral-spin var(--spin) linear infinite reverse;
     }
     :global([data-theme="light"]) .spiral-spin {
-      animation-duration: 420s;
       animation-direction: reverse;
+    }
+    :global([data-theme="light"]) .sp-num::after {
+      animation-direction: normal;
     }
 
     /* éclosion : chaque graine à son tour, du centre vers le bord (à chaque apparition, y compris au changement de thème) */
-    .spiral :global(.sp) {
+    .spiral :global(.spiral-dark path) {
       animation: sp-bloom 640ms var(--ease-out) backwards;
       animation-delay: calc(var(--i) * 3ms);
     }
@@ -91,9 +143,18 @@ const { dark, light } = renderSpiral();
       animation: sp-draw 1100ms var(--ease-in-out) backwards;
       animation-delay: calc(var(--i) * 28ms);
     }
-    .spiral :global(.sp-ring) {
+    .spiral :global(.spiral-light g path) {
       animation: sp-ink 420ms steps(3, end) backwards;
       animation-delay: calc(500ms + var(--i) * 110ms);
+    }
+    /* les chiffres s'inscrivent une fois les graines posées, dans l'ordre de la suite */
+    .sp-num {
+      animation: sp-ink 500ms var(--ease-out) backwards;
+      animation-delay: calc(900ms + var(--i) * 70ms);
+    }
+    /* en clair, les carrés d'accent sont posés en dernier (vers 1,4 s) : les chiffres attendent leur carré */
+    :global([data-theme="light"]) .sp-num {
+      animation-delay: calc(1500ms + var(--i) * 70ms);
     }
 
     /* ouverture du site (data-intro posé par Base au premier chargement) : la spirale naît au centre,
@@ -160,3 +221,103 @@ const { dark, light } = renderSpiral();
     }
   }
 </style>
+
+<script>
+  // À la souris, les graines voisines du pointeur s'écartent et gonflent, comme la sphère gonfle vers lui.
+  const REACH = 150; // rayon d'influence, en unités du dessin (cadre de 1000)
+  const PUSH = 26;
+  const SWELL = 0.85;
+
+  function mount(host: HTMLElement): () => void {
+    const fine = matchMedia("(hover: hover) and (pointer: fine)");
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    type Seed = { el: SVGPathElement; x: number; y: number; fixed: boolean; moved: boolean };
+    const cache = new Map<SVGSVGElement, Seed[]>();
+    const seedsOf = (svg: SVGSVGElement) => {
+      let seeds = cache.get(svg);
+      if (!seeds) {
+        // les bras du monde clair portent une classe : seules les graines sont retenues
+        seeds = [...svg.querySelectorAll<SVGPathElement>("path:not(.sp-arm)")].map((el) => {
+          const b = el.getBBox();
+          return {
+            el,
+            x: b.x + b.width / 2,
+            y: b.y + b.height / 2,
+            fixed: !!el.closest(".sp-accent"), // les graines numérotées gonflent sans bouger : le chiffre reste dessus
+            moved: false,
+          };
+        });
+        cache.set(svg, seeds);
+      }
+      return seeds;
+    };
+    const current = () =>
+      [...host.querySelectorAll<SVGSVGElement>("svg")].find((s) => s.getClientRects().length > 0);
+
+    const aim = { x: 0, y: 0, k: 0 };
+    const at = { x: 0, y: 0, k: 0 };
+    let raf = 0;
+    let last = 0;
+    const tick = (now: number) => {
+      const ease = 1 - Math.exp(-Math.min(0.05, (now - last) / 1000) * 9);
+      last = now;
+      at.x += (aim.x - at.x) * ease;
+      at.y += (aim.y - at.y) * ease;
+      at.k += (aim.k - at.k) * ease;
+      const svg = current();
+      const ctm = svg?.getScreenCTM();
+      if (svg && ctm) {
+        // le pointeur est ramené dans le repère du dessin, rotation et glissement compris
+        const p = new DOMPoint(at.x, at.y).matrixTransform(ctm.inverse());
+        for (const s of seedsOf(svg)) {
+          const dx = s.x - p.x;
+          const dy = s.y - p.y;
+          const d = Math.hypot(dx, dy);
+          if (d < REACH && at.k > 0.01) {
+            const f = (1 - d / REACH) ** 2 * at.k;
+            const push = s.fixed || d < 1e-3 ? 0 : (f * PUSH) / d;
+            s.el.style.transform = `translate(${(dx * push).toFixed(2)}px, ${(dy * push).toFixed(2)}px) scale(${(1 + f * SWELL).toFixed(3)})`;
+            s.moved = true;
+          } else if (s.moved) {
+            s.el.style.transform = "";
+            s.moved = false;
+          }
+        }
+      }
+      raf = at.k > 0.01 || aim.k > 0 ? requestAnimationFrame(tick) : 0;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || !fine.matches || still.matches) return;
+      const box = host.getBoundingClientRect();
+      const inside = e.clientY < box.bottom && e.clientY > box.top;
+      aim.x = e.clientX;
+      aim.y = e.clientY;
+      aim.k = inside ? 1 : 0;
+      if (at.k < 0.01) {
+        at.x = aim.x;
+        at.y = aim.y;
+      }
+      if (!raf && inside) {
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    const onLeave = () => (aim.k = 0);
+    addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(raf);
+      removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+    };
+  }
+
+  let stop: (() => void)[] = [];
+  document.addEventListener("astro:page-load", () => {
+    stop = [...document.querySelectorAll<HTMLElement>("[data-field]")].map(mount);
+  });
+  document.addEventListener("astro:before-swap", () => {
+    stop.forEach((fn) => fn());
+    stop = [];
+  });
+</script>

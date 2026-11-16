@@ -13,5 +13,6 @@ status: published
 featured: true
 order: 7
 repo: Stryxman/ad-agent
+cover: ./cover.png
 start: 2026-09
 end: 2026-09

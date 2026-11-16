@@ -80,16 +80,17 @@ export function renderSpiral(size = 1000): { dark: string; light: string } {
   let marked = "";
   for (let i = 0; i < SEEDS; i++) {
     const { r, theta, x, y } = phylloPoint(i, SEEDS);
+    const accent = isFibonacci(i + 1);
     const poly = regularPolygon(
       c + x * R,
       c + y * R,
-      pitch * (0.15 + 0.27 * r),
-      SIDES[i % 3]!,
+      pitch * (accent ? 0.2 + 0.3 * r : 0.15 + 0.27 * r), // la graine d'accent est plus grosse : elle porte son rang
+      accent ? 8 : SIDES[i % 3]!,
       theta,
     );
-    if (isFibonacci(i + 1)) marked += `<path class="sp" style="--i:${i}" d="${closed(poly)}"/>`;
+    if (accent) marked += `<path style="--i:${i}" d="${closed(poly)}"/>`;
     else
-      plain += `<path class="sp" style="--i:${i}" fill-opacity="${r2(0.9 - 0.62 * r)}" d="${closed(poly)}"/>`;
+      plain += `<path style="--i:${i}" fill-opacity="${r2(0.9 - 0.62 * r)}" d="${closed(poly)}"/>`;
   }
   const dark =
     svgOpen(size, "spiral-dark") +
@@ -101,26 +102,51 @@ export function renderSpiral(size = 1000): { dark: string; light: string } {
   let accents = "";
   for (let i = 0; i < SEEDS; i++) {
     const { r, theta, x, y } = phylloPoint(i, SEEDS);
-    // désordre croissant vers le bord (Vera Molnár) : décalage et rotation tirés au sort, amplitude ∝ r²
+    const accent = isFibonacci(i + 1);
+    // désordre croissant vers le bord (Vera Molnár) : décalage et rotation tirés au sort, amplitude ∝ r².
+    // Les carrés d'accent restent à leur place : ils portent leur rang (spiralLabels).
     const wild = r * r;
-    const dx = (rand() - 0.5) * pitch * 0.5 * wild;
-    const dy = (rand() - 0.5) * pitch * 0.5 * wild;
+    const dx = (rand() - 0.5) * pitch * 0.5 * wild * (accent ? 0 : 1);
+    const dy = (rand() - 0.5) * pitch * 0.5 * wild * (accent ? 0 : 1);
     const rot = theta + Math.PI / 4 + (rand() - 0.5) * 1.6 * wild;
     const d = closed(
-      regularPolygon(c + x * R + dx, c + y * R + dy, pitch * (0.14 + 0.24 * r), 4, rot),
+      regularPolygon(
+        c + x * R + dx,
+        c + y * R + dy,
+        pitch * (accent ? 0.2 + 0.3 * r : 0.14 + 0.24 * r),
+        4,
+        rot,
+      ),
     );
-    if (isFibonacci(i + 1)) accents += d;
-    else rings[Math.min(RINGS - 1, Math.floor(r * RINGS))] += d;
+    if (accent) accents += `<path d="${d}"/>`;
+    else rings[Math.min(RINGS - 1, Math.floor(r * RINGS))] += `<path d="${d}"/>`;
   }
   let light = svgOpen(size, "spiral-light");
   for (let a = 0; a < ARMS; a++) {
     const pts = armPoints(a, ARMS, SEEDS).map(([x, y]): Vec2 => [c + x * R, c + y * R]);
     light += `<path class="sp-arm text-line-strong" style="--i:${a}" pathLength="1" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.55" stroke-linecap="round" d="${open(pts)}"/>`;
   }
-  rings.forEach((d, k) => {
-    light += `<path class="sp-ring text-ink-muted" style="--i:${k}" stroke="currentColor" stroke-width="0.9" stroke-opacity="0.75" stroke-linejoin="round" d="${d}"/>`;
-  });
-  light += `<path class="sp-ring text-accent" style="--i:${RINGS}" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="${accents}"/></svg>`;
+  // un groupe par anneau : --i (l'ordre de pose) est hérité par chaque carré
+  light +=
+    `<g class="text-ink-muted" stroke="currentColor" stroke-width="0.9" stroke-opacity="0.75" stroke-linejoin="round">` +
+    rings.map((d, k) => `<g style="--i:${k}">${d}</g>`).join("") +
+    `</g><g class="text-accent sp-accent" style="--i:${RINGS}" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${accents}</g></svg>`;
 
   return { dark, light };
+}
+
+// Rang des graines d'accent (1, 2, 3, 5, 8… 233), à poser au centre de chaque graine.
+// x, y : position en % du cadre ; size : corps du chiffre en % de la largeur du cadre.
+export function spiralLabels(): { n: number; x: number; y: number; size: number }[] {
+  const pitch = 0.47 * Math.sqrt(Math.PI / SEEDS);
+  return FIBONACCI.map((n) => {
+    const { r, x, y } = phylloPoint(n - 1, SEEDS);
+    const rad = pitch * (0.2 + 0.3 * r); // rayon de la graine d'accent, en fraction du cadre
+    return {
+      n,
+      x: Math.round((50 + x * 47) * 100) / 100,
+      y: Math.round((50 + y * 47) * 100) / 100,
+      size: Math.round(rad * (n > 99 ? 0.78 : n > 9 ? 0.95 : 1.15) * 1e4) / 100,
+    };
+  });
 }

@@ -52,3 +52,12 @@
 - Aucune dépendance ajoutée. Accueil : 13 Ko → 34,5 Ko compressée.
 - Tests : 134 unitaires, 70 E2E (6 ignorés exprès). Pas encore de revue de code.
 
+## 2026-11-16 : lot 2 (palette chaude, nombres, curseur, transition)
+
+- Palette chaude dans les trois blocs de couleurs, contrastes recalculés (accent 4,9:1 en clair, 10:1 en sombre).
+- Sceau réécrit : 34 graines à l'angle d'or, forme selon la provenance, accent sur un bras de 5 ou de 8. Sous le titre de la fiche, il ne lui prend plus de largeur.
+- Spirale : rang inscrit sur les 12 graines de la suite (contenu généré, tenu droit par une rotation inverse), graines qui s'écartent et gonflent près du pointeur.
+- Carte vers fiche : l'aperçu se soulève, grandit, et redescend à la fermeture (retour d'historique, lien vers la grille en repli).
+- Sphère aussi sur À propos tant qu'il n'y a pas de portrait. Couvertures : trois rendus réels pour Ad Agent, renard en polygones pour Compagnon.
+- Tests : 132 unitaires, 77 E2E (7 ignorés exprès). Accueil : 34,9 Ko compressée.
+

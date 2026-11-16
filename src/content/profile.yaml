@@ -2,14 +2,14 @@
 main:
   fullName: Richard
   role:
-    fr: Automatisation, IA et web
-    en: Automation, AI and web
+    fr: Automatisations et agents IA
+    en: Automation and AI agents
   headline:
     fr: Richard
     en: Richard
   tagline:
-    fr: J'aime créer des automatismes et des applications avec l'IA, ainsi que des sites web.
-    en: I enjoy building automations and AI-powered apps, as well as websites.
+    fr: Je construis des automatisations et des agents IA qui enlèvent le travail répétitif, et je montre comment chacun est fabriqué.
+    en: I build automations and AI agents that take repetitive work off your plate, and show how each one is made.
   bio:
     fr: |-
       Salut, c'est Richard. Ça fait quelques semaines que j'apprends à utiliser l'IA et les automatisations, et ça me plaît tellement que j'ai envie d'en faire ma passion, et de devenir expert du domaine.

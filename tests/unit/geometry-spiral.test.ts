@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   ARMS,
   GOLDEN_ANGLE,
-  RINGS,
   SEEDS,
   armPoints,
   armTurn,
@@ -10,6 +9,7 @@ import {
   phylloPoint,
   regularPolygon,
   renderSpiral,
+  spiralLabels,
 } from "../../src/lib/geometry/phyllo";
 import {
   LATTICE,
@@ -58,20 +58,31 @@ describe("spirale de phyllotaxie", () => {
       expect(pts[j * sub]![1]).toBeCloseTo(y, 9);
     }
   });
-  it("le rendu compte 233 polygones sombres, 21 bras et 9 calques de carrés clairs", () => {
+  it("le rendu compte 233 polygones sombres, 21 bras et 233 carrés clairs", () => {
     const { dark, light } = renderSpiral();
-    expect(dark.match(/class="sp"/g)).toHaveLength(SEEDS);
+    expect(dark.match(/<path /g)).toHaveLength(SEEDS);
     expect(light.match(/class="sp-arm /g)).toHaveLength(ARMS);
-    expect(light.match(/class="sp-ring /g)).toHaveLength(RINGS + 1);
+    expect(light.match(/<path d=/g)).toHaveLength(SEEDS); // les bras portent une classe avant d
   });
   it("les graines de rang 1, 2, 3, 5, 8… portent l'accent", () => {
     const { dark } = renderSpiral();
     const marked = dark.slice(dark.indexOf("sp-accent"));
-    expect(marked.match(/class="sp"/g)).toHaveLength(12);
+    expect(marked.match(/<path /g)).toHaveLength(12);
     expect(marked).toContain('style="--i:0"'); // la graine de rang 1
     expect(marked).toContain('style="--i:232"'); // la graine de rang 233
     expect([1, 2, 3, 5, 8, 13, 233].every(isFibonacci)).toBe(true);
     expect([4, 6, 7, 100].some(isFibonacci)).toBe(false);
+  });
+  it("chaque rang de la suite a son chiffre, posé sur sa graine, dans le cadre", () => {
+    const labels = spiralLabels();
+    expect(labels.map((l) => l.n)).toEqual([1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233]);
+    for (const { n, x, y, size } of labels) {
+      const p = phylloPoint(n - 1, SEEDS);
+      expect(x).toBeCloseTo(50 + p.x * 47, 1);
+      expect(y).toBeCloseTo(50 + p.y * 47, 1);
+      expect(size).toBeGreaterThan(0.5);
+      expect(size).toBeLessThan(3);
+    }
   });
   it("reste léger, décoratif, déterministe, sans couleur en dur ni identifiant", () => {
     const a = renderSpiral();

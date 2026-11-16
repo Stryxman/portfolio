@@ -89,7 +89,7 @@ test("ouverture : le nom attend la spirale, puis s'affiche ; jamais masqué en m
     // à la fin de la chorégraphie, tout le texte du hero est opaque et les 233 graines sont à leur place
     await finishIntro(page);
     await expect(h1).toHaveCSS("opacity", "1");
-    await expect(page.locator("[data-field] .sp")).toHaveCount(233);
+    await expect(page.locator("[data-field] .spiral-dark path")).toHaveCount(233);
     await ctx.close();
   }
 });
@@ -106,23 +106,67 @@ test("l'ouverture ne se rejoue pas en revenant sur l'accueil par navigation inte
   await expect(page.getByRole("heading", { level: 1 })).toHaveCSS("animation-name", "none");
 });
 
-test("la sphère est décorative, dessinée sur canvas, avec une image fixe en repli", async ({
-  page,
-}) => {
+for (const path of ["/fr/", "/fr/a-propos/"]) {
+  test(`la sphère est décorative, dessinée sur canvas, avec une image fixe en repli (${path})`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const sphere = page.locator("[data-sphere]");
+    await expect(sphere).toHaveAttribute("aria-hidden", "true");
+    await expect(sphere.locator("svg")).toHaveCount(2); // un repli par thème
+    await sphere.scrollIntoViewIfNeeded();
+    await expect(sphere).toHaveAttribute("data-live", "");
+    // le canvas a bien reçu des pixels
+    await expect
+      .poll(() =>
+        sphere.locator("canvas").evaluate((c: HTMLCanvasElement) => {
+          const data = c.getContext("2d")!.getImageData(0, 0, c.width, c.height).data;
+          for (let i = 3; i < data.length; i += 4) if (data[i]) return true;
+          return false;
+        }),
+      )
+      .toBe(true);
+  });
+}
+
+test("la spirale porte les nombres de la suite, en contenu décoratif", async ({ page }) => {
   await page.goto("/fr/");
-  const sphere = page.locator("[data-sphere]");
-  await expect(sphere).toHaveAttribute("aria-hidden", "true");
-  await expect(sphere.locator("svg")).toHaveCount(2); // un repli par thème
-  await sphere.scrollIntoViewIfNeeded();
-  await expect(sphere).toHaveAttribute("data-live", "");
-  // le canvas a bien reçu des pixels
-  await expect
-    .poll(() =>
-      sphere.locator("canvas").evaluate((c: HTMLCanvasElement) => {
-        const data = c.getContext("2d")!.getImageData(0, 0, c.width, c.height).data;
-        for (let i = 3; i < data.length; i += 4) if (data[i]) return true;
-        return false;
-      }),
-    )
-    .toBe(true);
+  const labels = page.locator("[data-field] .sp-num");
+  await expect(labels).toHaveCount(12);
+  expect(await labels.evaluateAll((els) => els.map((el) => el.getAttribute("data-n")))).toEqual([
+    "1",
+    "2",
+    "3",
+    "5",
+    "8",
+    "13",
+    "21",
+    "34",
+    "55",
+    "89",
+    "144",
+    "233",
+  ]);
+  // aucun texte dans le DOM : les lecteurs d'écran et la recherche dans la page ne voient rien
+  await expect(page.locator("[data-field]")).toHaveText("");
+});
+
+test("à la souris, les graines voisines du pointeur réagissent, puis reviennent", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "pointeur fin uniquement");
+  await page.goto("/fr/");
+  await finishIntro(page);
+  const moved = () =>
+    page
+      .locator("[data-field] svg path")
+      .evaluateAll((els) => els.filter((el) => (el as SVGElement).style.transform).length);
+  const box = (await page.locator("[data-field-motion]").boundingBox())!;
+  await page.mouse.move(box.x + box.width * 0.4, box.y + box.height * 0.4);
+  await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5, { steps: 6 });
+  await expect.poll(moved).toBeGreaterThan(3);
+  await page.mouse.move(2, 2);
+  await page.evaluate(() => document.documentElement.dispatchEvent(new Event("pointerleave")));
+  await expect.poll(moved).toBe(0);
 });
