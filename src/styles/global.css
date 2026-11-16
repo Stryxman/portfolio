@@ -1,30 +1,31 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Tokens : DESIGN_BRIEF §3.1. Clair « Traceur », sombre « Transformation ». */
+/* Tokens : DESIGN_BRIEF §3.1. Clair « Traceur », sombre « Transformation ».
+   Palette chaude (2026-11-16) : gris teintés vers 70°, accent cuivre en clair, ambre en sombre. */
 :root, [data-theme="light"] {
-  --bg: oklch(0.985 0.002 265);
-  --surface: oklch(0.995 0.001 265);
-  --ink: oklch(0.20 0.006 265);
-  --ink-muted: oklch(0.47 0.010 265);
-  --line: oklch(0.91 0.004 265);
-  --line-strong: oklch(0.65 0.006 265);
-  --accent: oklch(0.47 0.21 264);
-  --accent-ink: oklch(0.985 0.002 265);
+  --bg: oklch(0.985 0.002 70);
+  --surface: oklch(0.995 0.001 70);
+  --ink: oklch(0.20 0.006 70);
+  --ink-muted: oklch(0.47 0.010 70);
+  --line: oklch(0.91 0.004 70);
+  --line-strong: oklch(0.65 0.006 70);
+  --accent: oklch(0.55 0.15 50);
+  --accent-ink: oklch(0.985 0.002 70);
   --danger: oklch(0.55 0.19 25);
   --success: oklch(0.53 0.12 155);
   color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --bg: oklch(0.165 0.006 265);
-  --surface: oklch(0.205 0.007 265);
-  --ink: oklch(0.95 0.004 265);
-  --ink-muted: oklch(0.73 0.010 265);
-  --line: oklch(0.30 0.008 265);
-  --line-strong: oklch(0.50 0.010 265);
-  --accent: oklch(0.74 0.14 264);
-  --accent-ink: oklch(0.165 0.006 265);
+  --bg: oklch(0.165 0.006 70);
+  --surface: oklch(0.205 0.007 70);
+  --ink: oklch(0.95 0.004 70);
+  --ink-muted: oklch(0.73 0.010 70);
+  --line: oklch(0.30 0.008 70);
+  --line-strong: oklch(0.50 0.010 70);
+  --accent: oklch(0.80 0.14 70);
+  --accent-ink: oklch(0.165 0.006 70);
   --danger: oklch(0.70 0.15 25);
   --success: oklch(0.75 0.12 155);
   color-scheme: dark;
@@ -33,14 +34,14 @@
 /* Sans JavaScript : la préférence système décide (valeurs identiques au bloc sombre, vérifié par tests/unit/tokens.test.ts) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --bg: oklch(0.165 0.006 265);
-    --surface: oklch(0.205 0.007 265);
-    --ink: oklch(0.95 0.004 265);
-    --ink-muted: oklch(0.73 0.010 265);
-    --line: oklch(0.30 0.008 265);
-    --line-strong: oklch(0.50 0.010 265);
-    --accent: oklch(0.74 0.14 264);
-    --accent-ink: oklch(0.165 0.006 265);
+    --bg: oklch(0.165 0.006 70);
+    --surface: oklch(0.205 0.007 70);
+    --ink: oklch(0.95 0.004 70);
+    --ink-muted: oklch(0.73 0.010 70);
+    --line: oklch(0.30 0.008 70);
+    --line-strong: oklch(0.50 0.010 70);
+    --accent: oklch(0.80 0.14 70);
+    --accent-ink: oklch(0.165 0.006 70);
     --danger: oklch(0.70 0.15 25);
     --success: oklch(0.75 0.12 155);
     color-scheme: dark;
@@ -116,8 +117,42 @@
   .prose blockquote { border-left: 2px solid var(--line-strong); padding-left: 1em; color: var(--ink-muted); }
 }
 
-/* Carte → fiche : élément partagé en 280 ms (DESIGN_BRIEF §4.2) ; ClientRouter coupe les animations en mouvement réduit */
+/* Carte → fiche : l'aperçu sort de sa carte, grandit jusqu'à sa place dans la fiche, et y redescend à la fermeture.
+   Pas d'ombre ni de filtre pendant le trajet : ils faisaient sauter des images (mesuré le 2026-11-16).
+   Les autres éléments partagés gardent 280 ms (DESIGN_BRIEF §4.2) ; ClientRouter coupe tout en mouvement réduit. */
 ::view-transition-group(*) {
   animation-duration: var(--dur-page);
   animation-timing-function: var(--ease-out);
+}
+[data-frame],
+[data-preview] {
+  view-transition-class: apercu;
+}
+::view-transition-group(*.apercu) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1; /* passe au-dessus de la page qui s'efface */
+}
+/* carte et fiche n'ont pas les mêmes proportions : on recadre au lieu d'écraser l'image */
+::view-transition-old(*.apercu),
+::view-transition-new(*.apercu) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+/* Ouverture de l'accueil : le texte du hero arrive quand la spirale lui laisse la place (SpiralField).
+   Visible par défaut ; masqué seulement par le remplissage arrière de l'animation, donc jamais sans JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-intro] .hero-in {
+    animation: hero-in 820ms var(--ease-out) backwards;
+    animation-delay: calc(1400ms + var(--n) * 90ms);
+  }
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(8px);
+  }
 }

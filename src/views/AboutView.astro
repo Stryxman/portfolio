@@ -14,6 +14,7 @@ import { formatPeriod } from "../lib/projects/model";
 import Button from "../components/Button.astro";
 import Tag from "../components/Tag.astro";
 import SocialLinks from "../components/SocialLinks.astro";
+import BlobSphere from "../components/BlobSphere.astro";
 interface Props {
   locale: Locale;
 }
@@ -67,7 +68,7 @@ const section = "mx-auto max-w-[1240px] px-6 py-16 md:px-10 md:py-28";
         </div>
       )}
     </div>
-    {profile.portrait && (
+    {profile.portrait ? (
       <Image
         src={profile.portrait}
         alt={profile.fullName}
@@ -75,6 +76,9 @@ const section = "mx-auto max-w-[1240px] px-6 py-16 md:px-10 md:py-28";
         sizes="(min-width: 768px) 40vw, 100vw"
         class="aspect-[3/4] w-full rounded-panel border border-line object-cover md:col-span-5"
       />
+    ) : (
+      /* sans portrait, la sphère de l'accueil tient la colonne ; sur mobile elle vient après le texte */
+      <BlobSphere class="mx-auto w-full max-w-[300px] md:col-span-5 md:max-w-[460px] md:self-start" />
     )}
   </section>
 

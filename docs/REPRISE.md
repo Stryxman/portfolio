@@ -2,6 +2,16 @@
 
 > Fichier court : où on en est et quoi faire ensuite. Mis à jour à chaque fin de session.
 
+## Dernière mise en production (2026-11-16) : mouvement, palette chaude, fiches
+
+- **Quoi :** spirale de phyllotaxie à l'ouverture de l'accueil (233 graines à l'angle d'or, rang inscrit sur les graines de la suite, réaction à la souris), sphère en treillis de Fibonacci sur l'accueil et À propos, palette chaude (cuivre en clair, ambre en sombre), sceau des fiches en mini spirale, aperçu qui sort de sa carte et y redescend (bouton « Fermer »), image de fiche préchargée au survol, nouveaux textes du profil, couvertures Ad Agent et Compagnon.
+- **État :** branche `motion-fibonacci` fusionnée dans `main` en local (`git merge --no-ff`) sur accord de Richard. Types, lint, 132 unitaires, 77 E2E et build verts ; revue de code faite (9 constats, 7 corrigés).
+- **Laissés ouverts :** le nom n'apparaît qu'après 1,4 s à l'ouverture (effet voulu, pèse sur le LCP) ; `FieldStatic`, `field.ts` et `sealMatrix` ne servent plus qu'à la planche de dev ; la couverture de Compagnon est provisoire.
+- **Fichiers :** `src/lib/geometry/phyllo.ts`, `sphere.ts`, `seal.ts`, `src/components/SpiralField.astro`, `BlobSphere.astro`, `src/lib/projects/preview.ts`, script de préchargement dans `src/layouts/Base.astro`.
+- **Pour tester un écran animé :** `finishIntro(page)` de `tests/e2e/intro.ts` avant toute mesure de contraste ou d'opacité sur l'accueil.
+- **Piège du serveur de dev :** après l'ajout d'un `cover` dans un `meta.yaml`, relancer `pnpm dev` (le contenu reste en cache et l'image échoue avec `LocalImageUsedWrongly`). Le build n'est pas touché.
+- **`DESIGN_BRIEF.md` :** un encadré en tête signale ce qui est périmé (accent, champ génératif) ; le reste du brief est à réécrire si le design évolue encore.
+
 ## À lire en premier (mini récap, 2026-10-15)
 
 - **Où on en est :** en production : 8 projets publiés (compagnon, Orbit Lab, Vertige, MédiMatch avec galerie, veille IA, ETL, Ad Agent) et champ animé. Branche `contenu-3` : AdPulse. Prod : https://portfolio-lac-nine-ql5m5f65wy.vercel.app

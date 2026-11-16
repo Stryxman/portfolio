@@ -43,3 +43,28 @@
 - Contenu : `headline` du profil (≤ 6 mots), image manquante = avertissement (le sceau sert de repli), `compagnon` et `portfolio` publiés ; `compagnon` sans lien de code (dépôt privé).
 - Hygiène : `.astro/` hors de Git, navigation partagée avec page courante, `getProfile()` sans assertion, liens sociaux en pied de page.
 - Tests : 115 unitaires, 56 E2E (6 ignorés exprès).
+
+## 2026-11-16 : mouvement de l'accueil (branche `motion-fibonacci`, non fusionnée)
+
+- Audit du mouvement : grille sombre en boucle, clair figé, rien au défilement. Détail dans la note d'audit de la fiche du projet.
+- Spirale de phyllotaxie rendue en SVG au build : 233 polygones (3, 5, 8 côtés) en sombre, 21 bras et carrés au trait en clair. Ouverture en CSS seul, le texte du hero reste visible sans JavaScript et en mouvement réduit.
+- Sphère en treillis de Fibonacci sur canvas 2D : s'enroule depuis le disque (projection de Lambert), blob par somme de sinus, renflement vers le pointeur, en pause hors écran, image SVG en repli.
+- Aucune dépendance ajoutée. Accueil : 13 Ko → 34,5 Ko compressée.
+- Tests : 134 unitaires, 70 E2E (6 ignorés exprès). Pas encore de revue de code.
+
+## 2026-11-16 : lot 2 (palette chaude, nombres, curseur, transition)
+
+- Palette chaude dans les trois blocs de couleurs, contrastes recalculés (accent 4,9:1 en clair, 10:1 en sombre).
+- Sceau réécrit : 34 graines à l'angle d'or, forme selon la provenance, accent sur un bras de 5 ou de 8. Sous le titre de la fiche, il ne lui prend plus de largeur.
+- Spirale : rang inscrit sur les 12 graines de la suite (contenu généré, tenu droit par une rotation inverse), graines qui s'écartent et gonflent près du pointeur.
+- Carte vers fiche : l'aperçu se soulève, grandit, et redescend à la fermeture (retour d'historique, lien vers la grille en repli).
+- Sphère aussi sur À propos tant qu'il n'y a pas de portrait. Couvertures : trois rendus réels pour Ad Agent, renard en polygones pour Compagnon.
+- Tests : 132 unitaires, 77 E2E (7 ignorés exprès). Accueil : 34,9 Ko compressée.
+
+## 2026-11-16 : lot 3 (ordre, bio, ouverture des fiches)
+
+- Mesure de l'à-coup à l'ouverture d'une fiche : la page arrive en moins de 100 ms, mais l'image de la fiche arrivait 110 à 190 ms après, en pleine animation, et l'ombre portée faisait sauter des images.
+- Correctif : l'image de la fiche est demandée au survol ou au focus du lien (carte, projet précédent ou suivant) et la navigation lui laisse 250 ms au plus ; ombre retirée, transition ramenée à 380 ms. Image prête dès l'ouverture dans tous les cas mesurés.
+- Contenu : ordre des projets, bio en deux phrases plus directes, MédiMatch décrit comme une landing page.
+- Tests : 132 unitaires, 77 E2E.
+

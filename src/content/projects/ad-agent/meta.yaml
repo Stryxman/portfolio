@@ -11,7 +11,8 @@ stack: [python, playwright]
 tags: [agent, publicité, claude-api]
 status: published
 featured: true
-order: 7
+order: 1
 repo: Stryxman/ad-agent
+cover: ./cover.png
 start: 2026-09
 end: 2026-09

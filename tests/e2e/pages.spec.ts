@@ -211,3 +211,26 @@ test("la galerie d'une fiche charge ses images, avec une légende visible", asyn
       .toBe(true);
   }
 });
+
+test("fiche : Fermer ramène à la page d'où l'on vient, ou à la grille en accès direct", async ({
+  page,
+}) => {
+  const first = grid[0]!;
+  // accès direct : simple lien vers la grille
+  await page.goto(`/fr/projets/${first.slug}/`);
+  await expect(page.locator("a[data-close]")).toHaveAttribute("href", "/fr/projets/");
+  // depuis l'accueil : retour arrière, on retombe sur l'accueil
+  await page.goto("/fr/");
+  await page.locator("[data-project] a").first().click();
+  await expect(page).toHaveURL(/\/fr\/projets\/[^/]+\/$/);
+  await page.locator("a[data-close]").click();
+  await expect(page).toHaveURL(/\/fr\/$/);
+  // après « projet suivant », la page précédente est une fiche : Fermer mène à la grille, pas à l'autre fiche
+  await page.locator("[data-project] a").first().click();
+  await expect(page).toHaveURL(/\/fr\/projets\/[^/]+\/$/);
+  const opened = page.url();
+  await page.locator('a[rel="next"], a[rel="prev"]').first().click();
+  await expect(page).not.toHaveURL(opened);
+  await page.locator("a[data-close]").click();
+  await expect(page).toHaveURL(/\/fr\/projets\/$/);
+});

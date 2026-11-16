@@ -1,5 +1,9 @@
 # DESIGN BRIEF : Portfolio
 
+> **Mis à jour partiellement le 2026-11-16.** Deux points de ce brief ne décrivent plus le site :
+> - **Couleurs (§3.1) :** l'accent n'est plus outremer. Clair `oklch(0.55 0.15 50)` (cuivre), sombre `oklch(0.80 0.14 70)` (ambre), gris teintés vers 70°. Les valeurs de référence sont dans `src/styles/global.css`, vérifiées par `tests/unit/tokens.test.ts`.
+> - **Champ génératif (§2, §5) :** la grille déformée par matrices est remplacée par une spirale de 233 graines à l'angle d'or (`src/lib/geometry/phyllo.ts`) et une sphère en treillis de Fibonacci (`sphere.ts`). Le mouvement réel est décrit dans `PROGRESS.md` (2026-11-16).
+
 > v1.0 · 2026-10-12
 > Construit avec les skills `taste-skill`, `minimalist-skill`, `emil-design-eng` et `impeccable` (méthode *shape*), complétés par `design:*`.
 > Docs liés : [PRD](PRD.md) · [APP_FLOW](APP_FLOW.md) · [TRD](TRD.md)

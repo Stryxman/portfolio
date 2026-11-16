@@ -10,7 +10,7 @@ stack: [astro, typescript, tailwindcss, claude-code]
 tags: [webgl, i18n]
 # archivé : ce site est le portfolio lui-même, inutile de le présenter dans sa propre grille
 status: archived
-order: 2
+order: 8
 repo: Stryxman/portfolio
 liveUrl: https://portfolio-lac-nine-ql5m5f65wy.vercel.app
 start: 2026-10

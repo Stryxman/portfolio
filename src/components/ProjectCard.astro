@@ -3,6 +3,7 @@ import type { Locale } from "../i18n/config";
 import { fmt, t } from "../i18n/ui";
 import { projectPath } from "../i18n/routes";
 import type { ProjectCard } from "../lib/projects/model";
+import { CARD_SIZES } from "../lib/projects/preview";
 import ProjectImage from "./ProjectImage.astro";
 import Tag from "./Tag.astro";
 interface Props {
@@ -29,7 +30,7 @@ const langOf = (lang: Locale) => (lang === locale ? undefined : lang);
       slug={card.slug}
       provenance={card.provenance}
       alt={fmt(locale, "capture.alt", { title: card.title.text })}
-      sizes="(min-width: 768px) 50vw, 100vw"
+      sizes={CARD_SIZES}
     />
   </div>
   <div class="flex flex-col gap-2">

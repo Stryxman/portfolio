@@ -39,7 +39,7 @@ test("sans JavaScript, le thème sombre du système s'applique", async ({ browse
   await page.goto("/fr/");
   const [bg, darkBg] = await page.evaluate(() => {
     const probe = document.createElement("div");
-    probe.style.color = "oklch(0.165 0.006 265)";
+    probe.style.color = "oklch(0.165 0.006 70)"; // --bg du thème sombre (global.css)
     document.body.append(probe);
     return [getComputedStyle(document.body).backgroundColor, getComputedStyle(probe).color];
   });

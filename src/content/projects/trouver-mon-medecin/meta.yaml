@@ -6,8 +6,8 @@ title:
   fr: "MédiMatch : trouver mon médecin"
   en: "MédiMatch: find the right doctor"
 summary:
-  fr: Un site d'orientation médicale où l'on décrit son problème dans un formulaire en trois étapes ou à un chatbot construit avec n8n.
-  en: A medical guidance site where visitors describe their problem in a three-step form or to a chatbot built with n8n.
+  fr: Landing page d'orientation médicale où l'on décrit son problème dans un formulaire en trois étapes ou à un chatbot construit avec n8n.
+  en: A medical guidance landing page where visitors describe their problem in a three-step form or to a chatbot built with n8n.
 category: website
 provenance: claude
 stack: [n8n, openai, airtable]
