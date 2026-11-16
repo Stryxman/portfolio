@@ -312,9 +312,10 @@ const labels = spiralLabels();
     };
   }
 
+  // .spiral : l'ancien champ de la planche de dev porte aussi data-field, ses tracés ne sont pas des graines
   let stop: (() => void)[] = [];
   document.addEventListener("astro:page-load", () => {
-    stop = [...document.querySelectorAll<HTMLElement>("[data-field]")].map(mount);
+    stop = [...document.querySelectorAll<HTMLElement>(".spiral[data-field]")].map(mount);
   });
   document.addEventListener("astro:before-swap", () => {
     stop.forEach((fn) => fn());

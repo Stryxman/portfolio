@@ -225,4 +225,12 @@ test("fiche : Fermer ramène à la page d'où l'on vient, ou à la grille en acc
   await expect(page).toHaveURL(/\/fr\/projets\/[^/]+\/$/);
   await page.locator("a[data-close]").click();
   await expect(page).toHaveURL(/\/fr\/$/);
+  // après « projet suivant », la page précédente est une fiche : Fermer mène à la grille, pas à l'autre fiche
+  await page.locator("[data-project] a").first().click();
+  await expect(page).toHaveURL(/\/fr\/projets\/[^/]+\/$/);
+  const opened = page.url();
+  await page.locator('a[rel="next"], a[rel="prev"]').first().click();
+  await expect(page).not.toHaveURL(opened);
+  await page.locator("a[data-close]").click();
+  await expect(page).toHaveURL(/\/fr\/projets\/$/);
 });

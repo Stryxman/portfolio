@@ -83,8 +83,10 @@ const { dark, light } = renderSphere();
     // pointeur : direction visée (repère de vue, y vers le haut) et force, amorties comme un ressort
     const aim = { x: 0, y: 0, k: 0 };
     const pull = { x: 0, y: 0, k: 0 };
+    let visible = false;
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
+      // hors écran, on ne lit pas la géométrie du canvas à chaque mouvement de souris
+      if (!visible || e.pointerType !== "mouse") return;
       const r = canvas.getBoundingClientRect();
       aim.x = ((e.clientX - r.left) / r.width) * 2 - 1;
       aim.y = -(((e.clientY - r.top) / r.height) * 2 - 1);
@@ -196,7 +198,6 @@ const { dark, light } = renderSphere();
     };
 
     let raf = 0;
-    let visible = false;
     let last = 0;
     let clock = 0;
     const tick = (now: number) => {
@@ -219,6 +220,7 @@ const { dark, light } = renderSphere();
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry!.isIntersecting;
+        if (!visible) aim.k = 0;
         if (visible) wake();
       },
       { rootMargin: "80px" },

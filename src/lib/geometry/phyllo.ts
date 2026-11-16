@@ -65,6 +65,11 @@ const open = (p: readonly Vec2[]) =>
 const svgOpen = (size: number, cls: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" aria-hidden="true" focusable="false" class="${cls}" fill="none">`;
 
+// Part du cadre occupée par le rayon du disque, et rayon d'une graine en fraction de l'écart moyen entre graines.
+// La graine d'accent est plus grosse : elle porte son rang (spiralLabels).
+const DISC = 0.47;
+const seedRadius = (r: number, accent: boolean) => (accent ? 0.2 + 0.3 * r : 0.15 + 0.27 * r);
+
 export const RINGS = 8;
 export const ARMS = 21;
 
@@ -73,7 +78,7 @@ export const ARMS = 21;
 // Clair « Traceur » : 21 bras tracés au trait, carrés au contour de plus en plus désordonnés vers le bord.
 export function renderSpiral(size = 1000): { dark: string; light: string } {
   const c = size / 2;
-  const R = size * 0.47;
+  const R = size * DISC;
   const pitch = R * Math.sqrt(Math.PI / SEEDS); // distance moyenne entre deux graines
 
   let plain = "";
@@ -84,7 +89,7 @@ export function renderSpiral(size = 1000): { dark: string; light: string } {
     const poly = regularPolygon(
       c + x * R,
       c + y * R,
-      pitch * (accent ? 0.2 + 0.3 * r : 0.15 + 0.27 * r), // la graine d'accent est plus grosse : elle porte son rang
+      pitch * seedRadius(r, accent),
       accent ? 8 : SIDES[i % 3]!,
       theta,
     );
@@ -138,14 +143,14 @@ export function renderSpiral(size = 1000): { dark: string; light: string } {
 // Rang des graines d'accent (1, 2, 3, 5, 8… 233), à poser au centre de chaque graine.
 // x, y : position en % du cadre ; size : corps du chiffre en % de la largeur du cadre.
 export function spiralLabels(): { n: number; x: number; y: number; size: number }[] {
-  const pitch = 0.47 * Math.sqrt(Math.PI / SEEDS);
+  const pitch = DISC * Math.sqrt(Math.PI / SEEDS);
   return FIBONACCI.map((n) => {
     const { r, x, y } = phylloPoint(n - 1, SEEDS);
-    const rad = pitch * (0.2 + 0.3 * r); // rayon de la graine d'accent, en fraction du cadre
+    const rad = pitch * seedRadius(r, true); // en fraction du cadre
     return {
       n,
-      x: Math.round((50 + x * 47) * 100) / 100,
-      y: Math.round((50 + y * 47) * 100) / 100,
+      x: Math.round((50 + x * DISC * 100) * 100) / 100,
+      y: Math.round((50 + y * DISC * 100) * 100) / 100,
       size: Math.round(rad * (n > 99 ? 0.78 : n > 9 ? 0.95 : 1.15) * 1e4) / 100,
     };
   });

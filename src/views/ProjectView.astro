@@ -235,11 +235,18 @@ const dt = "text-ink-muted";
 </Base>
 
 <script>
+  // Fermer redescend l'aperçu dans sa carte en revenant d'un cran, mais seulement si la page précédente est bien
+  // celle qui a ouvert la fiche (grille, accueil). Après « projet suivant » ou un changement de langue, la page
+  // précédente est une autre fiche : le lien mène alors à la grille. Sans l'API Navigation, le lien suffit.
+  type Entry = { url: string | null; index: number };
+  const isFiche = (path: string) => /\/(projets|projects)\/[^/]+\/$/.test(path);
   document.addEventListener("astro:page-load", () => {
     document.querySelector<HTMLAnchorElement>("a[data-close]")?.addEventListener("click", (e) => {
-      // ClientRouter numérote les pages visitées : au-delà de la première, un retour arrière existe
-      const visited = (history.state as { index?: number } | null)?.index ?? 0;
-      if (visited > 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+      const nav = (window as { navigation?: { entries(): Entry[]; currentEntry: Entry | null } })
+        .navigation;
+      const before = nav?.currentEntry && nav.entries()[nav.currentEntry.index - 1];
+      if (before?.url && !isFiche(new URL(before.url).pathname)) {
         e.preventDefault();
         history.back();
       }
